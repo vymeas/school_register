@@ -1,0 +1,84 @@
+@extends('layouts.app')
+@section('title', 'Users')
+@section('page-title', 'Users')
+
+@section('content')
+<div class="card">
+    <div class="card-header">
+        <div class="toolbar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search users..." value="{{ request('search') }}">
+            </div>
+            <select class="form-control" style="width:auto;" id="roleFilter">
+                <option value="">All Roles</option>
+                <option value="super_admin" {{ request('role')=='super_admin'?'selected':'' }}>Super Admin</option>
+                <option value="admin" {{ request('role')=='admin'?'selected':'' }}>Admin</option>
+                <option value="accountant" {{ request('role')=='accountant'?'selected':'' }}>Accountant</option>
+                <option value="registrar" {{ request('role')=='registrar'?'selected':'' }}>Registrar</option>
+                <option value="teacher" {{ request('role')=='teacher'?'selected':'' }}>Teacher</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('userModal')">+ Add User</button>
+    </div>
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead><tr><th>Username</th><th>Full Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+            @forelse($users as $user)
+                <tr>
+                    <td><strong>{{ $user->username }}</strong></td>
+                    <td>{{ $user->full_name }}</td>
+                    <td><span class="badge info">{{ str_replace('_', ' ', ucfirst($user->role)) }}</span></td>
+                    <td>{{ $user->email ?? '—' }}</td>
+                    <td>{{ $user->phone ?? '—' }}</td>
+                    <td><span class="badge {{ $user->status }}">{{ ucfirst($user->status) }}</span></td>
+                    <td><div class="btn-group"><button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/users/{{ $user->id }}', 'user')">🗑</button></div></td>
+                </tr>
+            @empty
+                <tr><td colspan="7"><div class="empty-state"><div class="empty-icon">👥</div><h3>No users</h3></div></td></tr>
+            @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal-overlay" id="userModal">
+    <div class="modal">
+        <div class="modal-header"><h3>Add User</h3><button class="modal-close" onclick="closeModal('userModal')">✕</button></div>
+        <div class="modal-body">
+            <form id="userForm" method="POST" action="{{ route('users.store') }}">
+                @csrf
+                <div class="form-row">
+                    <div class="form-group"><label class="form-label">Username *</label><input type="text" name="username" class="form-control" required></div>
+                    <div class="form-group"><label class="form-label">Password *</label><input type="password" name="password" class="form-control" required></div>
+                </div>
+                <div class="form-group"><label class="form-label">Full Name *</label><input type="text" name="full_name" class="form-control" required></div>
+                <div class="form-row">
+                    <div class="form-group"><label class="form-label">Role *</label><select name="role" class="form-control" required><option value="admin">Admin</option><option value="accountant">Accountant</option><option value="registrar">Registrar</option><option value="teacher">Teacher</option></select></div>
+                    <div class="form-group"><label class="form-label">Email</label><input type="email" name="email" class="form-control"></div>
+                </div>
+                <div class="form-group"><label class="form-label">Phone</label><input type="text" name="phone" class="form-control"></div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('userModal')">Cancel</button>
+            <button class="btn btn-primary" onclick="document.getElementById('userForm').submit()">Save User</button>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+document.getElementById('searchInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { const p = new URLSearchParams(window.location.search); p.set('search', this.value); window.location.search = p.toString(); }
+});
+document.getElementById('roleFilter').addEventListener('change', function() {
+    const p = new URLSearchParams(window.location.search);
+    if (this.value) p.set('role', this.value);
+    else p.delete('role');
+    window.location.search = p.toString();
+});
+</script>
+@endpush
+@endsection
