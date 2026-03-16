@@ -83,10 +83,12 @@ function getCsrfToken() {
 async function apiRequest(url, method = 'GET', data = null) {
     const options = {
         method,
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'X-CSRF-TOKEN': getCsrfToken(),
+            'X-Requested-With': 'XMLHttpRequest',
         },
     };
     if (data && method !== 'GET') {
@@ -106,16 +108,78 @@ async function apiRequest(url, method = 'GET', data = null) {
     }
 }
 
+// ---- Confirmation Modal ----
+function showConfirmModal(message, onConfirm, confirmLabel = 'Yes, Delete') {
+    // Remove any existing confirm modal
+    const existing = document.getElementById('confirmModal');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'confirmModal';
+    overlay.className = 'modal-overlay show';
+    overlay.style.zIndex = '10000';
+    overlay.innerHTML = `
+        <div class="modal" style="max-width: 420px;">
+            <div class="modal-header">
+                <h3>⚠️ Confirm Action</h3>
+                <button class="modal-close" id="confirmCancel2">✕</button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <p style="margin: 0; font-size: 15px;">${message}</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="confirmCancelBtn">Cancel</button>
+                <button class="btn btn-${confirmLabel.includes('Restore') ? 'primary' : 'danger'}" id="confirmOkBtn">${confirmLabel}</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    function close() {
+        overlay.remove();
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('confirmCancelBtn').onclick = close;
+    document.getElementById('confirmCancel2').onclick = close;
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) close();
+    });
+    document.getElementById('confirmOkBtn').onclick = function() {
+        close();
+        onConfirm();
+    };
+}
+
 // ---- Delete Confirmation ----
 function confirmDelete(url, itemName = 'item') {
-    if (confirm(`Are you sure you want to delete this ${itemName}? This action cannot be undone.`)) {
-        apiRequest(url, 'DELETE')
-            .then(() => {
-                showAlert(`${itemName} deleted successfully.`, 'success');
-                setTimeout(() => location.reload(), 800);
-            })
-            .catch(err => showAlert(err.message, 'danger'));
-    }
+    showConfirmModal(
+        `Are you sure you want to delete this ${itemName}? This action cannot be undone.`,
+        function() {
+            apiRequest(url, 'DELETE')
+                .then(() => {
+                    showAlert(`${itemName} deleted successfully.`, 'success');
+                    setTimeout(() => location.reload(), 800);
+                })
+                .catch(err => showAlert(err.message, 'danger'));
+        }
+    );
+}
+
+// ---- Restore Confirmation ----
+function confirmRestore(url, itemName = 'item') {
+    showConfirmModal(
+        `Are you sure you want to restore this ${itemName}?`,
+        function() {
+            apiRequest(url, 'PUT')
+                .then(() => {
+                    showAlert(`${itemName} restored successfully.`, 'success');
+                    setTimeout(() => location.reload(), 800);
+                })
+                .catch(err => showAlert(err.message, 'danger'));
+        }
+    );
 }
 
 // ---- Form Validation Display ----

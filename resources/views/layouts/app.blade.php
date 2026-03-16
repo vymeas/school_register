@@ -59,8 +59,14 @@
             <a href="{{ route('users.index') }}" class="nav-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
                 <span class="nav-icon">👥</span> Users
             </a>
-            <a href="{{ route('settings.index') }}" class="nav-item {{ request()->routeIs('settings.*') ? 'active' : '' }}">
+            <a href="{{ route('settings.index') }}" class="nav-item {{ request()->routeIs('settings.index') ? 'active' : '' }}">
                 <span class="nav-icon">⚙️</span> Settings
+            </a>
+            <a href="{{ route('settings.grades.restore') }}" class="nav-item {{ request()->routeIs('settings.grades.restore') ? 'active' : '' }}">
+                <span class="nav-icon">♻️</span> Restore Grades
+            </a>
+            <a href="{{ route('settings.teachers.restore') }}" class="nav-item {{ request()->routeIs('settings.teachers.restore') ? 'active' : '' }}">
+                <span class="nav-icon">♻️</span> Restore Teachers
             </a>
         </nav>
     </aside>

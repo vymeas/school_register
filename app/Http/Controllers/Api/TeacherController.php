@@ -64,10 +64,20 @@ class TeacherController extends Controller
     public function destroy(string $id): JsonResponse
     {
         $teacher = Teacher::findOrFail($id);
-        $teacher->delete();
+        $teacher->update(['is_delete' => true]);
 
         return response()->json([
             'message' => 'Teacher deleted successfully.',
+        ]);
+    }
+
+    public function restore(string $id): JsonResponse
+    {
+        $teacher = Teacher::findOrFail($id);
+        $teacher->update(['is_delete' => false]);
+
+        return response()->json([
+            'message' => 'Teacher restored successfully.',
         ]);
     }
 }

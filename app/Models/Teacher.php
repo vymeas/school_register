@@ -7,19 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 class Teacher extends Model
 {
     protected $fillable = [
+        'teacher_code',
         'name',
+        'date_of_birth',
+        'gender',
         'phone',
         'email',
         'classroom_id',
         'status',
         'address',
         'hire_date',
+        'is_delete',
     ];
 
     protected function casts(): array
     {
         return [
             'hire_date' => 'date',
+            'date_of_birth' => 'date',
         ];
     }
 
@@ -30,6 +35,6 @@ class Teacher extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('status', 'active');
+        return $query->where('is_delete', false);
     }
 }

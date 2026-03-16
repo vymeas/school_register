@@ -39,7 +39,24 @@
         <div class="modal-body">
             <form id="classroomForm" method="POST" action="{{ route('classrooms.store') }}">
                 @csrf
-                <div class="form-group"><label class="form-label">Grade *</label><select name="grade_id" class="form-control" required><option value="">Select Grade</option>@foreach($grades as $grade)<option value="{{ $grade->id }}">{{ $grade->name }}</option>@endforeach</select></div>
+                <div class="form-group">
+                    <label class="form-label">Term *</label>
+                    <select id="termSelect" class="form-control" required>
+                        <option value="">Select Term</option>
+                        @foreach($terms as $term)
+                            <option value="{{ $term->id }}">{{ $term->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Grade *</label>
+                    <select name="grade_id" id="gradeSelect" class="form-control" required disabled>
+                        <option value="">Select Term first</option>
+                        @foreach($grades as $grade)
+                            <option value="{{ $grade->id }}" data-term-id="{{ $grade->term_id }}">{{ $grade->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="form-row">
                     <div class="form-group"><label class="form-label">Name *</label><input type="text" name="name" class="form-control" placeholder="e.g. Grade 1A" required></div>
                     <div class="form-group"><label class="form-label">Capacity</label><input type="number" name="capacity" class="form-control" value="30" min="1"></div>
@@ -52,4 +69,39 @@
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('termSelect').addEventListener('change', function () {
+    const termId = this.value;
+    const gradeSelect = document.getElementById('gradeSelect');
+    const options = gradeSelect.querySelectorAll('option[data-term-id]');
+
+    // Reset grade select
+    gradeSelect.value = '';
+
+    if (!termId) {
+        gradeSelect.disabled = true;
+        gradeSelect.querySelector('option[value=""]').textContent = 'Select Term first';
+        options.forEach(opt => opt.style.display = 'none');
+        return;
+    }
+
+    gradeSelect.disabled = false;
+    gradeSelect.querySelector('option[value=""]').textContent = 'Select Grade';
+
+    let hasVisible = false;
+    options.forEach(opt => {
+        if (opt.dataset.termId === termId) {
+            opt.style.display = '';
+            hasVisible = true;
+        } else {
+            opt.style.display = 'none';
+        }
+    });
+
+    if (!hasVisible) {
+        gradeSelect.querySelector('option[value=""]').textContent = 'No grades for this term';
+    }
+});
+</script>
 @endsection
