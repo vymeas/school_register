@@ -37,12 +37,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Grades
     Route::apiResource('grades', GradeController::class)->names('api.grades');
+    Route::put('/grades/{grade}/restore', [GradeController::class, 'restore'])->name('api.grades.restore');
 
     // Terms
     Route::apiResource('terms', TermController::class)->names('api.terms');
 
     // Teachers
     Route::apiResource('teachers', TeacherController::class)->names('api.teachers');
+    Route::put('/teachers/{teacher}/restore', [TeacherController::class, 'restore'])->name('api.teachers.restore');
 
     // Tuition Plans
     Route::apiResource('tuition-plans', TuitionPlanController::class)->names('api.tuition-plans');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Classroom;
 use App\Models\Grade;
+use App\Models\Term;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller
@@ -13,7 +14,8 @@ class ClassroomController extends Controller
     {
         return view('classrooms.index', [
             'classrooms' => Classroom::with(['grade', 'teacher'])->withCount('students')->orderBy('name')->get(),
-            'grades' => Grade::orderBy('name')->get(),
+            'grades' => Grade::with('term')->orderBy('name')->get(),
+            'terms' => Term::orderBy('name')->get(),
         ]);
     }
 

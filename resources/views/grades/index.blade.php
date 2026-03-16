@@ -8,12 +8,21 @@
         <h2>All Grades</h2>
         <button class="btn btn-primary" onclick="openModal('gradeModal')">+ Add Grade</button>
     </div>
+    <div style="padding: 12px 20px; border-bottom: 1px solid var(--border-color, #e2e8f0);">
+        <label class="form-label" style="margin-right: 8px; font-weight: 500;">Filter by Term:</label>
+        <select id="termFilter" class="form-control" style="display: inline-block; width: auto; min-width: 200px;">
+            <option value="">All Terms</option>
+            @foreach($terms as $term)
+                <option value="{{ $term->id }}">{{ $term->name }}</option>
+            @endforeach
+        </select>
+    </div>
     <div class="table-responsive">
         <table class="data-table">
             <thead><tr><th>Name</th><th>Term</th><th>Description</th><th>Classrooms</th><th>Actions</th></tr></thead>
             <tbody>
             @forelse($grades as $grade)
-                <tr>
+                <tr data-term-id="{{ $grade->term_id }}">
                     <td><strong>{{ $grade->name }}</strong></td>
                     <td>{{ $grade->term->name ?? '—' }}</td>
                     <td>{{ $grade->description ?? '—' }}</td>
@@ -71,6 +80,19 @@
 </div>
 
 <script>
+// Term filter
+document.getElementById('termFilter').addEventListener('change', function () {
+    const termId = this.value;
+    const rows = document.querySelectorAll('tbody tr[data-term-id]');
+    rows.forEach(row => {
+        if (!termId || row.dataset.termId === termId) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+
 function editGrade(grade) {
     document.getElementById('modalTitle').innerText = 'Edit Grade';
     document.getElementById('gradeForm').action = '/grades/' + grade.id;

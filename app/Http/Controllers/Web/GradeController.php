@@ -42,4 +42,11 @@ class GradeController extends Controller
 
         return redirect()->route('grades.index')->with('success', 'Grade updated successfully.');
     }
+
+    public function restoreIndex()
+    {
+        return view('settings.grades-restore', [
+            'grades' => Grade::where('is_delete', true)->with('term')->withCount('classrooms')->orderBy('name')->get(),
+        ]);
+    }
 }

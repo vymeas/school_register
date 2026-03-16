@@ -69,4 +69,14 @@ class GradeController extends Controller
             'message' => 'Grade deleted successfully.',
         ]);
     }
+
+    public function restore(string $id): JsonResponse
+    {
+        $grade = Grade::findOrFail($id);
+        $grade->update(['is_delete' => false]);
+
+        return response()->json([
+            'message' => 'Grade restored successfully.',
+        ]);
+    }
 }

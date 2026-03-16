@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
     // Teachers
     Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
     Route::post('/teachers', [TeacherController::class, 'store'])->name('teachers.store');
+    Route::put('/teachers/{teacher}', [TeacherController::class, 'update'])->name('teachers.update');
 
     // Classrooms
     Route::get('/classrooms', [ClassroomController::class, 'index'])->name('classrooms.index');
@@ -78,4 +79,6 @@ Route::middleware('auth')->group(function () {
 
     // Settings
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::get('/settings/grades-restore', [GradeController::class, 'restoreIndex'])->name('settings.grades.restore');
+    Route::get('/settings/teachers-restore', [TeacherController::class, 'restoreIndex'])->name('settings.teachers.restore');
 });
