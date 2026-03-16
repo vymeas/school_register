@@ -23,13 +23,15 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Gender</th>
-                    <th>Classroom</th>
-                    <th>Parent</th>
-                    <th>Status</th>
-                    <th>Registered</th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'student_code', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Code</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'first_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Name</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'date_of_birth', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Date Of Birth</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'father_contact', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Contact</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'grade_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Study Class</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'classroom_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Class Room</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'turn', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Turn</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'teacher_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Teacher</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'status', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Status</a></th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -37,12 +39,14 @@
             @forelse($students as $student)
                 <tr>
                     <td><strong>{{ $student->student_code }}</strong></td>
-                    <td>{{ $student->first_name }} {{ $student->last_name }}</td>
-                    <td>{{ ucfirst($student->gender) }}</td>
+                    <td>{{ $student->full_name }}</td>
+                    <td>{{ $student->date_of_birth ? $student->date_of_birth->format('d/m/Y') : '—' }}</td>
+                    <td>{{ $student->father_contact ?? $student->mother_contact ?? '—' }}</td>
+                    <td>{{ $student->classroom->grade->name ?? '—' }}</td>
                     <td>{{ $student->classroom->name ?? '—' }}</td>
-                    <td>{{ $student->parent_name ?? '—' }}</td>
+                    <td>{{ $student->turn ?? '—' }}</td>
+                    <td>{{ $student->classroom->teacher->name ?? '—' }}</td>
                     <td><span class="badge {{ $student->status }}">{{ ucfirst($student->status) }}</span></td>
-                    <td>{{ $student->registration_date ? $student->registration_date->format('d M Y') : '—' }}</td>
                     <td>
                         <div class="btn-group">
                             <a href="{{ route('students.show', $student) }}" class="btn btn-sm btn-secondary">👁</a>
@@ -53,7 +57,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="8">
+                    <td colspan="10">
                         <div class="empty-state">
                             <div class="empty-icon">🎓</div>
                             <h3>No students found</h3>
@@ -114,6 +118,38 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group">
+                        <label class="form-label">Place of Birth</label>
+                        <input type="text" name="place_of_birth" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address</label>
+                        <input type="text" name="address" class="form-control">
+                    </div>
+                </div>
+                <hr>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Father Name</label>
+                        <input type="text" name="father_name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Father Contact</label>
+                        <input type="text" name="father_contact" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Mother Name</label>
+                        <input type="text" name="mother_name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mother Contact</label>
+                        <input type="text" name="mother_contact" class="form-control">
+                    </div>
+                </div>
+                <hr>
+                <div class="form-row">
+                    <div class="form-group">
                         <label class="form-label">Classroom</label>
                         <select name="classroom_id" class="form-control">
                             <option value="">Select Classroom</option>
@@ -134,21 +170,34 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Parent Name</label>
-                        <input type="text" name="parent_name" class="form-control">
+                        <label class="form-label">Turn</label>
+                        <input type="text" name="turn" class="form-control" placeholder="e.g. Afternoon">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Parent Phone</label>
-                        <input type="text" name="parent_phone" class="form-control">
+                        <label class="form-label">Time</label>
+                        <input type="text" name="time" class="form-control" placeholder="e.g. 1:00 PM - 5:00 PM">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Address</label>
-                    <input type="text" name="address" class="form-control">
+                <hr>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Characteristics</label>
+                        <textarea name="characteristics" class="form-control" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Health</label>
+                        <textarea name="health" class="form-control" rows="2"></textarea>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Emergency Contact</label>
-                    <input type="text" name="emergency_contact" class="form-control">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Emergency Name</label>
+                        <input type="text" name="emergency_name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Emergency Contact</label>
+                        <input type="text" name="emergency_contact" class="form-control">
+                    </div>
                 </div>
             </form>
         </div>
