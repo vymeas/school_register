@@ -31,6 +31,8 @@ class Student extends Model
         'emergency_contact',
         'emergency_name',
         'photo',
+        'teacher_id',
+        'start_date',
     ];
 
     protected function casts(): array
@@ -38,6 +40,7 @@ class Student extends Model
         return [
             'date_of_birth' => 'date',
             'registration_date' => 'date',
+            'start_date' => 'date',
         ];
     }
 
@@ -56,6 +59,11 @@ class Student extends Model
     public function term()
     {
         return $this->belongsTo(Term::class);
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
     }
 
     public function enrollments()

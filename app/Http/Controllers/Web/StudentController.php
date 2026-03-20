@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Classroom;
 use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\Term;
 use App\Services\StudentCodeGenerator;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class StudentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Student::with(['classroom.grade', 'classroom.teacher', 'term']);
+        $query = Student::with(['classroom.grade', 'classroom.teacher', 'term', 'teacher', 'payments.tuitionPlan']);
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -37,7 +38,7 @@ class StudentController extends Controller
             'father_name', 'mother_name', 'address', 'status', 'registration_date',
             'student_code', 'turn', 'time', 'characteristics', 'health', 
             'emergency_name', 'teacher_name', 'classroom_name', 'grade_name',
-            'father_contact', 'mother_contact', 'emergency_contact'
+            'father_contact', 'mother_contact', 'emergency_contact', 'start_date'
         ];
 
         if (in_array($sort, $allowedSorts)) {
@@ -65,6 +66,7 @@ class StudentController extends Controller
         return view('students.index', [
             'students' => $query->paginate(15)->withQueryString(),
             'classrooms' => Classroom::orderBy('name')->get(),
+            'teachers' => Teacher::orderBy('name')->get(),
             'terms' => Term::orderBy('start_date', 'desc')->get(),
         ]);
     }
@@ -92,6 +94,8 @@ class StudentController extends Controller
             'time' => 'nullable|string|max:255',
             'emergency_contact' => 'nullable|string|max:255',
             'emergency_name' => 'nullable|string|max:255',
+            'teacher_id' => 'nullable|exists:teachers,id',
+            'start_date' => 'nullable|date',
         ]);
 
         $data['student_code'] = StudentCodeGenerator::generate();

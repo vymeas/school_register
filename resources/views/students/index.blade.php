@@ -26,12 +26,12 @@
                     <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'student_code', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Code</a></th>
                     <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'first_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Name</a></th>
                     <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'date_of_birth', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Date Of Birth</a></th>
-                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'father_contact', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Contact</a></th>
-                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'grade_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Study Class</a></th>
-                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'classroom_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Class Room</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'emergency_contact', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Contact</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'classroom_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Classroom</a></th>
                     <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'turn', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Turn</a></th>
-                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'teacher_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Teacher</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'start_date', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Start Date</a></th>
                     <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'status', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Status</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'teacher_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Teacher</a></th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -41,12 +41,18 @@
                     <td><strong>{{ $student->student_code }}</strong></td>
                     <td>{{ $student->full_name }}</td>
                     <td>{{ $student->date_of_birth ? $student->date_of_birth->format('d/m/Y') : '—' }}</td>
-                    <td>{{ $student->father_contact ?? $student->mother_contact ?? '—' }}</td>
-                    <td>{{ $student->classroom->grade->name ?? '—' }}</td>
-                    <td>{{ $student->classroom->name ?? '—' }}</td>
+                    <td>{{ $student->emergency_contact ?? '—' }}</td>
+                    <td>
+                        @if($student->payments->isNotEmpty())
+                            <span class="badge secondary">{{ $student->payments->last()->tuitionPlan->classroom ?? '—' }}</span>
+                        @else
+                            <span class="text-muted">—</span>
+                        @endif
+                    </td>
                     <td>{{ $student->turn ?? '—' }}</td>
-                    <td>{{ $student->classroom->teacher->name ?? '—' }}</td>
+                    <td>{{ $student->start_date ? $student->start_date->format('d/m/Y') : '—' }}</td>
                     <td><span class="badge {{ $student->status }}">{{ ucfirst($student->status) }}</span></td>
+                    <td>{{ $student->teacher->name ?? $student->classroom->teacher->name ?? '—' }}</td>
                     <td>
                         <div class="btn-group">
                             <a href="{{ route('students.show', $student) }}" class="btn btn-sm btn-secondary">👁</a>
@@ -150,22 +156,9 @@
                 <hr>
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Classroom</label>
-                        <select name="classroom_id" class="form-control">
-                            <option value="">Select Classroom</option>
-                            @foreach($classrooms as $classroom)
-                                <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
                         <label class="form-label">Term</label>
                         <select name="term_id" class="form-control">
-                            <option value="">Select Term</option>
-                            @foreach($terms as $term)
-                                <option value="{{ $term->id }}">{{ $term->name }}</option>
-                            @endforeach
-                        </select>
+                            <option value="">Select Term</option>@foreach($terms as $term)<option value="{{ $term->id }}">{{ $term->name }}</option>@endforeach</select>
                     </div>
                 </div>
                 <div class="form-row">
@@ -179,6 +172,21 @@
                     </div>
                 </div>
                 <hr>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Teacher *</label>
+                        <select name="teacher_id" class="form-control" required>
+                            <option value="">Select Teacher</option>
+                            @foreach($teachers as $teacher)
+                                <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" name="start_date" class="form-control">
+                    </div>
+                </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Characteristics</label>

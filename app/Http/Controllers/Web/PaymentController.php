@@ -13,7 +13,12 @@ class PaymentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Payment::with(['student', 'tuitionPlan', 'creator']);
+        $latestPaymentIds = Payment::selectRaw('MAX(id) as id')
+            ->groupBy('student_id')
+            ->pluck('id');
+
+        $query = Payment::whereIn('id', $latestPaymentIds)
+            ->with(['student.payments.tuitionPlan', 'tuitionPlan', 'creator']);
 
         if ($request->filled('method')) {
             $query->where('payment_method', $request->method);
@@ -41,5 +46,10 @@ class PaymentController extends Controller
         PaymentService::createPayment($data, auth()->id());
 
         return redirect()->route('payments.index')->with('success', 'Payment recorded successfully.');
+    }
+    public function destroy(Payment $payment)
+    {
+        $payment->delete();
+        return redirect()->route('payments.index')->with('success', 'Payment deleted successfully.');
     }
 }
