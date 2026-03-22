@@ -33,7 +33,7 @@
                     <td>{{ $user->email ?? '—' }}</td>
                     <td>{{ $user->phone ?? '—' }}</td>
                     <td><span class="badge {{ $user->status }}">{{ ucfirst($user->status) }}</span></td>
-                    <td><div class="btn-group"><button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/users/{{ $user->id }}', 'user')">🗑</button></div></td>
+                    <td><div class="btn-group"><button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/users/{{ $user->id }}', 'user')" data-tip="Delete User">🗑</button></div></td>
                 </tr>
             @empty
                 <tr><td colspan="7"><div class="empty-state"><div class="empty-icon">👥</div><h3>No users</h3></div></td></tr>

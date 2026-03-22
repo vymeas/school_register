@@ -2,24 +2,47 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Classroom extends Model
 {
     protected $fillable = [
         'grade_id',
+        'turn_id',
+        'teacher_id',
         'name',
         'capacity',
+        'is_archived',
     ];
+
+    protected $casts = [
+        'is_archived' => 'boolean',
+    ];
+
+    /**
+     * Global scope: always hide archived classrooms by default.
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope('active', function (Builder $query) {
+            $query->where('is_archived', false);
+        });
+    }
 
     public function grade()
     {
         return $this->belongsTo(Grade::class);
     }
 
+    public function turn()
+    {
+        return $this->belongsTo(Turn::class);
+    }
+
     public function teacher()
     {
-        return $this->hasOne(Teacher::class);
+        return $this->belongsTo(Teacher::class);
     }
 
     public function students()

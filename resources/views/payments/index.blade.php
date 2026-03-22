@@ -13,24 +13,54 @@
                 <option value="acleda" {{ request('method')=='acleda'?'selected':'' }}>ACLEDA</option>
                 <option value="wing" {{ request('method')=='wing'?'selected':'' }}>Wing</option>
             </select>
+            <select class="form-control" style="width:auto;" id="statusFilter">
+                <option value="">All Payment Status</option>
+                <option value="paid" {{ request('status')=='paid'?'selected':'' }}>Paid</option>
+                <option value="void" {{ request('status')=='void'?'selected':'' }}>Void</option>
+            </select>
         </div>
         <button class="btn btn-primary" onclick="openModal('paymentModal')">+ Record Payment</button>
     </div>
+    <div class="card-body" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding-top: 14px;">
+        <div class="stat-card" style="padding: 14px;">
+            <div class="stat-label">Active Students</div>
+            <div class="stat-value">{{ $activeStudentCount }}</div>
+        </div>
+        <div class="stat-card" style="padding: 14px;">
+            <div class="stat-label">Expired Students</div>
+            <div class="stat-value">{{ $expiredStudentCount }}</div>
+        </div>
+        <div class="stat-card" style="padding: 14px;">
+            <div class="stat-label">Expiring in 7 Days</div>
+            <div class="stat-value">{{ $expiringSoonCount }}</div>
+        </div>
+    </div>
     <div class="table-responsive">
         <table class="data-table">
-            <thead><tr><th>Student</th><th>Tuition Plan</th><th>Amount</th><th>Method</th><th>Study Period</th><th>Date</th></tr></thead>
+            <thead><tr><th>Student</th><th>Enrollment</th><th>Tuition Plan</th><th>Amount</th><th>Method</th><th>Payment</th><th>Paid Until</th><th>Status</th></tr></thead>
             <tbody>
             @forelse($payments as $payment)
+                @php
+                    $paidUntil = $payment->end_study_date;
+                    $isActive = $paidUntil && now()->lte($paidUntil);
+                    $studentStatus = $isActive ? 'active' : 'expired';
+                @endphp
                 <tr>
                     <td><strong>{{ $payment->student->first_name ?? '' }} {{ $payment->student->last_name ?? '' }}</strong><br><span class="text-muted fs-sm">{{ $payment->student->student_code ?? '' }}</span></td>
+                    <td>
+                        {{ $payment->enrollment->classroom->name ?? '—' }}
+                        <br>
+                        <span class="text-muted fs-sm">{{ $payment->enrollment->term->name ?? '—' }}</span>
+                    </td>
                     <td>{{ $payment->tuitionPlan->name ?? '—' }}</td>
                     <td><strong>${{ number_format($payment->amount, 2) }}</strong></td>
                     <td><span class="badge info">{{ strtoupper($payment->payment_method) }}</span></td>
-                    <td>{{ $payment->start_study_date->format('d/m/Y') }} — {{ $payment->end_study_date->format('d/m/Y') }}</td>
                     <td>{{ $payment->payment_date->format('d M Y') }}</td>
+                    <td>{{ $payment->end_study_date->format('d M Y') }}</td>
+                    <td><span class="badge {{ $studentStatus }}">{{ ucfirst($studentStatus) }}</span></td>
                 </tr>
             @empty
-                <tr><td colspan="6"><div class="empty-state"><div class="empty-icon">💳</div><h3>No payments</h3><p>Record your first payment.</p><button class="btn btn-primary" onclick="openModal('paymentModal')">+ Record Payment</button></div></td></tr>
+                <tr><td colspan="8"><div class="empty-state"><div class="empty-icon">💳</div><h3>No payments</h3><p>Record your first payment.</p><button class="btn btn-primary" onclick="openModal('paymentModal')">+ Record Payment</button></div></td></tr>
             @endforelse
             </tbody>
         </table>
@@ -49,11 +79,25 @@
         <div class="modal-body">
             <form id="paymentForm" method="POST" action="{{ route('payments.store') }}">
                 @csrf
-                <div class="form-group"><label class="form-label">Student *</label><select name="student_id" class="form-control" required><option value="">Select Student</option>@foreach($students as $s)<option value="{{ $s->id }}">{{ $s->student_code }} — {{ $s->first_name }} {{ $s->last_name }}</option>@endforeach</select></div>
+                <input type="hidden" name="student_id" id="studentIdInput">
+                <div class="form-group">
+                    <label class="form-label">Enrollment *</label>
+                    <select name="enrollment_id" class="form-control" required id="enrollmentSelect">
+                        <option value="">Select Enrollment</option>
+                        @foreach($enrollments as $enrollment)
+                            <option
+                                value="{{ $enrollment->id }}"
+                                data-student-id="{{ $enrollment->student_id }}"
+                            >
+                                {{ $enrollment->student->student_code ?? '' }} — {{ $enrollment->student->first_name ?? '' }} {{ $enrollment->student->last_name ?? '' }} | {{ $enrollment->classroom->name ?? '—' }} | {{ $enrollment->term->name ?? '—' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="form-group"><label class="form-label">Tuition Plan *</label><select name="tuition_plan_id" class="form-control" required id="planSelect">@foreach($tuitionPlans as $p)<option value="{{ $p->id }}" data-price="{{ $p->price }}">{{ $p->name }} — ${{ number_format($p->price,2) }}</option>@endforeach</select></div>
                 <div class="form-row">
-                    <div class="form-group"><label class="form-label">Amount ($)</label><input type="number" name="amount" id="amountInput" class="form-control" step="0.01"></div>
-                    <div class="form-group"><label class="form-label">Start Study Date *</label><input type="date" name="start_study_date" class="form-control" required value="{{ date('Y-m-d') }}"></div>
+                    <div class="form-group"><label class="form-label">Amount ($)</label><input type="number" name="amount" id="amountInput" class="form-control" step="0.01" required readonly></div>
+                    <div class="form-group"><label class="form-label">Payment Date</label><input type="date" name="payment_date" class="form-control" value="{{ date('Y-m-d') }}"></div>
                 </div>
                 <div class="form-row">
                     <div class="form-group"><label class="form-label">Payment Method *</label><select name="payment_method" class="form-control" required><option value="cash">Cash</option><option value="aba">ABA</option><option value="acleda">ACLEDA</option><option value="wing">Wing</option></select></div>
@@ -76,12 +120,32 @@ document.getElementById('planSelect').addEventListener('change', function() {
     document.getElementById('amountInput').value = opt.dataset.price || '';
 });
 document.getElementById('planSelect').dispatchEvent(new Event('change'));
-document.getElementById('methodFilter').addEventListener('change', function() {
-    const p = new URLSearchParams(window.location.search);
-    if (this.value) p.set('method', this.value);
-    else p.delete('method');
-    window.location.search = p.toString();
+
+document.getElementById('enrollmentSelect').addEventListener('change', function() {
+    const opt = this.options[this.selectedIndex];
+    document.getElementById('studentIdInput').value = opt.dataset.studentId || '';
 });
+
+document.getElementById('methodFilter').addEventListener('change', function() {
+    applyFilters();
+});
+
+document.getElementById('statusFilter').addEventListener('change', function() {
+    applyFilters();
+});
+
+function applyFilters() {
+    const p = new URLSearchParams(window.location.search);
+    const method = document.getElementById('methodFilter').value;
+    const status = document.getElementById('statusFilter').value;
+    if (method) p.set('method', method);
+    else p.delete('method');
+    if (status) p.set('status', status);
+    else p.delete('status');
+    p.delete('page');
+    window.location.search = p.toString();
+}
+
 if (new URLSearchParams(window.location.search).get('action') === 'create') openModal('paymentModal');
 </script>
 @endpush

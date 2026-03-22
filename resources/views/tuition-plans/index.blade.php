@@ -18,7 +18,7 @@
                     <td>{{ $plan->duration_month }} month{{ $plan->duration_month > 1 ? 's' : '' }}</td>
                     <td><strong>${{ number_format($plan->price, 2) }}</strong></td>
                     <td><span class="badge {{ $plan->status }}">{{ ucfirst($plan->status) }}</span></td>
-                    <td><div class="btn-group"><button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/tuition-plans/{{ $plan->id }}', 'tuition plan')">🗑</button></div></td>
+                    <td><div class="btn-group"><button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/tuition-plans/{{ $plan->id }}', 'tuition plan')" data-tip="Delete Plan">🗑</button></div></td>
                 </tr>
             @empty
                 <tr><td colspan="5"><div class="empty-state"><div class="empty-icon">💰</div><h3>No tuition plans</h3></div></td></tr>

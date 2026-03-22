@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\SettingsController;
 use App\Http\Controllers\Web\StudentController;
 use App\Http\Controllers\Web\TeacherController;
 use App\Http\Controllers\Web\TermController;
+use App\Http\Controllers\Web\TurnController;
 use App\Http\Controllers\Web\TuitionPlanController;
 use App\Http\Controllers\Web\UserController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
     Route::post('/students', [StudentController::class, 'store'])->name('students.store');
     Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
+    Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
+    Route::patch('/students/{student}/study-status', [StudentController::class, 'updateStudyStatus'])->name('students.study-status');
 
     // Teachers
     Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
@@ -48,6 +51,9 @@ Route::middleware('auth')->group(function () {
     // Classrooms
     Route::get('/classrooms', [ClassroomController::class, 'index'])->name('classrooms.index');
     Route::post('/classrooms', [ClassroomController::class, 'store'])->name('classrooms.store');
+    Route::put('/classrooms/{classroom}', [ClassroomController::class, 'update'])->name('classrooms.update');
+    Route::get('/classrooms/archived', [ClassroomController::class, 'archiveIndex'])->name('classrooms.archived');
+    Route::post('/classrooms/{id}/restore', [ClassroomController::class, 'restore'])->name('classrooms.restore');
 
     // Grades
     Route::get('/grades', [GradeController::class, 'index'])->name('grades.index');
@@ -57,6 +63,14 @@ Route::middleware('auth')->group(function () {
     // Terms
     Route::get('/terms', [TermController::class, 'index'])->name('terms.index');
     Route::post('/terms', [TermController::class, 'store'])->name('terms.store');
+    Route::put('/terms/{term}', [TermController::class, 'update'])->name('terms.update');
+
+
+    // Turns
+    Route::get('/turns', [TurnController::class, 'index'])->name('turns.index');
+    Route::post('/turns', [TurnController::class, 'store'])->name('turns.store');
+    Route::put('/turns/{turn}', [TurnController::class, 'update'])->name('turns.update');
+    Route::delete('/turns/{turn}', [TurnController::class, 'destroy'])->name('turns.destroy');
 
     // Tuition Plans
     Route::get('/tuition-plans', [TuitionPlanController::class, 'index'])->name('tuition-plans.index');
@@ -65,10 +79,15 @@ Route::middleware('auth')->group(function () {
     // Payments
     Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
     Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
+    Route::get('/payments/students/{student}', [PaymentController::class, 'showStudentPayments'])->name('payments.students.show');
 
     // Enrollments
     Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
     Route::post('/enrollments', [EnrollmentController::class, 'store'])->name('enrollments.store');
+    Route::post('/enrollments/{enrollment}/upgrade', [EnrollmentController::class, 'upgrade'])->name('enrollments.upgrade');
+    Route::post('/enrollments/{enrollment}/transfer', [EnrollmentController::class, 'transfer'])->name('enrollments.transfer');
+    Route::get('/enrollments/students/{student}/history', [EnrollmentController::class, 'history'])->name('enrollments.history');
+    Route::get('/enrollments/students/{student}/current', [EnrollmentController::class, 'current'])->name('enrollments.current');
 
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
@@ -81,4 +100,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::get('/settings/grades-restore', [GradeController::class, 'restoreIndex'])->name('settings.grades.restore');
     Route::get('/settings/teachers-restore', [TeacherController::class, 'restoreIndex'])->name('settings.teachers.restore');
+    Route::get('/settings/students-restore', [StudentController::class, 'restoreIndex'])->name('settings.students.restore');
 });

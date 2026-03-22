@@ -1052,3 +1052,48 @@ select.form-control {
 .justify-between { justify-content: space-between; }
 .fw-600 { font-weight: 600; }
 .fs-sm { font-size: 12px; }
+
+
+/* ---- Tooltip System ---- */
+[data-tip] {
+    position: relative;
+}
+[data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.85);
+    background: #1e1b4b;
+    color: #e2e8f0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    white-space: nowrap;
+    padding: 5px 10px;
+    border-radius: 6px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 9999;
+    border: 1px solid rgba(139,92,246,0.25);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+[data-tip]::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.85);
+    border: 5px solid transparent;
+    border-top-color: #1e1b4b;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 9999;
+}
+[data-tip]:hover::after,
+[data-tip]:hover::before {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}

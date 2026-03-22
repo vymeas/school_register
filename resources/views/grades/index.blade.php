@@ -29,8 +29,8 @@
                     <td>{{ $grade->classrooms_count }}</td>
                     <td>
                         <div class="btn-group">
-                            <button class="btn btn-sm btn-secondary" onclick="editGrade({{ json_encode($grade) }})">✎</button>
-                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/grades/{{ $grade->id }}', 'grade')">🗑</button>
+                            <button class="btn btn-sm btn-secondary" onclick="editGrade({{ json_encode($grade) }})" data-tip="Edit Grade">✎</button>
+                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/grades/{{ $grade->id }}', 'grade')" data-tip="Delete Grade">🗑</button>
                         </div>
                     </td>
                 </tr>

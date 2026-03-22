@@ -72,13 +72,30 @@ class StudentController extends Controller
         ]);
     }
 
+    public function generateCode(): JsonResponse
+    {
+        return response()->json([
+            'code' => StudentCodeGenerator::generate(),
+        ]);
+    }
+
     public function destroy(string $id): JsonResponse
     {
         $student = Student::findOrFail($id);
-        $student->delete();
+        $student->update(['is_delete' => true]);
 
         return response()->json([
             'message' => 'Student deleted successfully.',
+        ]);
+    }
+
+    public function restore(string $id): JsonResponse
+    {
+        $student = Student::onlyDeleted()->findOrFail($id);
+        $student->update(['is_delete' => false]);
+
+        return response()->json([
+            'message' => 'Student restored successfully.',
         ]);
     }
 }
