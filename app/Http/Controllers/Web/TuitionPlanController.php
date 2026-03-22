@@ -12,6 +12,7 @@ class TuitionPlanController extends Controller
     {
         return view('tuition-plans.index', [
             'plans' => TuitionPlan::orderBy('duration_month')->get(),
+            'classrooms' => \App\Models\Classroom::orderBy('name')->pluck('name'),
         ]);
     }
 
@@ -21,6 +22,7 @@ class TuitionPlanController extends Controller
             'name' => 'required|string|max:255',
             'duration_month' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
+            'classroom' => 'nullable|string|max:255',
         ]);
 
         TuitionPlan::create($data);

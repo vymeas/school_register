@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Classroom;
 use App\Models\Enrollment;
 use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\Term;
 use App\Models\TuitionPlan;
 use App\Models\Turn;
@@ -70,7 +71,7 @@ class StudentController extends Controller
             'father_name', 'mother_name', 'address', 'status', 'registration_date',
             'student_code', 'turn', 'time', 'characteristics', 'health', 
             'emergency_name', 'teacher_name', 'classroom_name', 'grade_name',
-            'father_contact', 'mother_contact', 'emergency_contact'
+            'father_contact', 'mother_contact', 'emergency_contact', 'start_date'
         ];
 
         if (in_array($sort, $allowedSorts)) {
@@ -133,6 +134,8 @@ class StudentController extends Controller
             'time' => 'nullable|string|max:255',
             'emergency_contact' => 'nullable|string|max:255',
             'emergency_name' => 'nullable|string|max:255',
+            'teacher_id' => 'nullable|exists:teachers,id',
+            'start_date' => 'nullable|date',
         ]);
 
         if (empty($data['student_code'])) {

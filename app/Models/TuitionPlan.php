@@ -10,6 +10,7 @@ class TuitionPlan extends Model
         'name',
         'duration_month',
         'price',
+        'classroom',
         'status',
     ];
 
