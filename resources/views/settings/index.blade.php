@@ -33,6 +33,16 @@
                 <div class="form-group"><label class="form-label">PHP Version</label><input type="text" class="form-control" value="{{ phpversion() }}" readonly></div>
             </div>
         </div>
+
+        <div class="settings-section">
+            <h3>♻️ Restore Archived Data</h3>
+            <div class="form-row" style="gap:12px;">
+                <a href="{{ route('settings.grades.restore') }}" class="btn btn-secondary" style="flex:1; text-align:center;">📚 Restore Grades</a>
+                <a href="{{ route('settings.teachers.restore') }}" class="btn btn-secondary" style="flex:1; text-align:center;">👨‍🏫 Restore Teachers</a>
+                <a href="{{ route('classrooms.archived') }}" class="btn btn-secondary" style="flex:1; text-align:center;">📦 Restore Classrooms</a>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
+

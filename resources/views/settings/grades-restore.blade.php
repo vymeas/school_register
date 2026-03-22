@@ -20,7 +20,7 @@
                     <td>{{ $grade->classrooms_count }}</td>
                     <td>
                         <div class="btn-group">
-                            <button class="btn btn-sm btn-primary" onclick="confirmRestore('/api/grades/{{ $grade->id }}/restore', 'grade')">♻ Restore</button>
+                            <button class="btn btn-sm btn-primary" onclick="confirmRestore('/api/grades/{{ $grade->id }}/restore', 'grade')" data-tip="Restore Grade">♻ Restore</button>
                         </div>
                     </td>
                 </tr>

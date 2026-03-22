@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\TeacherController;
 use App\Http\Controllers\Api\TermController;
+use App\Http\Controllers\Api\TurnController;
 use App\Http\Controllers\Api\TuitionPlanController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me'])->name('api.auth.me');
 
     // Students
+    Route::get('/students/generate-code', [StudentController::class, 'generateCode'])->name('api.students.generate-code');
+    Route::put('/students/{id}/restore', [StudentController::class, 'restore'])->name('api.students.restore');
     Route::apiResource('students', StudentController::class)->names('api.students');
 
     // Classrooms
@@ -42,6 +45,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Terms
     Route::apiResource('terms', TermController::class)->names('api.terms');
 
+    // Turns
+    Route::apiResource('turns', TurnController::class)->names('api.turns');
+
     // Teachers
     Route::apiResource('teachers', TeacherController::class)->names('api.teachers');
     Route::put('/teachers/{teacher}/restore', [TeacherController::class, 'restore'])->name('api.teachers.restore');
@@ -50,10 +56,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('tuition-plans', TuitionPlanController::class)->names('api.tuition-plans');
 
     // Payments
+    Route::get('/payments/students/{student}', [PaymentController::class, 'showStudentPayments'])->name('api.payments.students.show');
     Route::apiResource('payments', PaymentController::class)->only(['index', 'store', 'show'])->names('api.payments');
 
     // Enrollments
     Route::apiResource('enrollments', EnrollmentController::class)->only(['index', 'store', 'show', 'update'])->names('api.enrollments');
+    Route::post('/enrollments/{enrollment}/upgrade', [EnrollmentController::class, 'upgrade'])->name('api.enrollments.upgrade');
+    Route::post('/enrollments/{enrollment}/transfer', [EnrollmentController::class, 'transfer'])->name('api.enrollments.transfer');
+    Route::get('/enrollments/students/{student}/history', [EnrollmentController::class, 'history'])->name('api.enrollments.history');
+    Route::get('/enrollments/students/{student}/current', [EnrollmentController::class, 'current'])->name('api.enrollments.current');
 
     // Reports
     Route::get('/reports/payments', [ReportController::class, 'paymentReport'])->name('api.reports.payments');

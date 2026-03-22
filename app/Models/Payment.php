@@ -8,11 +8,13 @@ class Payment extends Model
 {
     protected $fillable = [
         'student_id',
+        'enrollment_id',
         'tuition_plan_id',
         'amount',
         'payment_date',
         'start_study_date',
         'end_study_date',
+        'status',
         'payment_method',
         'reference_number',
         'note',
@@ -37,6 +39,11 @@ class Payment extends Model
     public function tuitionPlan()
     {
         return $this->belongsTo(TuitionPlan::class);
+    }
+
+    public function enrollment()
+    {
+        return $this->belongsTo(Enrollment::class);
     }
 
     public function creator()

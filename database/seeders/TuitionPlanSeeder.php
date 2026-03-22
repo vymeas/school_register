@@ -17,7 +17,7 @@ class TuitionPlanSeeder extends Seeder
         ];
 
         foreach ($plans as $plan) {
-            TuitionPlan::create($plan);
+            TuitionPlan::updateOrCreate(['name' => $plan['name']], $plan);
         }
     }
 }

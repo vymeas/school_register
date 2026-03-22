@@ -17,8 +17,10 @@ class StoreEnrollmentRequest extends FormRequest
             'student_id' => 'required|exists:students,id',
             'classroom_id' => 'required|exists:classrooms,id',
             'term_id' => 'required|exists:terms,id',
-            'enrollment_date' => 'required|date',
-            'status' => 'nullable|in:active,inactive,transferred',
+            'grade_id' => 'nullable|exists:grades,id',
+            'start_date' => 'nullable|date',
+            'enrollment_date' => 'nullable|date',
+            'status' => 'nullable|in:pending,active,completed,transferred',
         ];
     }
 }

@@ -10,7 +10,11 @@ class Enrollment extends Model
         'student_id',
         'classroom_id',
         'term_id',
+        'grade_id',
         'enrollment_date',
+        'start_date',
+        'end_date',
+        'is_current',
         'status',
     ];
 
@@ -18,6 +22,9 @@ class Enrollment extends Model
     {
         return [
             'enrollment_date' => 'date',
+            'start_date' => 'date',
+            'end_date' => 'date',
+            'is_current' => 'boolean',
         ];
     }
 
@@ -34,5 +41,20 @@ class Enrollment extends Model
     public function term()
     {
         return $this->belongsTo(Term::class);
+    }
+
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function scopeCurrent($query)
+    {
+        return $query->where('is_current', true);
     }
 }

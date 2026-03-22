@@ -13,30 +13,52 @@
                 <option value="acleda" {{ request('method')=='acleda'?'selected':'' }}>ACLEDA</option>
                 <option value="wing" {{ request('method')=='wing'?'selected':'' }}>Wing</option>
             </select>
+            <select class="form-control" style="width:auto;" id="statusFilter">
+                <option value="">All Payment Status</option>
+                <option value="paid" {{ request('status')=='paid'?'selected':'' }}>Paid</option>
+                <option value="void" {{ request('status')=='void'?'selected':'' }}>Void</option>
+            </select>
         </div>
         <button class="btn btn-primary" onclick="openPaymentModal()">+ Record Payment</button>
     </div>
+    <div class="card-body" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding-top: 14px;">
+        <div class="stat-card" style="padding: 14px;">
+            <div class="stat-label">Active Students</div>
+            <div class="stat-value">{{ $activeStudentCount }}</div>
+        </div>
+        <div class="stat-card" style="padding: 14px;">
+            <div class="stat-label">Expired Students</div>
+            <div class="stat-value">{{ $expiredStudentCount }}</div>
+        </div>
+        <div class="stat-card" style="padding: 14px;">
+            <div class="stat-label">Expiring in 7 Days</div>
+            <div class="stat-value">{{ $expiringSoonCount }}</div>
+        </div>
+    </div>
     <div class="table-responsive">
         <table class="data-table">
-            <thead><tr><th>Student</th><th>Tuition Plan</th><th>Classroom</th><th>Amount</th><th>Method</th><th>Study Period</th><th>Date</th><th>Actions</th></tr></thead>
+            <thead><tr><th>Student</th><th>Enrollment</th><th>Tuition Plan</th><th>Amount</th><th>Method</th><th>Payment</th><th>Paid Until</th><th>Status</th></tr></thead>
             <tbody>
             @forelse($payments as $payment)
+                @php
+                    $paidUntil = $payment->end_study_date;
+                    $isActive = $paidUntil && now()->lte($paidUntil);
+                    $studentStatus = $isActive ? 'active' : 'expired';
+                @endphp
                 <tr>
                     <td><strong>{{ $payment->student->first_name ?? '' }} {{ $payment->student->last_name ?? '' }}</strong><br><span class="text-muted fs-sm">{{ $payment->student->student_code ?? '' }}</span></td>
+                    <td>
+                        {{ $payment->enrollment->classroom->name ?? '—' }}
+                        <br>
+                        <span class="text-muted fs-sm">{{ $payment->enrollment->term->name ?? '—' }}</span>
+                    </td>
                     <td>{{ $payment->tuitionPlan->name ?? '—' }}</td>
                     <td><span class="badge secondary">{{ $payment->tuitionPlan->classroom ?? '—' }}</span></td>
                     <td><strong>${{ number_format($payment->amount, 2) }}</strong></td>
                     <td><span class="badge info">{{ strtoupper($payment->payment_method) }}</span></td>
-                    <td>{{ $payment->start_study_date->format('d/m/Y') }} — {{ $payment->end_study_date->format('d/m/Y') }}</td>
                     <td>{{ $payment->payment_date->format('d M Y') }}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-secondary" title="View" data-payment="{{ $payment->toJson() }}" onclick="viewPayment(this.dataset.payment)">👁️</button>
-                            <button class="btn btn-sm btn-secondary" title="Repay" onclick="repayStudent({{ $payment->student_id }}, {{ $payment->tuition_plan_id }})">🔄</button>
-                            <button class="btn btn-sm btn-secondary" title="Receipt Voucher" onclick="openReceiptVoucher(this.dataset.payment)" data-payment="{{ $payment->toJson() }}">📄</button>
-                            <button class="btn btn-sm btn-danger" title="Delete" onclick="confirmDelete('/payments/{{ $payment->id }}', 'payment')">🗑️</button>
-                        </div>
-                    </td>
+                    <td>{{ $payment->end_study_date->format('d M Y') }}</td>
+                    <td><span class="badge {{ $studentStatus }}">{{ ucfirst($studentStatus) }}</span></td>
                 </tr>
             @empty
                 <tr><td colspan="8"><div class="empty-state"><div class="empty-icon">💳</div><h3>No payments</h3><p>Record your first payment.</p><button class="btn btn-primary" onclick="openModal('paymentModal')">+ Record Payment</button></div></td></tr>
@@ -58,20 +80,25 @@
         <div class="modal-body">
             <form id="paymentForm" method="POST" action="{{ route('payments.store') }}">
                 @csrf
+                <input type="hidden" name="student_id" id="studentIdInput">
                 <div class="form-group">
-                    <label class="form-label">Student *</label>
-                    <select name="student_id" id="studentSelect" class="form-control" required>
-                        <option value="">Select Student</option>
-                        @foreach($students as $s)
-                            <option value="{{ $s->id }}">{{ $s->student_code }} — {{ $s->first_name }} {{ $s->last_name }}</option>
+                    <label class="form-label">Enrollment *</label>
+                    <select name="enrollment_id" class="form-control" required id="enrollmentSelect">
+                        <option value="">Select Enrollment</option>
+                        @foreach($enrollments as $enrollment)
+                            <option
+                                value="{{ $enrollment->id }}"
+                                data-student-id="{{ $enrollment->student_id }}"
+                            >
+                                {{ $enrollment->student->student_code ?? '' }} — {{ $enrollment->student->first_name ?? '' }} {{ $enrollment->student->last_name ?? '' }} | {{ $enrollment->classroom->name ?? '—' }} | {{ $enrollment->term->name ?? '—' }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group"><label class="form-label">Tuition Plan *</label><select name="tuition_plan_id" class="form-control" required id="planSelect">@foreach($tuitionPlans as $p)<option value="{{ $p->id }}" data-price="{{ $p->price }}" data-classroom="{{ $p->classroom }}">{{ $p->name }} — ${{ number_format($p->price,2) }}</option>@endforeach</select></div>
-                <div class="form-group"><label class="form-label">Classroom</label><input type="text" id="classroomInput" class="form-control" readonly></div>
+                <div class="form-group"><label class="form-label">Tuition Plan *</label><select name="tuition_plan_id" class="form-control" required id="planSelect">@foreach($tuitionPlans as $p)<option value="{{ $p->id }}" data-price="{{ $p->price }}">{{ $p->name }} — ${{ number_format($p->price,2) }}</option>@endforeach</select></div>
                 <div class="form-row">
-                    <div class="form-group"><label class="form-label">Amount ($)</label><input type="number" name="amount" id="amountInput" class="form-control" step="0.01"></div>
-                    <div class="form-group"><label class="form-label">Start Study Date *</label><input type="date" name="start_study_date" class="form-control" required value="{{ date('Y-m-d') }}"></div>
+                    <div class="form-group"><label class="form-label">Amount ($)</label><input type="number" name="amount" id="amountInput" class="form-control" step="0.01" required readonly></div>
+                    <div class="form-group"><label class="form-label">Payment Date</label><input type="date" name="payment_date" class="form-control" value="{{ date('Y-m-d') }}"></div>
                 </div>
                 <div class="form-row">
                     <div class="form-group"><label class="form-label">Payment Method *</label><select name="payment_method" class="form-control" required><option value="cash">Cash</option><option value="aba">ABA</option><option value="acleda">ACLEDA</option><option value="wing">Wing</option></select></div>
@@ -352,184 +379,30 @@ function repayStudent(studentId, planId) {
     openModal('paymentModal');
 }
 document.getElementById('planSelect').dispatchEvent(new Event('change'));
-document.getElementById('methodFilter').addEventListener('change', function() {
-    const p = new URLSearchParams(window.location.search);
-    if (this.value) p.set('method', this.value);
-    else p.delete('method');
-    window.location.search = p.toString();
+
+document.getElementById('enrollmentSelect').addEventListener('change', function() {
+    const opt = this.options[this.selectedIndex];
+    document.getElementById('studentIdInput').value = opt.dataset.studentId || '';
 });
-let currentVoucherPayment = null;
 
-function openReceiptVoucher(paymentData) {
-    const p = typeof paymentData === 'string' ? JSON.parse(paymentData) : paymentData;
-    currentVoucherPayment = p;
-    
-    // Header
-    const genderKh = p.student.gender === 'male' ? 'ប្រុស' : 'ស្រី';
-    const payDate = new Date(p.payment_date).toLocaleDateString();
-    const startDate = new Date(p.start_study_date).toLocaleDateString();
-    
-    const fields = [
-        { label: 'ឈ្មោះ (Name)', value: `${p.student.first_name} ${p.student.last_name}` },
-        { label: 'ភេទ (Gender)', value: genderKh },
-        { label: 'លេខវិក្កយបត្រ (Receipt #)', value: `PAY-${p.id.toString().padStart(6, '0')}` },
-        { label: 'ថ្នាក់ (Class)', value: p.tuition_plan ? p.tuition_plan.classroom : '—' },
-        { label: 'វេន (Turn)', value: p.student.turn || '—' },
-        { label: 'អត្តលេខ (ID)', value: p.student.student_code },
-        { label: 'សម្រាប់ (For)', value: p.tuition_plan ? p.tuition_plan.name : '—' },
-        { label: 'គិតចាប់ពី (From)', value: startDate },
-        { label: 'បង់ថ្ងៃនៅថ្ងៃទី (Date)', value: payDate }
-    ];
+document.getElementById('methodFilter').addEventListener('change', function() {
+    applyFilters();
+});
 
-    document.getElementById('voucherStudentHeader').innerHTML = fields.map(f => `
-        <div class="info-item">
-            <div class="v-label-text">${f.label}</div>
-            <input type="text" class="v-value-input" value="${f.value}">
-        </div>
-    `).join('');
+document.getElementById('statusFilter').addEventListener('change', function() {
+    applyFilters();
+});
 
-    // Clear Items
-    document.getElementById('voucherItemsBody').innerHTML = '';
-    addVoucherRow(`Tuition Fee - ${p.tuition_plan ? p.tuition_plan.name : '—'}`, 1, p.amount, 0);
-    
-    openModal('receiptVoucherModal');
-}
-
-function addVoucherRow(desc = '', qty = 1, price = 0, disc = 0) {
-    const tbody = document.getElementById('voucherItemsBody');
-    const rowCount = tbody.children.length + 1;
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td style="border: 1px solid #ddd; text-align: center;">${rowCount}</td>
-        <td style="border: 1px solid #ddd;"><input type="text" class="v-desc" value="${desc}" style="text-align: left;"></td>
-        <td style="border: 1px solid #ddd;"><input type="number" class="v-qty" value="${qty}" oninput="updateVoucherTotals()"></td>
-        <td style="border: 1px solid #ddd;"><input type="number" class="v-price" value="${price}" step="0.01" oninput="updateVoucherTotals()"></td>
-        <td style="border: 1px solid #ddd;"><input type="number" class="v-disc" value="${disc}" oninput="updateVoucherTotals()"></td>
-        <td style="border: 1px solid #ddd; text-align: center;" class="v-total-usd">0.00</td>
-        <td style="border: 1px solid #ddd; text-align: center;" class="v-total-riel">0</td>
-        <td style="border: 1px solid #ddd; text-align: center;"><button class="btn btn-sm" onclick="this.closest('tr').remove(); updateVoucherTotals();">❌</button></td>
-    `;
-    tbody.appendChild(row);
-    updateVoucherTotals();
-}
-
-function updateVoucherTotals() {
-    const rows = document.getElementById('voucherItemsBody').children;
-    let grandUsd = 0;
-    
-    Array.from(rows).forEach((row, index) => {
-        row.cells[0].textContent = index + 1;
-        const qty = parseFloat(row.querySelector('.v-qty').value) || 0;
-        const price = parseFloat(row.querySelector('.v-price').value) || 0;
-        const disc = parseFloat(row.querySelector('.v-disc').value) || 0;
-        
-        const totalUsd = (qty * price) * (1 - disc / 100);
-        const totalRiel = Math.round(totalUsd * 4100);
-        
-        row.querySelector('.v-total-usd').textContent = totalUsd.toFixed(2);
-        row.querySelector('.v-total-riel').textContent = totalRiel.toLocaleString();
-        
-        grandUsd += totalUsd;
-    });
-
-    document.getElementById('voucherGrandTotalUsd').textContent = grandUsd.toFixed(2);
-    document.getElementById('voucherGrandTotalRiel').textContent = Math.round(grandUsd * 4100).toLocaleString();
-}
-
-function saveVoucher() {
-    // Current requirement doesn't specify backend saving, so just a "Saved" feedback for now
-    alert('Voucher data prepared for printing.');
-}
-
-function printVoucherFinal() {
-    const p = currentVoucherPayment;
-    
-    // Extract grid fields
-    const gridItems = Array.from(document.getElementById('voucherStudentHeader').querySelectorAll('.info-item')).map(div => ({
-        label: div.querySelector('.v-label-text').textContent,
-        value: div.querySelector('.v-value-input').value
-    }));
-
-    const items = [];
-    document.getElementById('voucherItemsBody').querySelectorAll('tr').forEach(row => {
-        items.push({
-            desc: row.querySelector('.v-desc').value,
-            qty: row.querySelector('.v-qty').value,
-            price: row.querySelector('.v-price').value,
-            disc: row.querySelector('.v-disc').value,
-            totalUsd: row.querySelector('.v-total-usd').textContent,
-            totalRiel: row.querySelector('.v-total-riel').textContent
-        });
-    });
-
-    const printWindow = window.open('', '_blank');
-    
-    let gridHtml = gridItems.map(it => `
-        <div class="info-item"><span class="info-label">${it.label}</span><div class="info-value">${it.value}</div></div>
-    `).join('');
-
-    let rowsHtml = items.map((it, idx) => `
-        <tr>
-            <td>${idx + 1}</td>
-            <td style="text-align: left;">${it.desc}</td>
-            <td>${it.qty}</td>
-            <td>$${parseFloat(it.price).toFixed(2)}</td>
-            <td>${it.disc}%</td>
-            <td>$${it.totalUsd}</td>
-            <td>${it.totalRiel}៛</td>
-            <td>[ ]</td>
-        </tr>
-    `).join('');
-
-    const grandTotalUsd = items.reduce((sum, it) => sum + parseFloat(it.totalUsd), 0).toFixed(2);
-    const grandTotalRiel = Math.round(grandTotalUsd * 4100).toLocaleString();
-
-    const content = `
-        <html>
-        <head>
-            <title>Receipt</title>
-            <style>
-                @import url('https://fonts.googleapis.com/css2?family=Khmer&family=Inter:wght@400;700&display=swap');
-                body { font-family: 'Inter', 'Khmer', sans-serif; padding: 20px; color: #333; }
-                .receipt-container { width: 100%; max-width: 800px; margin: 0 auto; }
-                .receipt-header { text-align: center; margin-bottom: 20px; }
-                .receipt-header h1 { margin: 0; font-size: 24px; }
-                .receipt-header h2 { margin: 0; font-size: 20px; }
-                .info-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border: 1.5px solid #000; margin-bottom: 20px; }
-                .info-item { border: 0.5px solid #000; padding: 8px; min-height: 40px; }
-                .info-label { font-size: 11px; color: #333; }
-                .info-value { font-weight: bold; font-size: 14px; border-bottom: 1px dotted #888; }
-                .item-table { width: 100%; border-collapse: collapse; border: 1.5px solid #000; }
-                .item-table th, .item-table td { border: 1px solid #000; padding: 8px; text-align: center; font-size: 12px; }
-                .total-row { font-weight: bold; background: #eee; }
-                .signatures { display: flex; justify-content: space-between; margin-top: 60px; padding: 0 40px; }
-                .signature-box { text-align: center; width: 250px; }
-                .signature-line { margin-top: 50px; border-top: 1px solid #000; }
-            </style>
-        </head>
-        <body onload="window.print()">
-            <div class="receipt-container">
-                <div class="receipt-header"><h1>វិក្កយបត្រទទួលប្រាក់</h1><h2>Receipt Voucher</h2></div>
-                <div class="info-grid">${gridHtml}</div>
-                <table class="item-table">
-                    <thead><tr><th>ល.រ<br>(No)</th><th>បរិយាយ<br>(Description)</th><th>បរិមាណ<br>(Qty)</th><th>តម្លៃ ($)<br>(Price)</th><th>បញ្ចុះ (%)<br>(Disc)</th><th>សរុប ($)<br>(Total $)</th><th>សរុប (រ)<br>(Total R)</th><th>លុប</th></tr></thead>
-                    <tbody>${rowsHtml}<tr class="total-row"><td colspan="5" style="text-align: right;">សរុប (Total)</td><td>$${grandTotalUsd}</td><td>${grandTotalRiel}៛</td><td></td></tr></tbody>
-                </table>
-                <div class="signatures">
-                    <div class="signature-box"><div>ហត្ថលេខាអតិថិជន</div><div>Customer Signature</div><div class="signature-line"></div></div>
-                    <div class="signature-box"><div>ហត្ថលេខាគណនេយ្យ</div><div>Cashier Signature</div><div class="signature-line"></div></div>
-                </div>
-            </div>
-        </body>
-        </html>
-    `;
-    printWindow.document.write(content);
-    printWindow.document.close();
-}
-
-function printReceipt(paymentData) {
-    // Keep this function for simple printing if needed, but the user requested editable voucher
-    openReceiptVoucher(paymentData);
+function applyFilters() {
+    const p = new URLSearchParams(window.location.search);
+    const method = document.getElementById('methodFilter').value;
+    const status = document.getElementById('statusFilter').value;
+    if (method) p.set('method', method);
+    else p.delete('method');
+    if (status) p.set('status', status);
+    else p.delete('status');
+    p.delete('page');
+    window.location.search = p.toString();
 }
 
 if (new URLSearchParams(window.location.search).get('action') === 'create') openModal('paymentModal');

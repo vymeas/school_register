@@ -9,14 +9,16 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'username' => 'superadmin',
-            'password' => 'password',
-            'full_name' => 'Super Admin',
-            'role' => 'super_admin',
-            'status' => 'active',
-            'email' => 'admin@school.com',
-            'phone' => '012345678',
-        ]);
+        User::updateOrCreate(
+            ['username' => 'superadmin'],
+            [
+                'password' => 'password',
+                'full_name' => 'Super Admin',
+                'role' => 'super_admin',
+                'status' => 'active',
+                'email' => 'admin@school.com',
+                'phone' => '012345678',
+            ]
+        );
     }
 }

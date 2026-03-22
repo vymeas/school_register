@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
@@ -27,6 +28,8 @@ class Student extends Model
         'turn',
         'time',
         'status',
+        'study_status',
+        'is_delete',
         'registration_date',
         'emergency_contact',
         'emergency_name',
@@ -34,6 +37,16 @@ class Student extends Model
         'teacher_id',
         'start_date',
     ];
+
+    /**
+     * Global scope: always hide soft-deleted students.
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope('not_deleted', function (Builder $query) {
+            $query->where('is_delete', false);
+        });
+    }
 
     protected function casts(): array
     {
@@ -76,6 +89,13 @@ class Student extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function latestPayment()
+    {
+        return $this->hasOne(Payment::class)
+            ->where('status', 'paid')
+            ->orderByDesc('end_study_date');
+    }
+
     // Scopes
     public function scopeActive($query)
     {
@@ -87,8 +107,18 @@ class Student extends Model
         return $query->where('status', 'expired');
     }
 
-    public function scopePending($query)
+    public function scopeStudying($query)
     {
-        return $query->where('status', 'pending');
+        return $query->where('study_status', 'studying');
+    }
+
+    public function scopeDropped($query)
+    {
+        return $query->where('study_status', 'dropped');
+    }
+
+    public function scopeOnlyDeleted($query)
+    {
+        return $query->withoutGlobalScope('not_deleted')->where('is_delete', true);
     }
 }

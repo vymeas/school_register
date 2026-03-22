@@ -30,8 +30,8 @@
                     <td><span class="badge {{ $teacher->status }}">{{ ucfirst($teacher->status) }}</span></td>
                     <td>
                         <div class="btn-group">
-                            <button class="btn btn-sm btn-secondary" onclick="editTeacher({{ json_encode($teacher) }})">✎</button>
-                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/teachers/{{ $teacher->id }}', 'teacher')">🗑</button>
+                            <button class="btn btn-sm btn-secondary" onclick="editTeacher({{ json_encode($teacher) }})" data-tip="Edit Teacher">✎</button>
+                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/teachers/{{ $teacher->id }}', 'teacher')" data-tip="Delete Teacher">🗑</button>
                         </div>
                     </td>
                 </tr>

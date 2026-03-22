@@ -31,7 +31,7 @@
             <a href="{{ route('teachers.index') }}" class="nav-item {{ request()->routeIs('teachers.*') ? 'active' : '' }}">
                 <span class="nav-icon">👨‍🏫</span> Teachers
             </a>
-            <a href="{{ route('classrooms.index') }}" class="nav-item {{ request()->routeIs('classrooms.*') ? 'active' : '' }}">
+            <a href="{{ route('classrooms.index') }}" class="nav-item {{ request()->routeIs('classrooms.index') || request()->routeIs('classrooms.store') ? 'active' : '' }}">
                 <span class="nav-icon">🏫</span> Classrooms
             </a>
             <a href="{{ route('grades.index') }}" class="nav-item {{ request()->routeIs('grades.*') ? 'active' : '' }}">
@@ -39,6 +39,9 @@
             </a>
             <a href="{{ route('terms.index') }}" class="nav-item {{ request()->routeIs('terms.*') ? 'active' : '' }}">
                 <span class="nav-icon">📅</span> Terms
+            </a>
+            <a href="{{ route('turns.index') }}" class="nav-item {{ request()->routeIs('turns.*') ? 'active' : '' }}">
+                <span class="nav-icon">🕒</span> Turns
             </a>
 
             <div class="nav-section-title">Finance</div>
@@ -67,6 +70,12 @@
             </a>
             <a href="{{ route('settings.teachers.restore') }}" class="nav-item {{ request()->routeIs('settings.teachers.restore') ? 'active' : '' }}">
                 <span class="nav-icon">♻️</span> Restore Teachers
+            </a>
+            <a href="{{ route('settings.students.restore') }}" class="nav-item {{ request()->routeIs('settings.students.restore') ? 'active' : '' }}">
+                <span class="nav-icon">♻️</span> Restore Students
+            </a>
+            <a href="{{ route('classrooms.archived') }}" class="nav-item {{ request()->routeIs('classrooms.archived') ? 'active' : '' }}">
+                <span class="nav-icon">📦</span> Restore Classrooms
             </a>
         </nav>
     </aside>

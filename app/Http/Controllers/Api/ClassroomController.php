@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClassroomRequest;
 use App\Models\Classroom;
+use App\Models\Enrollment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -37,10 +38,27 @@ class ClassroomController extends Controller
 
     public function show(string $id): JsonResponse
     {
-        $classroom = Classroom::with(['grade', 'teacher', 'students'])->findOrFail($id);
+        $classroom = Classroom::with(['grade.term', 'teacher', 'turn'])->findOrFail($id);
+        $termId = $classroom->grade?->term_id;
+
+        $enrollmentStudents = Enrollment::with('student')
+            ->where('classroom_id', $classroom->id)
+            ->where('grade_id', $classroom->grade_id)
+            ->when($termId, function ($query) use ($termId) {
+                $query->where('term_id', $termId);
+            })
+            ->where('is_current', true)
+            ->orderByDesc('start_date')
+            ->get()
+            ->pluck('student')
+            ->filter()
+            ->unique('id')
+            ->values();
 
         return response()->json([
-            'classroom' => $classroom,
+            'classroom' => $classroom
+                ->setAttribute('enrollment_students', $enrollmentStudents)
+                ->setAttribute('enrollment_students_count', $enrollmentStudents->count()),
         ]);
     }
 
@@ -58,10 +76,10 @@ class ClassroomController extends Controller
     public function destroy(string $id): JsonResponse
     {
         $classroom = Classroom::findOrFail($id);
-        $classroom->delete();
+        $classroom->update(['is_archived' => true]);
 
         return response()->json([
-            'message' => 'Classroom deleted successfully.',
+            'message' => 'Classroom archived successfully.',
         ]);
     }
 }

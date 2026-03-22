@@ -15,10 +15,10 @@ class StorePaymentRequest extends FormRequest
     {
         return [
             'student_id' => 'required|exists:students,id',
+            'enrollment_id' => 'required|exists:enrollments,id',
             'tuition_plan_id' => 'required|exists:tuition_plans,id',
-            'amount' => 'nullable|numeric|min:0',
+            'amount' => 'required|numeric|min:0',
             'payment_date' => 'nullable|date',
-            'start_study_date' => 'required|date',
             'payment_method' => 'required|in:cash,aba,acleda,wing',
             'reference_number' => 'nullable|string|max:255',
             'note' => 'nullable|string',

@@ -21,7 +21,7 @@
                     <td>{{ $teacher->email ?? '—' }}</td>
                     <td>
                         <div class="btn-group">
-                            <button class="btn btn-sm btn-primary" onclick="confirmRestore('/api/teachers/{{ $teacher->id }}/restore', 'teacher')">♻ Restore</button>
+                            <button class="btn btn-sm btn-primary" onclick="confirmRestore('/api/teachers/{{ $teacher->id }}/restore', 'teacher')" data-tip="Restore Teacher">♻ Restore</button>
                         </div>
                     </td>
                 </tr>

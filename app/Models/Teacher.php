@@ -13,7 +13,6 @@ class Teacher extends Model
         'gender',
         'phone',
         'email',
-        'classroom_id',
         'status',
         'address',
         'hire_date',
@@ -28,9 +27,9 @@ class Teacher extends Model
         ];
     }
 
-    public function classroom()
+    public function classrooms()
     {
-        return $this->belongsTo(Classroom::class);
+        return $this->hasMany(Classroom::class);
     }
 
     public function scopeActive($query)
