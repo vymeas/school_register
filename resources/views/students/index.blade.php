@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Students')
-@section('page-title', 'Students')
+@section('title', __('Students'))
+@section('page-title', __('Students'))
 
 @section('content')
 <div class="card">
@@ -53,14 +53,14 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'student_code', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Code</a></th>
-                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'first_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Name</a></th>
-                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'date_of_birth', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">Date Of Birth</a></th>
-                    <th>Teacher</th>
-                    <th>Current Enrollment</th>
-                    <th>Study Status</th>
-                    <th>Payment Status</th>
-                    <th>Actions</th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'student_code', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">{{ __('Code') }}</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'first_name', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">{{ __('Name') }}</a></th>
+                    <th><a href="{{ request()->fullUrlWithQuery(['sort' => 'date_of_birth', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}">{{ __('Date Of Birth') }}</a></th>
+                    <th>{{ __('Teacher') }}</th>
+                    <th>{{ __('Current Enrollment') }}</th>
+                    <th>{{ __('Study Status') }}</th>
+                    <th>{{ __('Payment Status') }}</th>
+                    <th>{{ __('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -130,7 +130,9 @@
                     <td>
                         <div class="btn-group">
                             <a href="{{ route('students.show', $student) }}" class="btn btn-sm btn-secondary" data-tip="View Profile"><i data-lucide="eye" style="width:14px;height:14px;"></i></a>
+                            @if(auth()->user()->role !== 'accountant')
                             <button class="btn btn-sm btn-secondary" onclick="editStudent({{ $student->id }})" data-tip="Edit Student"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
+                            @endif
                             <a href="{{ route('payments.create', ['student_id' => $student->id]) }}" class="btn btn-sm btn-success" data-tip="Record Payment"><i data-lucide="credit-card" style="width:14px;height:14px;"></i></a>
                             {{-- Quick study status toggle --}}
                             <form method="POST" action="{{ route('students.study-status', $student) }}" style="display:inline;">
@@ -150,7 +152,9 @@
                                         onclick="return confirm('Mark {{ addslashes($student->full_name) }} as Studying again?')"><i data-lucide="book-open-check" style="width:14px;height:14px;"></i></button>
                                 @endif
                             </form>
+                            @if(auth()->user()->role !== 'accountant')
                             <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/students/{{ $student->id }}', 'student')" data-tip="Delete Student"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
+                            @endif
                         </div>
                     </td>
                 </tr>

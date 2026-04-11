@@ -73,45 +73,46 @@
 .stu-btn-back:hover { background: rgba(255,255,255,0.22); }
 
 /* Info sections grid */
-.stu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
-@media (max-width: 768px) { .stu-grid { grid-template-columns: 1fr; } }
+.stu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+@media (max-width: 900px) { .stu-grid { grid-template-columns: 1fr; } }
 .stu-section-title {
-    font-size: 13px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.6px; color: var(--text-muted);
-    padding: 16px 20px 10px;
-    border-bottom: 1px solid var(--border-color);
+    font-size: 11px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--text-muted);
+    padding: 18px 24px 12px;
+    border-bottom: 1px solid rgba(0,0,0,0.03);
     display: flex; align-items: center; gap: 8px;
 }
-.stu-kv-table { width: 100%; }
-.stu-kv-table tr td { padding: 10px 20px; font-size: 13px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+.stu-kv-table { width: 100%; border-collapse: collapse; }
+.stu-kv-table tr td { padding: 12px 24px; font-size: 13,5px; border-bottom: 1px solid rgba(0,0,0,0.03); vertical-align: middle; }
 .stu-kv-table tr:last-child td { border-bottom: none; }
-.stu-kv-label { color: var(--text-muted); font-weight: 600; font-size: 12px; width: 130px; white-space: nowrap; }
-.stu-kv-value { color: var(--text-primary); font-weight: 500; }
+.stu-kv-label { color: var(--text-muted); font-weight: 500; width: 150px; }
+.stu-kv-value { color: var(--text-primary); font-weight: 600; }
 
 /* Current enrollment highlight */
 .enr-current-card {
-    background: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(139,92,246,0.05) 100%);
-    border: 1px solid rgba(99,102,241,0.25);
+    background: #fff;
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     margin-bottom: 24px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
     overflow: hidden;
 }
 .enr-current-header {
-    padding: 14px 20px;
-    background: rgba(99,102,241,0.1);
-    border-bottom: 1px solid rgba(99,102,241,0.2);
+    padding: 14px 24px;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--border-color);
     display: flex; align-items: center; justify-content: space-between;
 }
-.enr-current-header h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: #818cf8; display: flex; align-items: center; gap: 6px; }
+.enr-current-header h3 { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #6366f1; display: flex; align-items: center; gap: 8px; }
 .enr-stat-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    padding: 16px 20px;
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    padding: 24px;
+    gap: 24px;
 }
-.enr-stat-item label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); display: block; margin-bottom: 3px; }
-.enr-stat-item span { font-size: 14px; font-weight: 700; color: var(--text-primary); }
-.enr-stat-item span.accent { color: var(--accent-primary); }
+.enr-stat-item label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); display: block; margin-bottom: 6px; }
+.enr-stat-item span { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+.enr-stat-item span.accent { color: #6366f1; }
 
 /* Enrollment history table */
 .enr-history-table thead th { background: rgba(0,0,0,0.2); }
@@ -121,24 +122,47 @@
 {{-- Banner --}}
 <div class="stu-banner">
     <div class="stu-banner-inner">
-        <div class="stu-avatar">{{ $student->gender === 'female' ? '<i data-lucide="user-round" style="width:20px;height:20px;display:inline;"></i>' : '<i data-lucide="user-round" style="width:20px;height:20px;display:inline;"></i>' }}</div>
+        <div class="stu-avatar">
+            @if($student->gender === 'female')
+                <i data-lucide="user-round" style="width:40px;height:40px;color:#fff;"></i>
+            @else
+                <i data-lucide="user-round" style="width:40px;height:40px;color:#fff;"></i>
+            @endif
+        </div>
         <div class="stu-banner-info">
             <h1>{{ $student->full_name }}</h1>
-            <p>{{ $student->student_code }} · Registered {{ $student->registration_date ? $student->registration_date->format('d M Y') : 'N/A' }}</p>
+            <p>
+                <span style="opacity:0.8;">Student ID:</span> <strong>{{ $student->student_code }}</strong> 
+                <span style="margin:0 10px; opacity:0.4;">|</span>
+                <span style="opacity:0.8;">Enrolled Since:</span> <strong>{{ $student->registration_date ? $student->registration_date->format('d M Y') : 'N/A' }}</strong>
+            </p>
             <div class="stu-banner-chips">
-                <span class="stu-chip">{{ ucfirst($student->gender) }}</span>
+                <span class="stu-chip">
+                    <i data-lucide="{{ $student->gender === 'female' ? 'venus' : 'mars' }}" style="width:12px;height:12px;"></i>
+                    {{ ucfirst($student->gender) }}
+                </span>
                 @if($student->date_of_birth)
-                    <span class="stu-chip">{{ $student->date_of_birth->format('d M Y') }}</span>
+                    <span class="stu-chip">
+                        <i data-lucide="cake" style="width:12px;height:12px;"></i>
+                        {{ $student->date_of_birth->format('d M Y') }}
+                    </span>
                 @endif
-                <span class="stu-chip badge {{ $student->status }}" style="border:none;">{{ ucfirst($student->status) }}</span>
+                <span class="stu-chip" style="background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3);">
+                    {{ ucfirst($student->status) }}
+                </span>
                 @if($currentEnrollment)
-                    <span class="stu-chip">{{ $currentEnrollment->classroom->name ?? '—' }}</span>
-                    <span class="stu-chip">{{ $currentEnrollment->grade->name ?? $currentEnrollment->classroom->grade->name ?? '—' }}</span>
+                    <span class="stu-chip" style="background: rgba(99,102,241,0.3); border-color: rgba(99,102,241,0.4);">
+                        <i data-lucide="layout" style="width:12px;height:12px;"></i>
+                        {{ $currentEnrollment->classroom->name ?? '—' }} ({{ $currentEnrollment->grade->name ?? $currentEnrollment->classroom->grade->name ?? '—' }})
+                    </span>
                 @endif
             </div>
         </div>
         <div class="stu-banner-actions">
-            <a href="{{ route('students.index') }}" class="stu-btn-back">Back</a>
+            <a href="{{ route('students.index') }}" class="stu-btn-back">
+                <i data-lucide="arrow-left" style="width:14px;height:14px;"></i>
+                Back to List
+            </a>
         </div>
     </div>
 </div>
@@ -214,26 +238,56 @@
 
     {{-- Health --}}
     <div class="card">
-        <div class="stu-section-title">Health &amp; Characteristics</div>
-        <div style="padding:16px 20px;">
-            <div style="margin-bottom:14px;">
-                <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-muted); margin-bottom:6px;">Health</div>
-                <div style="font-size:13px; color:var(--text-primary); line-height:1.6;">{{ $student->health ?: 'None recorded' }}</div>
+        <div class="stu-section-title">
+            <i data-lucide="heart-pulse" style="width:14px;height:14px;"></i>
+            Health &amp; Characteristics
+        </div>
+        <div style="padding:20px 24px;">
+            <div style="margin-bottom:18px;">
+                <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                    <i data-lucide="activity" style="width:10px;height:10px;"></i> Health Condition
+                </div>
+                <div style="font-size:13.5px; color:var(--text-primary); line-height:1.6; padding:12px; background:#f8fafc; border-radius:8px; border:1px solid #f1f5f9;">
+                    {{ $student->health ?: 'No health conditions recorded.' }}
+                </div>
             </div>
             <div>
-                <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-muted); margin-bottom:6px;">Characteristics</div>
-                <div style="font-size:13px; color:var(--text-primary); line-height:1.6;">{{ $student->characteristics ?: 'None recorded' }}</div>
+                <div style="font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                    <i data-lucide="info" style="width:10px;height:10px;"></i> Characteristics
+                </div>
+                <div style="font-size:13.5px; color:var(--text-primary); line-height:1.6; padding:12px; background:#f8fafc; border-radius:8px; border:1px solid #f1f5f9;">
+                    {{ $student->characteristics ?: 'No specific characteristics recorded.' }}
+                </div>
             </div>
         </div>
     </div>
 
     {{-- Payment Summary --}}
     <div class="card">
-        <div class="stu-section-title">Payment Summary</div>
+        <div class="stu-section-title">
+            <i data-lucide="credit-card" style="width:14px;height:14px;"></i>
+            Payment Summary
+        </div>
         <table class="stu-kv-table">
-            <tr><td class="stu-kv-label">Total Payments</td><td class="stu-kv-value"><strong>{{ $student->payments->count() }}</strong></td></tr>
-            <tr><td class="stu-kv-label">Total Paid</td><td class="stu-kv-value"><strong style="color:var(--success);">${{ number_format($student->payments->sum('amount'), 2) }}</strong></td></tr>
+            <tr>
+                <td class="stu-kv-label">Total Payments</td>
+                <td class="stu-kv-value">
+                    <span style="font-size:18px; font-weight:800;">{{ $student->payments->count() }}</span>
+                    <span style="color:var(--text-muted); font-weight:400; font-size:12px; margin-left:4px;">transactions</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="stu-kv-label">Total Paid</td>
+                <td class="stu-kv-value">
+                    <span style="font-size:18px; font-weight:800; color:var(--success);">${{ number_format($student->payments->sum('amount'), 2) }}</span>
+                </td>
+            </tr>
         </table>
+        <div style="padding:15px 24px; background:#f8fafc; border-top:1px solid rgba(0,0,0,0.03);">
+            <a href="{{ route('payments.index', ['search' => $student->student_code]) }}" style="font-size:12px; font-weight:700; color:#6366f1; text-decoration:none; display:flex; align-items:center; gap:5px;">
+                View full payment history <i data-lucide="external-link" style="width:12px;height:12px;"></i>
+            </a>
+        </div>
     </div>
 </div>
 

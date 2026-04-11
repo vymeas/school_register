@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Grades')
-@section('page-title', 'Grades')
+@section('title', __('Grades'))
+@section('page-title', __('Grades'))
 
 @section('content')
 <div class="card">
@@ -19,7 +19,7 @@
     </div>
     <div class="table-responsive">
         <table class="data-table">
-            <thead><tr><th>Name</th><th>Term</th><th>Description</th><th>Classrooms</th><th>Actions</th></tr></thead>
+            <thead><tr><th>{{ __('Name') }}</th><th>{{ __('Term') }}</th><th>{{ __('Description') }}</th><th>{{ __('Classrooms') }}</th><th>{{ __('Actions') }}</th></tr></thead>
             <tbody>
             @forelse($grades as $grade)
                 <tr data-term-id="{{ $grade->term_id }}">
@@ -29,8 +29,12 @@
                     <td>{{ $grade->classrooms_count }}</td>
                     <td>
                         <div class="btn-group">
+                            @if(auth()->user()->role !== 'accountant')
                             <button class="btn btn-sm btn-secondary" onclick="editGrade({{ json_encode($grade) }})" data-tip="Edit Grade"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
+                            @endif
+                            @if(auth()->user()->role !== 'accountant')
                             <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/grades/{{ $grade->id }}', 'grade')" data-tip="Delete Grade"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
+                            @endif
                         </div>
                     </td>
                 </tr>

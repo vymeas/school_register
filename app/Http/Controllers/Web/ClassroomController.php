@@ -33,6 +33,10 @@ class ClassroomController extends Controller
             $query->where('turn_id', $request->turn_id);
         }
 
+        if ($request->filled('grade_id')) {
+            $query->where('grade_id', $request->grade_id);
+        }
+
         return view('classrooms.index', [
             'classrooms' => $query->orderBy('name')->get(),
             'grades' => Grade::with('term')->orderBy('name')->get(),
@@ -115,7 +119,7 @@ class ClassroomController extends Controller
     {
         $classrooms = Classroom::withoutGlobalScope('active')
             ->with(['grade.term', 'teacher', 'turn'])
-            ->where('is_archived', true)
+            ->where('is_delete', true)
             ->orderBy('name')
             ->get();
 
@@ -125,7 +129,7 @@ class ClassroomController extends Controller
     public function restore(int $id)
     {
         $classroom = Classroom::withoutGlobalScope('active')->findOrFail($id);
-        $classroom->update(['is_archived' => false]);
+        $classroom->update(['is_delete' => false]);
 
         return redirect()->route('classrooms.archived')->with('success', "Classroom \"{$classroom->name}\" restored successfully.");
     }

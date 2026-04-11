@@ -30,6 +30,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Redirect root to dashboard
 Route::get('/', fn () => redirect()->route('dashboard'));
 
+Route::get('lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'km'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
 // Protected routes
 Route::middleware('auth')->group(function () {
 

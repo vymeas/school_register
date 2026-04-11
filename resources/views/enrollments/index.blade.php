@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Enrollments')
-@section('page-title', 'Enrollments')
+@section('title', __('Enrollments'))
+@section('page-title', __('Enrollments'))
 
 @section('content')
 <div class="card">
@@ -20,7 +20,7 @@
     </div>
     <div class="table-responsive">
         <table class="data-table">
-            <thead><tr><th>Student</th><th>Term</th><th>Grade</th><th>Classroom</th><th>Start</th><th>End (Term)</th><th>Current</th><th>Status</th><th>Actions</th></tr></thead>
+            <thead><tr><th>{{ __('Student') }}</th><th>{{ __('Term') }}</th><th>{{ __('Grade') }}</th><th>{{ __('Classroom') }}</th><th>{{ __('Start') }}</th><th>{{ __('End (Term)') }}</th><th>{{ __('Current') }}</th><th>{{ __('Status') }}</th><th>{{ __('Actions') }}</th></tr></thead>
             <tbody>
             @forelse($enrollments as $e)
                 <tr>

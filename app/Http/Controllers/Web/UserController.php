@@ -12,6 +12,11 @@ class UserController extends Controller
     {
         $query = User::where('is_deleted', false);
 
+        // Don't show super_admin to non-super_admin users
+        if (auth()->user()->role !== 'super_admin') {
+            $query->where('role', '!=', 'super_admin');
+        }
+
         if ($request->filled('role')) {
             $query->where('role', $request->role);
         }
@@ -30,11 +35,16 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $allowedRoles = 'admin,accountant';
+        if (auth()->user()->role === 'super_admin') {
+            $allowedRoles .= ',super_admin';
+        }
+
         $data = $request->validate([
             'username' => 'required|string|unique:users,username|max:255',
             'password' => 'required|string|min:6',
             'full_name' => 'required|string|max:255',
-            'role' => 'required|in:super_admin,admin,accountant,registrar,teacher',
+            'role' => "required|in:{$allowedRoles}",
             'email' => 'nullable|email',
             'phone' => 'nullable|string',
         ]);

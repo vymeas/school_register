@@ -13,11 +13,11 @@ class Classroom extends Model
         'teacher_id',
         'name',
         'capacity',
-        'is_archived',
+        'is_delete',
     ];
 
     protected $casts = [
-        'is_archived' => 'boolean',
+        'is_delete' => 'boolean',
     ];
 
     /**
@@ -26,7 +26,7 @@ class Classroom extends Model
     protected static function booted(): void
     {
         static::addGlobalScope('active', function (Builder $query) {
-            $query->where('is_archived', false);
+            $query->where('is_delete', false);
         });
     }
 
