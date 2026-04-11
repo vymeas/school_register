@@ -92,9 +92,15 @@
                     {{-- Study Status --}}
                     <td>
                         @if($student->study_status === 'studying')
-                            <span class="badge active" style="background:rgba(16,185,129,0.12); color:#10b981;">📖 Studying</span>
+                            @if($student->status === 'active')
+                                <span class="badge active">✅ Active</span>
+                            @elseif($student->status === 'expired')
+                                <span class="badge expired">⏳ Expired</span>
+                            @else
+                                <span class="badge pending">🕒 Pending</span>
+                            @endif
                         @else
-                            <span class="badge expired" style="background:rgba(239,68,68,0.1); color:#ef4444;">🚫 Dropped</span>
+                            <span class="badge expired">🚫 Dropped</span>
                         @endif
                     </td>
                     {{-- Payment Status --}}

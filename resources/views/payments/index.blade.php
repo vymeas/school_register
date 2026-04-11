@@ -223,7 +223,6 @@
 document.getElementById('planSelect').addEventListener('change', function() {
     const opt = this.options[this.selectedIndex];
     document.getElementById('amountInput').value = opt.dataset.price || '';
-    document.getElementById('classroomInput').value = opt.dataset.classroom || '—';
 });
 
 let currentHistory = [];
@@ -349,29 +348,24 @@ function printHistory() {
 }
 
 function openPaymentModal() {
-    const studentSelect = document.getElementById('studentSelect');
-    studentSelect.disabled = false;
-    studentSelect.value = "";
     document.getElementById('paymentForm').reset();
+    document.getElementById('studentIdInput').value = '';
     document.getElementById('planSelect').dispatchEvent(new Event('change'));
     openModal('paymentModal');
 }
 
 function repayStudent(studentId, planId) {
-    const studentSelect = document.getElementById('studentSelect');
-    studentSelect.value = studentId;
-    studentSelect.disabled = true;
+    const enrollmentSelect = document.getElementById('enrollmentSelect');
     
-    // Add hidden input if it doesn't exist to ensure student_id is sent
-    let hiddenStudentInput = document.getElementById('hiddenStudentId');
-    if (!hiddenStudentInput) {
-        hiddenStudentInput = document.createElement('input');
-        hiddenStudentInput.type = 'hidden';
-        hiddenStudentInput.name = 'student_id';
-        hiddenStudentInput.id = 'hiddenStudentId';
-        document.getElementById('paymentForm').appendChild(hiddenStudentInput);
+    // Find first enrollment for this student
+    for (let opt of enrollmentSelect.options) {
+        if (opt.dataset.studentId === String(studentId)) {
+            enrollmentSelect.value = opt.value;
+            break;
+        }
     }
-    hiddenStudentInput.value = studentId;
+    
+    document.getElementById('studentIdInput').value = studentId;
 
     const planSelect = document.getElementById('planSelect');
     planSelect.value = planId;
