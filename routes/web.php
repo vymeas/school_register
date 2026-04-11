@@ -78,6 +78,7 @@ Route::middleware('auth')->group(function () {
 
     // Payments
     Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
+    Route::get('/payments/create', [PaymentController::class, 'create'])->name('payments.create');
     Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
     Route::get('/payments/students/{student}', [PaymentController::class, 'showStudentPayments'])->name('payments.students.show');
 
@@ -89,8 +90,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/enrollments/students/{student}/history', [EnrollmentController::class, 'history'])->name('enrollments.history');
     Route::get('/enrollments/students/{student}/current', [EnrollmentController::class, 'current'])->name('enrollments.current');
 
-    // Reports
+    // Reports — Classroom
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/classroom', [ReportController::class, 'classroom'])->name('reports.classroom');
+    Route::get('/reports/classroom-summary', [ReportController::class, 'classroomSummary'])->name('reports.classroom.summary');
+    Route::get('/reports/classroom-unpaid', [ReportController::class, 'classroomUnpaid'])->name('reports.classroom.unpaid');
+    // Reports — Students
+    Route::get('/reports/students', [ReportController::class, 'studentSummary'])->name('reports.students');
+    Route::get('/reports/students/{student}', [ReportController::class, 'studentProfile'])->name('reports.students.profile');
+    // Reports — Term/Grade
+    Route::get('/reports/term-grade', [ReportController::class, 'termGradeSummary'])->name('reports.term-grade');
+    Route::get('/reports/term-grade/{grade}', [ReportController::class, 'termGradeDetail'])->name('reports.term-grade.detail');
+    // Reports — Teachers
+    Route::get('/reports/teachers', [ReportController::class, 'teacherSummary'])->name('reports.teachers');
+    Route::get('/reports/teachers/{teacher}', [ReportController::class, 'teacherSchedule'])->name('reports.teachers.schedule');
+    // Reports — Payments
+    Route::get('/reports/payment-revenue', [ReportController::class, 'paymentRevenue'])->name('reports.payment.revenue');
+    Route::get('/reports/payment-transactions', [ReportController::class, 'paymentTransactions'])->name('reports.payment.transactions');
+    Route::get('/reports/payment-overdue', [ReportController::class, 'paymentOverdue'])->name('reports.payment.overdue');
+    Route::get('/reports/payment-receipt/{payment}', [ReportController::class, 'paymentReceipt'])->name('reports.payment.receipt');
 
     // Users
     Route::get('/users', [UserController::class, 'index'])->name('users.index');

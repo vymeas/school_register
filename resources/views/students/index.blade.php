@@ -131,7 +131,7 @@
                         <div class="btn-group">
                             <a href="{{ route('students.show', $student) }}" class="btn btn-sm btn-secondary" data-tip="View Profile">👁</a>
                             <button class="btn btn-sm btn-secondary" onclick="editStudent({{ $student->id }})" data-tip="Edit Student">✏️</button>
-                            <button class="btn btn-sm btn-success" onclick="openPayModal({{ $student->id }}, '{{ addslashes($student->full_name) }}', '{{ $student->student_code }}')" data-tip="Record Payment">💳</button>
+                            <a href="{{ route('payments.create', ['student_id' => $student->id]) }}" class="btn btn-sm btn-success" data-tip="Record Payment">💳</a>
                             {{-- Quick study status toggle --}}
                             <form method="POST" action="{{ route('students.study-status', $student) }}" style="display:inline;">
                                 @csrf
@@ -181,87 +181,7 @@
     @endif
 </div>
 
-{{-- Quick Pay Modal --}}
-<div class="modal-overlay" id="quickPayModal">
-    <div class="modal">
-        <div class="modal-header">
-            <div>
-                <h3>💳 Record Payment</h3>
-                <p id="payModalStudentInfo" style="font-size:12px; color:var(--text-muted); margin-top:2px;"></p>
-            </div>
-            <button class="modal-close" onclick="closeModal('quickPayModal')">✕</button>
-        </div>
-        <div class="modal-body">
-            <form id="quickPayForm" method="POST" action="{{ route('payments.store') }}">
-                @csrf
-                <input type="hidden" name="student_id" id="payStudentId">
 
-                <div class="form-group">
-                    <label class="form-label">Enrollment *</label>
-                    <select name="enrollment_id" id="payEnrollmentSelect" class="form-control" required>
-                        <option value="">Select Enrollment</option>
-                        @foreach($enrollments as $enrollment)
-                            <option
-                                value="{{ $enrollment->id }}"
-                                data-student-id="{{ $enrollment->student_id }}"
-                            >
-                                {{ $enrollment->classroom->name ?? '—' }} · {{ $enrollment->term->name ?? '—' }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Tuition Plan *</label>
-                    <select name="tuition_plan_id" id="payPlanSelect" class="form-control" required>
-                        <option value="">Select Plan</option>
-                        @foreach($tuitionPlans as $plan)
-                            <option value="{{ $plan->id }}" data-price="{{ $plan->price }}">
-                                {{ $plan->name }} — ${{ number_format($plan->price, 2) }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Amount ($) *</label>
-                        <input type="number" name="amount" id="payAmount" class="form-control" step="0.01" required readonly>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Payment Date</label>
-                        <input type="date" name="payment_date" class="form-control" value="{{ date('Y-m-d') }}">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Payment Method *</label>
-                        <select name="payment_method" class="form-control" required>
-                            <option value="cash">Cash</option>
-                            <option value="aba">ABA</option>
-                            <option value="acleda">ACLEDA</option>
-                            <option value="wing">Wing</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Reference #</label>
-                        <input type="text" name="reference_number" class="form-control" placeholder="Optional">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Note</label>
-                    <textarea name="note" class="form-control" rows="2" placeholder="Optional note"></textarea>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" onclick="closeModal('quickPayModal')">Cancel</button>
-            <button class="btn btn-success" onclick="document.getElementById('quickPayForm').submit()">💳 Save Payment</button>
-        </div>
-    </div>
-</div>
 
 {{-- Create/Edit Modal --}}
 <div class="modal-overlay" id="studentModal">
@@ -509,36 +429,7 @@ async function generateStudentCode() {
 
 if (new URLSearchParams(window.location.search).get('action') === 'create') openModal('studentModal');
 
-// ---- Quick Pay ----
-document.getElementById('payPlanSelect').addEventListener('change', function () {
-    const opt = this.options[this.selectedIndex];
-    document.getElementById('payAmount').value = opt.dataset.price || '';
-});
 
-function openPayModal(studentId, studentName, studentCode) {
-    // Set student info
-    document.getElementById('payStudentId').value = studentId;
-    document.getElementById('payModalStudentInfo').innerText = `${studentCode} · ${studentName}`;
-
-    // Filter enrollment dropdown to this student only
-    const enrollmentSelect = document.getElementById('payEnrollmentSelect');
-    let firstMatch = null;
-    Array.from(enrollmentSelect.options).forEach(opt => {
-        if (!opt.value) return;
-        const match = opt.dataset.studentId === String(studentId);
-        opt.hidden = !match;
-        if (match && !firstMatch) firstMatch = opt.value;
-    });
-
-    // Auto-select if only one enrollment
-    enrollmentSelect.value = firstMatch || '';
-
-    // Reset plan & amount
-    document.getElementById('payPlanSelect').value = '';
-    document.getElementById('payAmount').value = '';
-
-    openModal('quickPayModal');
-}
 </script>
 @endpush
 @endsection
