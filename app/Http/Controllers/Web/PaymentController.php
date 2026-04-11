@@ -31,19 +31,41 @@ class PaymentController extends Controller
 
         return view('payments.index', [
             'payments' => $query->latest('payment_date')->paginate(15)->withQueryString(),
-            'enrollments' => Enrollment::with(['student', 'classroom', 'term'])
-                ->where('is_current', true)
-                ->whereIn('status', ['pending', 'active'])
-                ->latest('start_date')
-                ->get(),
-            'tuitionPlans' => TuitionPlan::where('status', 'active')->orderBy('duration_month')->get(),
+            'activeStudentCount' => Student::where('status', 'active')->count(),
+            'expiredStudentCount' => Student::where('status', 'expired')->count(),
             'expiringSoonCount' => Payment::where('status', 'paid')
                 ->whereDate('end_study_date', '>=', $today)
                 ->whereDate('end_study_date', '<=', $sevenDaysLater)
                 ->distinct('student_id')
                 ->count('student_id'),
-            'activeStudentCount' => Student::where('status', 'active')->count(),
-            'expiredStudentCount' => Student::where('status', 'expired')->count(),
+        ]);
+    }
+
+    public function create(Request $request)
+    {
+        $enrollments = Enrollment::with(['student', 'classroom', 'term'])
+            ->where('is_current', true)
+            ->whereIn('status', ['pending', 'active'])
+            ->latest('start_date')
+            ->get();
+
+        $enrollmentsJson = $enrollments->map(function ($e) {
+            return [
+                'id'           => $e->id,
+                'student_id'   => $e->student_id,
+                'student_code' => $e->student->student_code ?? '',
+                'first_name'   => $e->student->first_name ?? '',
+                'last_name'    => $e->student->last_name ?? '',
+                'classroom'    => $e->classroom->name ?? '—',
+                'term'         => $e->term->name ?? '—',
+            ];
+        })->values()->toArray();
+
+        return view('payments.create', [
+            'enrollmentsJson'   => $enrollmentsJson,
+            'tuitionPlans'      => TuitionPlan::where('status', 'active')->orderBy('duration_month')->get(),
+            'selectedStudentId' => $request->student_id,
+            'selectedPlanId'    => $request->plan_id,
         ]);
     }
 

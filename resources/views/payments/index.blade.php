@@ -19,7 +19,7 @@
                 <option value="void" {{ request('status')=='void'?'selected':'' }}>Void</option>
             </select>
         </div>
-        <button class="btn btn-primary" onclick="openPaymentModal()">+ Record Payment</button>
+        <a href="{{ route('payments.create') }}" class="btn btn-primary">+ Record Payment</a>
     </div>
     <div class="card-body" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding-top: 14px;">
         <div class="stat-card" style="padding: 14px;">
@@ -61,7 +61,7 @@
                     <td><span class="badge {{ $studentStatus }}">{{ ucfirst($studentStatus) }}</span></td>
                 </tr>
             @empty
-                <tr><td colspan="8"><div class="empty-state"><div class="empty-icon">💳</div><h3>No payments</h3><p>Record your first payment.</p><button class="btn btn-primary" onclick="openModal('paymentModal')">+ Record Payment</button></div></td></tr>
+                <tr><td colspan="8"><div class="empty-state"><div class="empty-icon">💳</div><h3>No payments</h3><p>Record your first payment.</p><a href="{{ route('payments.create') }}" class="btn btn-primary">+ Record Payment</a></div></td></tr>
             @endforelse
             </tbody>
         </table>
@@ -74,45 +74,7 @@
     @endif
 </div>
 
-<div class="modal-overlay" id="paymentModal">
-    <div class="modal">
-        <div class="modal-header"><h3>Record Payment</h3><button class="modal-close" onclick="closeModal('paymentModal')">✕</button></div>
-        <div class="modal-body">
-            <form id="paymentForm" method="POST" action="{{ route('payments.store') }}">
-                @csrf
-                <input type="hidden" name="student_id" id="studentIdInput">
-                <div class="form-group">
-                    <label class="form-label">Enrollment *</label>
-                    <select name="enrollment_id" class="form-control" required id="enrollmentSelect">
-                        <option value="">Select Enrollment</option>
-                        @foreach($enrollments as $enrollment)
-                            <option
-                                value="{{ $enrollment->id }}"
-                                data-student-id="{{ $enrollment->student_id }}"
-                            >
-                                {{ $enrollment->student->student_code ?? '' }} — {{ $enrollment->student->first_name ?? '' }} {{ $enrollment->student->last_name ?? '' }} | {{ $enrollment->classroom->name ?? '—' }} | {{ $enrollment->term->name ?? '—' }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group"><label class="form-label">Tuition Plan *</label><select name="tuition_plan_id" class="form-control" required id="planSelect">@foreach($tuitionPlans as $p)<option value="{{ $p->id }}" data-price="{{ $p->price }}">{{ $p->name }} — ${{ number_format($p->price,2) }}</option>@endforeach</select></div>
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label">Amount ($)</label><input type="number" name="amount" id="amountInput" class="form-control" step="0.01" required readonly></div>
-                    <div class="form-group"><label class="form-label">Payment Date</label><input type="date" name="payment_date" class="form-control" value="{{ date('Y-m-d') }}"></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label">Payment Method *</label><select name="payment_method" class="form-control" required><option value="cash">Cash</option><option value="aba">ABA</option><option value="acleda">ACLEDA</option><option value="wing">Wing</option></select></div>
-                    <div class="form-group"><label class="form-label">Reference #</label><input type="text" name="reference_number" class="form-control"></div>
-                </div>
-                <div class="form-group"><label class="form-label">Note</label><textarea name="note" class="form-control" rows="2"></textarea></div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" onclick="closeModal('paymentModal')">Cancel</button>
-            <button class="btn btn-primary" onclick="document.getElementById('paymentForm').submit()">Save Payment</button>
-        </div>
-    </div>
-</div>
+
 
 <div class="modal-overlay" id="viewPaymentModal">
     <div class="modal">
@@ -347,30 +309,10 @@ function printHistory() {
     printWindow.document.close();
 }
 
-function openPaymentModal() {
-    document.getElementById('paymentForm').reset();
-    document.getElementById('studentIdInput').value = '';
-    document.getElementById('planSelect').dispatchEvent(new Event('change'));
-    openModal('paymentModal');
-}
+
 
 function repayStudent(studentId, planId) {
-    const enrollmentSelect = document.getElementById('enrollmentSelect');
-    
-    // Find first enrollment for this student
-    for (let opt of enrollmentSelect.options) {
-        if (opt.dataset.studentId === String(studentId)) {
-            enrollmentSelect.value = opt.value;
-            break;
-        }
-    }
-    
-    document.getElementById('studentIdInput').value = studentId;
-
-    const planSelect = document.getElementById('planSelect');
-    planSelect.value = planId;
-    planSelect.dispatchEvent(new Event('change'));
-    openModal('paymentModal');
+    window.location.href = `{{ route('payments.create') }}?student_id=${studentId}&plan_id=${planId}`;
 }
 document.getElementById('planSelect').dispatchEvent(new Event('change'));
 
@@ -399,7 +341,7 @@ function applyFilters() {
     window.location.search = p.toString();
 }
 
-if (new URLSearchParams(window.location.search).get('action') === 'create') openModal('paymentModal');
+
 </script>
 @endpush
 @endsection

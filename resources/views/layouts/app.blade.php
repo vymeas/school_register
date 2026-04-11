@@ -6,6 +6,60 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') — School Register</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <style>
+    /* ── Reports dropdown in sidebar ── */
+    .nav-group-toggle {
+        display: flex;
+        align-items: center;
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--text-muted, #94a3b8);
+        transition: background .15s, color .15s;
+        user-select: none;
+        gap: 4px;
+    }
+    .nav-group-toggle:hover {
+        background: var(--nav-hover, rgba(255,255,255,.06));
+        color: var(--text-primary, #e2e8f0);
+    }
+    .nav-group-toggle.open {
+        color: var(--accent-primary, #818cf8);
+        background: rgba(99,102,241,.1);
+    }
+    .nav-group-toggle .nav-icon { margin-right: 8px; font-size: 15px; }
+    .nav-group-toggle .ng-arrow {
+        margin-left: auto;
+        font-size: 10px;
+        transition: transform .22s;
+        opacity: .6;
+    }
+    .nav-group-toggle.open .ng-arrow { transform: rotate(180deg); opacity: 1; }
+    .nav-sub {
+        display: none;
+        padding-left: 14px;
+        margin-top: 2px;
+    }
+    .nav-sub.open { display: block; }
+    .nav-sub .nav-item {
+        padding-left: 26px;
+        font-size: 13px;
+        position: relative;
+    }
+    .nav-sub .nav-item::before {
+        content: '';
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 5px; height: 5px;
+        border-radius: 50%;
+        background: currentColor;
+        opacity: .35;
+    }
+    </style>
 </head>
 <body>
 <div class="app-wrapper">
@@ -56,9 +110,33 @@
             </a>
 
             <div class="nav-section-title">System</div>
-            <a href="{{ route('reports.index') }}" class="nav-item {{ request()->routeIs('reports.*') ? 'active' : '' }}">
-                <span class="nav-icon">📈</span> Reports
-            </a>
+@php $reportsOpen = request()->routeIs('reports.*'); @endphp
+            <div class="nav-group-toggle {{ $reportsOpen ? 'open' : '' }}" id="reportsToggle" onclick="toggleNavGroup('reportsToggle','reportsSub')">
+                <span class="nav-icon">📈</span>
+                Reports
+                <span class="ng-arrow">▼</span>
+            </div>
+            <div class="nav-sub {{ $reportsOpen ? 'open' : '' }}" id="reportsSub">
+                {{-- Payment --}}
+                <div style="font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text-muted,#475569);padding:6px 14px 2px 26px;">💰 Payment</div>
+                <a href="{{ route('reports.payment.revenue') }}" class="nav-item {{ request()->routeIs('reports.payment.revenue') ? 'active' : '' }}">Revenue</a>
+                <a href="{{ route('reports.payment.transactions') }}" class="nav-item {{ request()->routeIs('reports.payment.transactions') ? 'active' : '' }}">Transactions</a>
+                <a href="{{ route('reports.payment.overdue') }}" class="nav-item {{ request()->routeIs('reports.payment.overdue') ? 'active' : '' }}" style="{{ request()->routeIs('reports.payment.overdue') ? '' : 'color:#f87171;' }}">⚠️ Overdue</a>
+                {{-- Classroom --}}
+                <div style="font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text-muted,#475569);padding:6px 14px 2px 26px;">🏫 Classroom</div>
+                <a href="{{ route('reports.classroom') }}" class="nav-item {{ request()->routeIs('reports.classroom') ? 'active' : '' }}">Detail</a>
+                <a href="{{ route('reports.classroom.summary') }}" class="nav-item {{ request()->routeIs('reports.classroom.summary') ? 'active' : '' }}">Summary</a>
+                <a href="{{ route('reports.classroom.unpaid') }}" class="nav-item {{ request()->routeIs('reports.classroom.unpaid') ? 'active' : '' }}">Not Paid</a>
+                {{-- Students --}}
+                <div style="font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text-muted,#475569);padding:6px 14px 2px 26px;">🎓 Students</div>
+                <a href="{{ route('reports.students') }}" class="nav-item {{ request()->routeIs('reports.students*') ? 'active' : '' }}">Student Report</a>
+                {{-- Term/Grade --}}
+                <div style="font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text-muted,#475569);padding:6px 14px 2px 26px;">📚 Term / Grade</div>
+                <a href="{{ route('reports.term-grade') }}" class="nav-item {{ request()->routeIs('reports.term-grade*') ? 'active' : '' }}">Term &amp; Grade</a>
+                {{-- Teachers --}}
+                <div style="font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text-muted,#475569);padding:6px 14px 2px 26px;">👩‍🏫 Teachers</div>
+                <a href="{{ route('reports.teachers') }}" class="nav-item {{ request()->routeIs('reports.teachers*') ? 'active' : '' }}">Teacher Report</a>
+            </div>
             <a href="{{ route('users.index') }}" class="nav-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
                 <span class="nav-icon">👥</span> Users
             </a>
@@ -131,6 +209,14 @@
     </div>
 </div>
 <script src="{{ asset('js/app.js') }}"></script>
+<script>
+function toggleNavGroup(toggleId, subId) {
+    const toggle = document.getElementById(toggleId);
+    const sub    = document.getElementById(subId);
+    toggle.classList.toggle('open');
+    sub.classList.toggle('open');
+}
+</script>
 @stack('scripts')
 </body>
 </html>
