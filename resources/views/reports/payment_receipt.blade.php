@@ -46,10 +46,10 @@
   {{-- Action bar --}}
   <div class="no-print" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
     <div>
-      <a href="{{ url()->previous() }}" class="btn btn-secondary btn-sm">← Back</a>
+      <a href="{{ url()->previous() }}" class="btn btn-secondary btn-sm">Back</a>
     </div>
     <div style="display:flex;gap:8px;">
-      <button onclick="window.print()" class="btn btn-secondary btn-sm" style="border-color:rgba(99,102,241,.4);color:#818cf8;">🖨️ Print Receipt</button>
+      <button onclick="window.print()" class="btn btn-secondary btn-sm" style="border-color:rgba(99,102,241,.4);color:#818cf8;">Print Receipt</button>
     </div>
   </div>
 
@@ -58,7 +58,7 @@
     {{-- Header --}}
     <div class="rcpt-hdr">
       <div class="rcpt-hdr-left">
-        <div class="school">🏫 School Register</div>
+        <div class="school">School Register</div>
         <div class="tag">Official Payment Receipt</div>
       </div>
       <div class="rcpt-hdr-right">
@@ -70,13 +70,13 @@
     <div class="rcpt-body">
       {{-- Amount --}}
       <div class="rcpt-amount-box" style="margin-bottom:20px;">
-        <div class="label">💵 Amount Paid</div>
+        <div class="label">Amount Paid</div>
         <div class="amount">${{ number_format($payment->amount, 2) }}</div>
       </div>
 
       {{-- Student info --}}
       <div class="rcpt-section">
-        <div class="rcpt-section-title">📋 Student Information</div>
+        <div class="rcpt-section-title">Student Information</div>
         <div class="rcpt-grid">
           <div class="rcpt-field"><div class="lbl">Full Name</div><div class="val"><strong>{{ $payment->student?->first_name }} {{ $payment->student?->last_name }}</strong></div></div>
           <div class="rcpt-field"><div class="lbl">Student Code</div><div class="val">{{ $payment->student?->student_code ?? '—' }}</div></div>
@@ -89,7 +89,7 @@
 
       {{-- Payment details --}}
       <div class="rcpt-section">
-        <div class="rcpt-section-title">💳 Payment Details</div>
+        <div class="rcpt-section-title">Payment Details</div>
         <div class="rcpt-grid">
           <div class="rcpt-field"><div class="lbl">Payment Date</div><div class="val"><strong>{{ $payment->payment_date?->format('d M Y') }}</strong></div></div>
           <div class="rcpt-field"><div class="lbl">Method</div><div class="val"><span class="badge secondary">{{ strtoupper($payment->payment_method ?? '—') }}</span></div></div>

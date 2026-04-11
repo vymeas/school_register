@@ -121,24 +121,24 @@
 {{-- Banner --}}
 <div class="stu-banner">
     <div class="stu-banner-inner">
-        <div class="stu-avatar">{{ $student->gender === 'female' ? '👩' : '👨' }}</div>
+        <div class="stu-avatar">{{ $student->gender === 'female' ? '<i data-lucide="user-round" style="width:20px;height:20px;display:inline;"></i>' : '<i data-lucide="user-round" style="width:20px;height:20px;display:inline;"></i>' }}</div>
         <div class="stu-banner-info">
             <h1>{{ $student->full_name }}</h1>
             <p>{{ $student->student_code }} · Registered {{ $student->registration_date ? $student->registration_date->format('d M Y') : 'N/A' }}</p>
             <div class="stu-banner-chips">
                 <span class="stu-chip">{{ ucfirst($student->gender) }}</span>
                 @if($student->date_of_birth)
-                    <span class="stu-chip">📅 {{ $student->date_of_birth->format('d M Y') }}</span>
+                    <span class="stu-chip">{{ $student->date_of_birth->format('d M Y') }}</span>
                 @endif
                 <span class="stu-chip badge {{ $student->status }}" style="border:none;">{{ ucfirst($student->status) }}</span>
                 @if($currentEnrollment)
-                    <span class="stu-chip">🏫 {{ $currentEnrollment->classroom->name ?? '—' }}</span>
-                    <span class="stu-chip">📚 {{ $currentEnrollment->grade->name ?? $currentEnrollment->classroom->grade->name ?? '—' }}</span>
+                    <span class="stu-chip">{{ $currentEnrollment->classroom->name ?? '—' }}</span>
+                    <span class="stu-chip">{{ $currentEnrollment->grade->name ?? $currentEnrollment->classroom->grade->name ?? '—' }}</span>
                 @endif
             </div>
         </div>
         <div class="stu-banner-actions">
-            <a href="{{ route('students.index') }}" class="stu-btn-back">← Back</a>
+            <a href="{{ route('students.index') }}" class="stu-btn-back">Back</a>
         </div>
     </div>
 </div>
@@ -147,7 +147,7 @@
 @if($currentEnrollment)
 <div class="enr-current-card">
     <div class="enr-current-header">
-        <h3>✅ Current Enrollment</h3>
+        <h3>Current Enrollment</h3>
         <span class="badge active">Active</span>
     </div>
     <div class="enr-stat-row">
@@ -179,7 +179,7 @@
 </div>
 @else
 <div class="card" style="margin-bottom:24px; padding:20px; text-align:center; color:var(--text-muted);">
-    ⚠️ This student has no current enrollment.
+    This student has no current enrollment.
 </div>
 @endif
 
@@ -187,7 +187,7 @@
 <div class="stu-grid">
     {{-- Basic Info --}}
     <div class="card">
-        <div class="stu-section-title">👤 Basic Information</div>
+        <div class="stu-section-title">Basic Information</div>
         <table class="stu-kv-table">
             <tr><td class="stu-kv-label">Student Code</td><td class="stu-kv-value"><strong>{{ $student->student_code }}</strong></td></tr>
             <tr><td class="stu-kv-label">Gender</td><td class="stu-kv-value">{{ ucfirst($student->gender) }}</td></tr>
@@ -201,7 +201,7 @@
 
     {{-- Family Info --}}
     <div class="card">
-        <div class="stu-section-title">👨‍👩‍👧 Family Information</div>
+        <div class="stu-section-title">Family Information</div>
         <table class="stu-kv-table">
             <tr><td class="stu-kv-label">Father Name</td><td class="stu-kv-value">{{ $student->father_name ?? '—' }}</td></tr>
             <tr><td class="stu-kv-label">Father Contact</td><td class="stu-kv-value">{{ $student->father_contact ?? '—' }}</td></tr>
@@ -214,7 +214,7 @@
 
     {{-- Health --}}
     <div class="card">
-        <div class="stu-section-title">🏥 Health &amp; Characteristics</div>
+        <div class="stu-section-title">Health &amp; Characteristics</div>
         <div style="padding:16px 20px;">
             <div style="margin-bottom:14px;">
                 <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--text-muted); margin-bottom:6px;">Health</div>
@@ -229,7 +229,7 @@
 
     {{-- Payment Summary --}}
     <div class="card">
-        <div class="stu-section-title">💳 Payment Summary</div>
+        <div class="stu-section-title">Payment Summary</div>
         <table class="stu-kv-table">
             <tr><td class="stu-kv-label">Total Payments</td><td class="stu-kv-value"><strong>{{ $student->payments->count() }}</strong></td></tr>
             <tr><td class="stu-kv-label">Total Paid</td><td class="stu-kv-value"><strong style="color:var(--success);">${{ number_format($student->payments->sum('amount'), 2) }}</strong></td></tr>
@@ -240,7 +240,7 @@
 {{-- Enrollment History --}}
 <div class="card" style="margin-bottom: 24px;">
     <div class="card-header">
-        <h2>📋 Enrollment History</h2>
+        <h2>Enrollment History</h2>
         <span class="badge info">{{ $student->enrollments->count() }} record(s)</span>
     </div>
     <div class="table-responsive">
@@ -289,7 +289,7 @@
 
 {{-- Payment History --}}
 <div class="card">
-    <div class="card-header"><h2>💰 Payment History</h2></div>
+    <div class="card-header"><h2>Payment History</h2></div>
     <div class="table-responsive">
         <table class="data-table">
             <thead><tr><th>Plan</th><th>Amount</th><th>Period</th><th>Method</th></tr></thead>

@@ -5,23 +5,23 @@
 @section('content')
 <div class="stats-grid">
     <div class="stat-card">
-        <div class="stat-icon purple">🎓</div>
+        <div class="stat-icon purple"><i data-lucide="graduation-cap"></i></div>
         <div class="stat-value">{{ $totalStudents }}</div>
         <div class="stat-label">Total Students</div>
         <div class="stat-change up">↑ Active: {{ $activeStudents }}</div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon green">👨‍🏫</div>
+        <div class="stat-icon green"><i data-lucide="user-round-check"></i></div>
         <div class="stat-value">{{ $totalTeachers }}</div>
         <div class="stat-label">Total Teachers</div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon orange">🏫</div>
+        <div class="stat-icon orange"><i data-lucide="school"></i></div>
         <div class="stat-value">{{ $totalClassrooms }}</div>
         <div class="stat-label">Classrooms</div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon blue">💳</div>
+        <div class="stat-icon blue"><i data-lucide="credit-card"></i></div>
         <div class="stat-value">${{ number_format($totalPayments, 0) }}</div>
         <div class="stat-label">Total Payments</div>
     </div>
@@ -103,10 +103,14 @@
     <div class="card">
         <div class="card-header"><h2>Quick Actions</h2></div>
         <div class="card-body" style="display:flex; flex-direction:column; gap:10px;">
-            <a href="{{ route('students.index') }}?action=create" class="btn btn-primary" style="justify-content:flex-start;">🎓 Register New Student</a>
-            <a href="{{ route('payments.index') }}?action=create" class="btn btn-secondary" style="justify-content:flex-start;">💳 Record Payment</a>
-            <a href="{{ route('reports.index') }}" class="btn btn-secondary" style="justify-content:flex-start;">📈 View Reports</a>
+            <a href="{{ route('students.index') }}?action=create" class="btn btn-primary" style="justify-content:flex-start;"><i data-lucide="user-plus" style="width:16px;height:16px;"></i> Register New Student</a>
+            <a href="{{ route('payments.index') }}?action=create" class="btn btn-secondary" style="justify-content:flex-start;"><i data-lucide="credit-card" style="width:16px;height:16px;"></i> Record Payment</a>
+            <a href="{{ route('reports.index') }}" class="btn btn-secondary" style="justify-content:flex-start;"><i data-lucide="bar-chart-3" style="width:16px;height:16px;"></i> View Reports</a>
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>lucide.createIcons();</script>
+@endpush

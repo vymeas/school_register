@@ -18,12 +18,12 @@
 
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
   <div>
-    <div style="font-size:17px;font-weight:800;color:var(--text-primary,#e2e8f0);">👩‍🏫 {{ $teacher->name }}</div>
+    <div style="font-size:17px;font-weight:800;color:var(--text-primary,#e2e8f0);">{{ $teacher->name }}</div>
     <div style="font-size:12px;color:var(--text-muted,#64748b);">{{ $teacher->teacher_code ?? '—' }} · {{ $teacher->classrooms->count() }} classroom(s)</div>
   </div>
   <div style="display:flex;gap:8px;">
-    <a href="{{ route('reports.teachers') }}" class="btn btn-secondary btn-sm">← Back</a>
-    <button class="btn btn-secondary btn-sm" onclick="window.print()" style="border-color:rgba(99,102,241,.4);color:#818cf8;">🖨️ Print Schedule</button>
+    <a href="{{ route('reports.teachers') }}" class="btn btn-secondary btn-sm">Back</a>
+    <button class="btn btn-secondary btn-sm" onclick="window.print()" style="border-color:rgba(99,102,241,.4);color:#818cf8;">Print Schedule</button>
   </div>
 </div>
 
@@ -46,7 +46,7 @@
 
   {{-- Right: Schedule --}}
   <div class="pf-card">
-    <div style="font-size:14px;font-weight:700;color:var(--text-primary,#e2e8f0);margin-bottom:14px;">📋 Classroom Schedule</div>
+    <div style="font-size:14px;font-weight:700;color:var(--text-primary,#e2e8f0);margin-bottom:14px;">Classroom Schedule</div>
     @if($teacher->classrooms->isEmpty())
       <div style="text-align:center;color:var(--text-muted,#64748b);padding:30px;">No classrooms assigned.</div>
     @else
@@ -81,7 +81,7 @@
 </div>
 
 <div class="rpt-print">
-  <h2>👩‍🏫 Teacher Schedule — {{ $teacher->name }}</h2>
+  <h2>Teacher Schedule — {{ $teacher->name }}</h2>
   <div class="sub">Code: {{ $teacher->teacher_code??'—' }} | Phone: {{ $teacher->phone??'—' }} | Generated: {{ now()->format('d M Y, H:i') }} | By: {{ auth()->user()->full_name??'Admin' }}</div>
   <table>
     <thead><tr><th>#</th><th>Classroom</th><th>Grade</th><th>Term</th><th>Turn</th><th>Students</th></tr></thead>

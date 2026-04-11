@@ -21,12 +21,12 @@
                     <td>{{ $teacher->email ?? '—' }}</td>
                     <td>
                         <div class="btn-group">
-                            <button class="btn btn-sm btn-primary" onclick="confirmRestore('/api/teachers/{{ $teacher->id }}/restore', 'teacher')" data-tip="Restore Teacher">♻ Restore</button>
+                            <button class="btn btn-sm btn-primary" onclick="confirmRestore('/api/teachers/{{ $teacher->id }}/restore', 'teacher')" data-tip="Restore Teacher">Restore</button>
                         </div>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="6"><div class="empty-state"><div class="empty-icon">♻️</div><h3>No deleted teachers</h3><p>There are no deleted teachers to restore.</p></div></td></tr>
+                <tr><td colspan="6"><div class="empty-state"><div class="empty-icon"><i data-lucide="rotate-ccw"></i></div><h3>No deleted teachers</h3><p>There are no deleted teachers to restore.</p></div></td></tr>
             @endforelse
             </tbody>
         </table>

@@ -6,28 +6,28 @@
 @media print{body *{visibility:hidden!important}.rpt-print,.rpt-print *{visibility:visible!important}.rpt-print{position:fixed;top:0;left:0;width:100%;padding:24px;background:#fff;display:block!important}.rpt-print table{width:100%;border-collapse:collapse;font-size:10px}.rpt-print th{background:#1e293b!important;color:#fff!important;padding:7px 8px;-webkit-print-color-adjust:exact;print-color-adjust:exact}.rpt-print td{padding:5px 8px;border-bottom:1px solid #e2e8f0;color:#1e293b}.rpt-print tfoot td{background:#f1f5f9!important;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact}.rpt-print h2{font-size:16px;font-weight:800;margin-bottom:4px}.rpt-print .sub{font-size:11px;color:#64748b;margin-bottom:12px}.rpt-print .rf{margin-top:12px;font-size:10px;color:#94a3b8;text-align:right;page-break-inside:avoid}}
 .rpt-print{display:none}
 .tt-tbl{width:100%;border-collapse:collapse}
-.tt-tbl th{background:var(--bg-secondary,#0f172a);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted,#64748b);padding:10px 14px;text-align:left;border-bottom:2px solid var(--border-color,#2d3f55);white-space:nowrap}
-.tt-tbl td{padding:9px 14px;font-size:13px;color:var(--text-primary,#e2e8f0);border-bottom:1px solid rgba(255,255,255,.04)}
-.tt-tbl tfoot td{background:rgba(99,102,241,.08);font-weight:800;padding:10px 14px;border-top:2px solid var(--border-color,#2d3f55)}
+.tt-tbl th{background:var(--bg-table-header,#f9fafb);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted,#64748b);padding:10px 14px;text-align:left;border-bottom:2px solid var(--border-color,#e2e8f0);white-space:nowrap}
+.tt-tbl td{padding:9px 14px;font-size:13px;color:var(--text-primary,#1c2434);border-bottom:1px solid var(--border-color,#e2e8f0)}
+.tt-tbl tfoot td{background:rgba(99,102,241,.08);font-weight:800;padding:10px 14px;border-top:2px solid var(--border-color,#e2e8f0)}
 .tt-tbl tbody tr:hover{background:rgba(99,102,241,.06)}
 .xbtn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
-.xbtn.pr{background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)}.xbtn.pr:hover{background:#6366f1;color:#fff}
-.xbtn.ex{background:rgba(16,185,129,.12);color:#34d399;border:1px solid rgba(16,185,129,.3)}.xbtn.ex:hover{background:#10b981;color:#fff}
+.xbtn.pr{background:rgba(99,102,241,.15);color:#6366f1;border:1px solid rgba(99,102,241,.3)}.xbtn.pr:hover{background:#6366f1;color:#fff}
+.xbtn.ex{background:rgba(16,185,129,.12);color:#059669;border:1px solid rgba(16,185,129,.3)}.xbtn.ex:hover{background:#10b981;color:#fff}
 </style>
 
 <div class="card" style="width:100%;height:100%;">
   <div class="card-header">
-    <h3 class="card-title">📋 Transaction Log</h3>
+    <h3 class="card-title">Transaction Log</h3>
     <div style="display:flex;gap:8px;align-items:center;">
-      <a href="{{ route('reports.payment.revenue') }}" class="btn btn-secondary btn-sm">← Revenue</a>
-      <button class="xbtn pr" onclick="window.print()">🖨️ Print</button>
-      <button class="xbtn ex" onclick="exportTTCsv()">📊 Export</button>
+      <a href="{{ route('reports.payment.revenue') }}" class="btn btn-secondary btn-sm"><i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Revenue</a>
+      <button class="xbtn pr" onclick="window.print()">Print</button>
+      <button class="xbtn ex" onclick="exportTTCsv()">Export</button>
     </div>
   </div>
 
   {{-- Filters --}}
   <form method="GET" action="{{ route('reports.payment.transactions') }}">
-    <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border-color,#2d3f55);flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border-color,#e2e8f0);flex-wrap:wrap;">
       <div style="display:flex;flex-direction:column;gap:3px;">
         <label style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text-muted,#64748b);">From</label>
         <input type="date" name="date_from" value="{{ request('date_from') }}" class="form-control" style="font-size:13px;width:auto;">
@@ -88,7 +88,7 @@
             @else —
             @endif
           </td>
-          <td><a href="{{ route('reports.payment.receipt', $pay->id) }}" style="font-size:12px;color:#818cf8;">🧾</a></td>
+          <td><a href="{{ route('reports.payment.receipt', $pay->id) }}" style="font-size:12px;color:#818cf8;"><i data-lucide="receipt" style="width:14px;height:14px;"></i></a></td>
         </tr>
         @endforeach
       </tbody>
@@ -103,14 +103,14 @@
   </div>
 
   {{-- Pagination --}}
-  <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border-color,#2d3f55);">
+  <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border-color,#e2e8f0);">
     <span style="font-size:12px;color:var(--text-muted,#64748b);">Showing {{ $payments->firstItem() }}–{{ $payments->lastItem() }} of {{ $payments->total() }}</span>
     {{ $payments->links() }}
   </div>
 </div>
 
 <div class="rpt-print">
-  <h2>📋 Transaction Log</h2>
+  <h2>Transaction Log</h2>
   <div class="sub">Generated: {{ now()->format('d M Y, H:i') }} · By: {{ auth()->user()->full_name??'Admin' }} · Total: ${{ number_format($total,2) }}</div>
   <table>
     <thead><tr><th>#</th><th>Date</th><th>Ref#</th><th>Student</th><th>Classroom</th><th>Plan</th><th>Method</th><th>Amount ($)</th><th>Valid Until</th></tr></thead>

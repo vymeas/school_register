@@ -315,6 +315,7 @@
     font-size: 12px; font-weight: 700;
     cursor: pointer; text-align: center;
     transition: all .14s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 4px;
 }
 .method-pill:hover { border-color: #6366f1; color: #818cf8; background: rgba(99,102,241,.07); }
 .method-pill.active { border-color: #6366f1; color: #fff; background: #6366f1; }
@@ -331,10 +332,10 @@
 ══════════════════════════════════════════ --}}
 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
     <div>
-        <div style="font-size:18px; font-weight:800; color:var(--text-primary,#e2e8f0);">💳 Record New Payment</div>
+        <div style="font-size:18px; font-weight:800; color:var(--text-primary,#e2e8f0);">Record New Payment</div>
         <div style="font-size:12px; color:var(--text-muted,#64748b); margin-top:2px;">Fill in all required fields and save.</div>
     </div>
-    <a href="{{ route('payments.index') }}" class="btn-cancel">← Back to Payments</a>
+    <a href="{{ route('payments.index') }}" class="btn-cancel">Back to Payments</a>
 </div>
 
 {{-- ═══════════════════════════════════════════
@@ -345,7 +346,7 @@
     {{-- ─── LEFT: Enrollment Search ─── --}}
     <div class="pf-panel">
         <div class="pf-panel-header">
-            <div class="pf-panel-icon indigo">🎓</div>
+            <div class="pf-panel-icon indigo"><i data-lucide="graduation-cap"></i></div>
             <div>
                 <div class="pf-panel-title">Student Enrollment</div>
                 <div style="font-size:11px;color:var(--text-muted,#64748b);margin-top:1px;">Search and select the enrollment to pay for</div>
@@ -356,7 +357,7 @@
             {{-- Search box --}}
             <div id="epBox" class="ep-box" style="border:none; border-radius:0;">
                 <div class="ep-bar">
-                    <span class="ep-bar-icon">🔍</span>
+                    <span class="ep-bar-icon"><i data-lucide="search" style="width:14px;height:14px;"></i></span>
                     <input
                         type="text"
                         id="epInput"
@@ -365,13 +366,13 @@
                         autocomplete="off"
                     >
                     <span class="ep-bar-badge" id="epBadge"></span>
-                    <button type="button" class="ep-bar-clear" id="epClear">✕</button>
+                    <button type="button" class="ep-bar-clear" id="epClear"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
                 </div>
 
                 {{-- List --}}
                 <div class="ep-list" id="epList">
                     <div class="ep-empty" id="epHint">
-                        <span class="ep-empty-icon">🔍</span>
+                        <span class="ep-empty-icon"><i data-lucide="search" style="width:14px;height:14px;"></i></span>
                         <span>Type a student name or ID to search</span>
                     </div>
                 </div>
@@ -388,7 +389,7 @@
             </div>
 
             @error('enrollment_id')
-                <div style="padding:8px 14px; font-size:12px; color:#f87171;">⚠ {{ $message }}</div>
+                <div style="padding:8px 14px; font-size:12px; color:#f87171;">{{ $message }}</div>
             @enderror
         </div>
     </div>
@@ -396,7 +397,7 @@
     {{-- ─── RIGHT: Payment Details ─── --}}
     <div class="pf-panel">
         <div class="pf-panel-header">
-            <div class="pf-panel-icon emerald">💵</div>
+            <div class="pf-panel-icon emerald"><i data-lucide="banknote" style="width:16px;height:16px;"></i></div>
             <div>
                 <div class="pf-panel-title">Payment Details</div>
                 <div style="font-size:11px;color:var(--text-muted,#64748b);margin-top:1px;">Plan, amount, method and date</div>
@@ -438,10 +439,10 @@
             <div class="pf-field">
                 <label class="pf-label">Payment Method <span class="req">*</span></label>
                 <div class="method-pills">
-                    <button type="button" class="method-pill active" data-method="cash"   onclick="setMethod('cash',   this)">💵 Cash</button>
-                    <button type="button" class="method-pill"        data-method="aba"    onclick="setMethod('aba',    this)">🏦 ABA</button>
-                    <button type="button" class="method-pill"        data-method="acleda" onclick="setMethod('acleda', this)">🏛 ACLEDA</button>
-                    <button type="button" class="method-pill"        data-method="wing"   onclick="setMethod('wing',   this)">🪁 Wing</button>
+                    <button type="button" class="method-pill active" data-method="cash"   onclick="setMethod('cash',   this)"><i data-lucide="banknote" style="width:14px;height:14px;"></i> Cash</button>
+                    <button type="button" class="method-pill"        data-method="aba"    onclick="setMethod('aba',    this)"><i data-lucide="landmark" style="width:14px;height:14px;"></i> ABA</button>
+                    <button type="button" class="method-pill"        data-method="acleda" onclick="setMethod('acleda', this)"><i data-lucide="building-2" style="width:14px;height:14px;"></i> ACLEDA</button>
+                    <button type="button" class="method-pill"        data-method="wing"   onclick="setMethod('wing',   this)"><i data-lucide="send" style="width:14px;height:14px;"></i> Wing</button>
                 </div>
                 @error('payment_method') <span style="font-size:11px;color:#f87171;">{{ $message }}</span> @enderror
             </div>
@@ -478,9 +479,9 @@
 
 {{-- ═══ ACTION BAR ═══ --}}
 <div class="pf-actions">
-    <span id="epRequired" style="font-size:12px;color:#f87171;display:none;">⚠ Please select a student enrollment first.</span>
+    <span id="epRequired" style="font-size:12px;color:#f87171;display:none;">Please select a student enrollment first.</span>
     <a href="{{ route('payments.index') }}" class="btn-cancel">Cancel</a>
-    <button type="submit" class="btn-save">💳 Save Payment</button>
+    <button type="submit" class="btn-save">Save Payment</button>
 </div>
 
 </form>
@@ -543,7 +544,7 @@ function renderList(q) {
 
     if (!hits.length) {
         epList.innerHTML = `<div class="ep-empty">
-            <span class="ep-empty-icon">🔎</span>
+            <span class="ep-empty-icon"><i data-lucide="search" style="width:16px;height:16px;"></i></span>
             <span>No enrollment found for "<strong>${raw}</strong>"</span>
         </div>`;
         return;
@@ -558,7 +559,7 @@ function renderList(q) {
             <div class="ep-info">
                 <div class="ep-info-code">${hl(e.student_code, raw)}</div>
                 <div class="ep-info-name">${hl(full, raw)}</div>
-                <div class="ep-info-sub">📚 ${e.classroom} · 📅 ${e.term}</div>
+                <div class="ep-info-sub">${e.classroom} · ${e.term}</div>
             </div>
             <div class="ep-pick-btn">${chosen ? '✓ Chosen' : 'Select'}</div>
         </div>`;
@@ -583,7 +584,7 @@ function pick(id, sid, code, name, classroom, term, el) {
 
     // show banner
     epSelName.textContent = `${code} · ${name}`;
-    epSelSub.textContent  = `📚 ${classroom}  ·  📅 ${term}`;
+    epSelSub.textContent  = `${classroom}  ·  ${term}`;
     epSelBar.classList.add('show');
 
     // clear error state
@@ -641,7 +642,7 @@ if (preselectedStudentId) {
         enrollIn.value  = m.id;
         studentIn.value = m.student_id;
         epSelName.textContent = `${m.student_code} · ${full}`;
-        epSelSub.textContent  = `📚 ${m.classroom}  ·  📅 ${m.term}`;
+        epSelSub.textContent  = `${m.classroom}  ·  ${m.term}`;
         epSelBar.classList.add('show');
     }
 }

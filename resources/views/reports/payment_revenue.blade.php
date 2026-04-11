@@ -28,11 +28,11 @@
 
 <div class="card" style="width:100%;height:100%;">
   <div class="card-header">
-    <h3 class="card-title">💰 Payment Revenue Report — {{ $today->format('Y') }}</h3>
+    <h3 class="card-title">Payment Revenue Report — {{ $today->format('Y') }}</h3>
     <div style="display:flex;gap:8px;align-items:center;">
-      <a href="{{ route('reports.payment.transactions') }}" class="btn btn-secondary btn-sm">📋 Transactions</a>
-      <a href="{{ route('reports.payment.overdue') }}" class="btn btn-secondary btn-sm" style="color:#f87171;border-color:rgba(239,68,68,.35);">⚠️ Overdue</a>
-      <button class="xbtn pr" onclick="window.print()">🖨️ Print</button>
+      <a href="{{ route('reports.payment.transactions') }}" class="btn btn-secondary btn-sm">Transactions</a>
+      <a href="{{ route('reports.payment.overdue') }}" class="btn btn-secondary btn-sm" style="color:#f87171;border-color:rgba(239,68,68,.35);">Overdue</a>
+      <button class="xbtn pr" onclick="window.print()">Print</button>
     </div>
   </div>
 
@@ -48,7 +48,7 @@
     <div class="rev-grid">
       {{-- Monthly bar --}}
       <div class="rev-card">
-        <h4>📅 Monthly Revenue ({{ $today->format('Y') }})</h4>
+        <h4>Monthly Revenue ({{ $today->format('Y') }})</h4>
         @foreach($months as $mi => $mn)
           @php $row = $monthly->firstWhere('m', $mi+1); $val = $row?->total ?? 0; $pct = $maxMonth > 0 ? ($val/$maxMonth*100) : 0; @endphp
           <div class="rev-row">
@@ -64,7 +64,7 @@
       <div>
         {{-- By Plan --}}
         <div class="rev-card" style="margin-bottom:16px;">
-          <h4>📦 Revenue by Tuition Plan</h4>
+          <h4>Revenue by Tuition Plan</h4>
           @forelse($byPlan as $plan)
           @php $pct = $totalByPlan > 0 ? ($plan->total/$totalByPlan*100) : 0; @endphp
           <div class="rev-row">
@@ -80,7 +80,7 @@
 
         {{-- By Method --}}
         <div class="rev-card">
-          <h4>💳 Revenue by Payment Method</h4>
+          <h4>Revenue by Payment Method</h4>
           @forelse($byMethod as $method)
           @php $pct = $totalByMethod > 0 ? ($method->total/$totalByMethod*100) : 0; @endphp
           <div class="rev-row">
@@ -99,7 +99,7 @@
 </div>
 
 <div class="rpt-print">
-  <h2>💰 Payment Revenue Report — {{ $today->format('Y') }}</h2>
+  <h2>Payment Revenue Report — {{ $today->format('Y') }}</h2>
   <div class="sub">Generated: {{ now()->format('d M Y, H:i') }} · By: {{ auth()->user()->full_name??'Admin' }}</div>
   <table>
     <thead><tr><th>Period</th><th>Revenue ($)</th></tr></thead>

@@ -36,8 +36,8 @@
                                     '{{ $term->start_date->format('Y-m-d') }}',
                                     '{{ $term->end_date->format('Y-m-d') }}',
                                     '{{ $term->status }}'
-                                )">✏️</button>
-                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/terms/{{ $term->id }}', 'term')" data-tip="Delete Term">🗑</button>
+                                )"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/terms/{{ $term->id }}', 'term')" data-tip="Delete Term"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
                         </div>
                     </td>
                 </tr>
@@ -45,7 +45,7 @@
                 <tr>
                     <td colspan="5">
                         <div class="empty-state">
-                            <div class="empty-icon">📅</div>
+                            <div class="empty-icon"><i data-lucide="calendar-range" style="width:40px;height:40px;"></i></div>
                             <h3>No terms yet</h3>
                             <p>Add your first academic term.</p>
                             <button class="btn btn-primary" onclick="openAddTermModal()">+ Add Term</button>
@@ -63,7 +63,7 @@
     <div class="modal">
         <div class="modal-header">
             <h3 id="termModalTitle">Add Term</h3>
-            <button class="modal-close" onclick="closeModal('termModal')">✕</button>
+            <button class="modal-close" onclick="closeModal('termModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
         </div>
         <div class="modal-body">
             <form id="termForm" method="POST" action="{{ route('terms.store') }}">

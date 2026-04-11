@@ -8,25 +8,25 @@
 .sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
 @media(max-width:800px){.sgrid{grid-template-columns:1fr 1fr}}
 .stbl{width:100%;border-collapse:collapse}
-.stbl th{background:var(--bg-secondary,#0f172a);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted,#64748b);padding:10px 14px;text-align:left;border-bottom:2px solid var(--border-color,#2d3f55);cursor:pointer;user-select:none;white-space:nowrap}
-.stbl th:hover{color:var(--text-primary,#e2e8f0)}
-.stbl td{padding:9px 14px;font-size:13px;color:var(--text-primary,#e2e8f0);border-bottom:1px solid rgba(255,255,255,.04)}
+.stbl th{background:var(--bg-table-header,#f9fafb);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted,#64748b);padding:10px 14px;text-align:left;border-bottom:2px solid var(--border-color,#e2e8f0);cursor:pointer;user-select:none;white-space:nowrap}
+.stbl th:hover{color:var(--text-primary,#1c2434)}
+.stbl td{padding:9px 14px;font-size:13px;color:var(--text-primary,#1c2434);border-bottom:1px solid var(--border-color,#e2e8f0)}
 .stbl tbody tr:hover{background:rgba(99,102,241,.06)}
-.stbl tfoot td{padding:10px 14px;font-weight:800;background:rgba(99,102,241,.08);border-top:2px solid var(--border-color,#2d3f55)}
-.s-search{display:flex;align-items:center;gap:8px;border:1px solid var(--border-color,#2d3f55);border-radius:8px;background:var(--bg-secondary,#0f172a);padding:6px 12px;max-width:280px}
-.s-search input{border:none;background:transparent;color:var(--text-primary,#e2e8f0);font-size:13px;outline:none;width:100%}
-.stbr{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border-color,#2d3f55);flex-wrap:wrap}
+.stbl tfoot td{padding:10px 14px;font-weight:800;background:rgba(99,102,241,.08);border-top:2px solid var(--border-color,#e2e8f0)}
+.s-search{display:flex;align-items:center;gap:8px;border:1px solid var(--border-color,#e2e8f0);border-radius:8px;background:var(--bg-input,#ffffff);padding:6px 12px;max-width:280px}
+.s-search input{border:none;background:transparent;color:var(--text-primary,#1c2434);font-size:13px;outline:none;width:100%}
+.stbr{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border-color,#e2e8f0);flex-wrap:wrap}
 .xbtn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
-.xbtn.pr{background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)} .xbtn.pr:hover{background:#6366f1;color:#fff}
-.xbtn.ex{background:rgba(16,185,129,.12);color:#34d399;border:1px solid rgba(16,185,129,.3)} .xbtn.ex:hover{background:#10b981;color:#fff}
+.xbtn.pr{background:rgba(99,102,241,.15);color:#6366f1;border:1px solid rgba(99,102,241,.3)} .xbtn.pr:hover{background:#6366f1;color:#fff}
+.xbtn.ex{background:rgba(16,185,129,.12);color:#059669;border:1px solid rgba(16,185,129,.3)} .xbtn.ex:hover{background:#10b981;color:#fff}
 </style>
 
 <div class="card" style="width:100%;height:100%;">
   <div class="card-header">
-    <h3 class="card-title">🎓 Student Summary Report</h3>
+    <h3 class="card-title">Student Summary Report</h3>
     <div style="display:flex;gap:8px;align-items:center;">
-      <button class="xbtn pr" onclick="window.print()">🖨️ Print</button>
-      <button class="xbtn ex" onclick="exportCsvStudents()">📊 Export</button>
+      <button class="xbtn pr" onclick="window.print()">Print</button>
+      <button class="xbtn ex" onclick="exportCsvStudents()">Export</button>
     </div>
   </div>
 
@@ -37,7 +37,7 @@
     $other   = $total - $active - $dropped;
   @endphp
 
-  <div style="padding:14px 16px;border-bottom:1px solid var(--border-color,#2d3f55);">
+  <div style="padding:14px 16px;border-bottom:1px solid var(--border-color,#e2e8f0);">
     <div class="sgrid">
       <div class="stat-card"><div class="stat-label">Total Students</div><div class="stat-value">{{ $total }}</div></div>
       <div class="stat-card"><div class="stat-label">Studying</div><div class="stat-value" style="color:#34d399;">{{ $active }}</div></div>
@@ -49,7 +49,7 @@
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
       @foreach($byGrade as $grade => $items)
         <span style="font-size:12px;padding:3px 10px;border-radius:20px;background:rgba(99,102,241,.12);color:#818cf8;border:1px solid rgba(99,102,241,.25);">
-          📚 {{ $grade }}: <strong>{{ $items->count() }}</strong>
+          {{ $grade }}: <strong>{{ $items->count() }}</strong>
         </span>
       @endforeach
     </div>
@@ -57,7 +57,7 @@
 
   {{-- Toolbar --}}
   <div class="stbr">
-    <div class="s-search"><span style="color:var(--text-muted,#64748b);">🔍</span><input id="ssearch" placeholder="Search…" oninput="filterStudents()"></div>
+    <div class="s-search"><span style="color:var(--text-muted,#64748b);"><i data-lucide="search" style="width:14px;height:14px;"></i></span><input id="ssearch" placeholder="Search…" oninput="filterStudents()"></div>
     <select id="sstatusf" class="form-control" style="width:auto;font-size:13px;" onchange="filterStudents()">
       <option value="">All Status</option>
       <option value="studying">Studying</option>
@@ -124,7 +124,7 @@
 
 {{-- Print area --}}
 <div class="rpt-print" id="rptPrint">
-  <div class="rh">🎓 Student Summary Report</div>
+  <div class="rh">Student Summary Report</div>
   <div class="rs">Generated: {{ now()->format('d M Y, H:i') }} by {{ auth()->user()->full_name ?? 'Admin' }} · Total: {{ $total }} students</div>
   <table>
     <thead><tr><th>#</th><th>Code</th><th>Name</th><th>Gender</th><th>Classroom</th><th>Grade</th><th>Payments</th><th>Status</th></tr></thead>

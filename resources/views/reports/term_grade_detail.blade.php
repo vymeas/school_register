@@ -18,12 +18,12 @@
 
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
   <div>
-    <div style="font-size:17px;font-weight:800;color:var(--text-primary,#e2e8f0);">📚 {{ $grade->name }}</div>
+    <div style="font-size:17px;font-weight:800;color:var(--text-primary,#e2e8f0);">{{ $grade->name }}</div>
     <div style="font-size:12px;color:var(--text-muted,#64748b);">{{ $grade->term?->name ?? '—' }} · {{ $grade->classrooms->count() }} classrooms</div>
   </div>
   <div style="display:flex;gap:8px;">
-    <a href="{{ route('reports.term-grade') }}" class="btn btn-secondary btn-sm">← Back</a>
-    <button class="btn btn-secondary btn-sm" onclick="window.print()" style="border-color:rgba(99,102,241,.4);color:#818cf8;">🖨️ Print</button>
+    <a href="{{ route('reports.term-grade') }}" class="btn btn-secondary btn-sm">Back</a>
+    <button class="btn btn-secondary btn-sm" onclick="window.print()" style="border-color:rgba(99,102,241,.4);color:#818cf8;">Print</button>
   </div>
 </div>
 
@@ -95,18 +95,18 @@
   </div>
 </div>
 @empty
-  <div class="empty-state"><div class="empty-icon">📚</div><h3>No classrooms in this grade.</h3></div>
+  <div class="empty-state"><div class="empty-icon"><i data-lucide="book-open"></i></div><h3>No classrooms in this grade.</h3></div>
 @endforelse
 
 <div class="rpt-print">
-  <h2>📚 Grade Detail — {{ $grade->name }}</h2>
+  <h2>Grade Detail — {{ $grade->name }}</h2>
   <div class="sub">Term: {{ $grade->term?->name ?? '—' }} | Generated: {{ now()->format('d M Y, H:i') }} | By: {{ auth()->user()->full_name ?? 'Admin' }}</div>
   <table>
     <thead><tr><th>#</th><th>Classroom</th><th>Teacher</th><th>Turn</th><th>Student</th><th>Code</th><th>Contact</th><th>Paid ($)</th><th>Status</th></tr></thead>
     <tbody>
       @php $rn=0; @endphp
       @foreach($grade->classrooms as $cr)
-        <tr class="cr-row"><td colspan="9">🏫 {{ $cr->name }} · {{ $cr->teacher?->name??'No Teacher' }} · {{ $cr->enrollments->count() }} students · ${{ number_format($cr->enrollments->sum(fn($e)=>$e->payments->sum('amount')),2) }}</td></tr>
+        <tr class="cr-row"><td colspan="9">{{ $cr->name }} · {{ $cr->teacher?->name??'No Teacher' }} · {{ $cr->enrollments->count() }} students · ${{ number_format($cr->enrollments->sum(fn($e)=>$e->payments->sum('amount')),2) }}</td></tr>
         @foreach($cr->enrollments as $enrollment)
           @php $rn++;$s=$enrollment->student;$paid=$enrollment->payments->sum('amount');$last=$enrollment->payments->sortByDesc('payment_date')->first();$until=$last?->end_study_date;$isActive=$until&&now()->lte($until); @endphp
           <tr><td>{{ $rn }}</td><td>{{ $cr->name }}</td><td>{{ $cr->teacher?->name??'—' }}</td><td>{{ $cr->turn?->name??'—' }}</td><td>{{ $s->first_name??'' }} {{ $s->last_name??'' }}</td><td>{{ $s->student_code??'—' }}</td><td>{{ $s->parent_phone??'—' }}</td><td>${{ number_format($paid,2) }}</td><td>{{ $until?($isActive?'Active':'Expired'):'No Payment' }}</td></tr>

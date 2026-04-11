@@ -96,18 +96,18 @@
 
 <div class="card" style="width:100%;height:100%;">
     <div class="card-header">
-        <h3 class="card-title">🚨 Not Paid Classrooms</h3>
+        <h3 class="card-title">Not Paid Classrooms</h3>
         <div style="display:flex;gap:8px;align-items:center;">
-            <a href="{{ route('reports.classroom') }}" class="btn btn-secondary btn-sm">← Classroom Report</a>
-            <button class="btn btn-secondary btn-sm" onclick="window.print()" style="border-color:rgba(99,102,241,.4);color:#818cf8;">🖨️ Print</button>
-            <button class="btn btn-secondary btn-sm" onclick="exportUnpaidCsv()" style="border-color:rgba(16,185,129,.4);color:#34d399;">📊 Export</button>
+            <a href="{{ route('reports.classroom') }}" class="btn btn-secondary btn-sm"><i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Classroom Report</a>
+            <button class="btn btn-secondary btn-sm" onclick="window.print()" style="border-color:rgba(99,102,241,.4);color:#818cf8;">Print</button>
+            <button class="btn btn-secondary btn-sm" onclick="exportUnpaidCsv()" style="border-color:rgba(16,185,129,.4);color:#34d399;">Export</button>
         </div>
     </div>
 
     <div class="card-body">
         {{-- Alert bar --}}
         <div class="up-alert-bar">
-            <span style="font-size:20px;">⚠️</span>
+            <span style="font-size:20px;"><i data-lucide="alert-triangle" style="width:20px;height:20px;color:#f59e0b;"></i></span>
             <div>
                 <strong>{{ $classrooms->count() }}</strong> classroom{{ $classrooms->count() != 1 ? 's' : '' }}
                 have students who have <strong style="color:#f87171;">not yet paid</strong> or have <strong style="color:#f87171;">expired payments</strong>.
@@ -189,7 +189,7 @@
             </div>
         @empty
             <div class="empty-state">
-                <div class="empty-icon">✅</div>
+                <div class="empty-icon"><i data-lucide="check-circle-2" style="width:40px;height:40px;color:var(--success);"></i></div>
                 <h3>All students are paid!</h3>
                 <p>No classrooms with unpaid or expired payment students.</p>
             </div>
@@ -199,7 +199,7 @@
 
 {{-- Print area --}}
 <div class="up-print-area" id="upPrintArea">
-    <div class="pt-title">🚨 Not Paid Classrooms Report</div>
+    <div class="pt-title">Not Paid Classrooms Report</div>
     <div class="pt-sub">Generated: {{ now()->format('d M Y, H:i') }} · {{ $classrooms->count() }} classrooms · {{ $totalUnpaidStudents }} unpaid students</div>
     <table>
         <thead>
@@ -210,7 +210,7 @@
             @foreach($classrooms as $classroom)
                 <tr class="cr-row">
                     <td colspan="9">
-                        🏫 {{ $classroom->name }}
+                        {{ $classroom->name }}
                         · {{ $classroom->teacher->name ?? 'No Teacher' }}
                         · {{ $classroom->grade->name ?? '—' }}
                         · Unpaid: {{ $classroom->unpaidEnrollments->count() }} / {{ $classroom->enrollments->count() }}

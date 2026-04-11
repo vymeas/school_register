@@ -8,20 +8,20 @@
 .cs-toolbar {
     display: flex; align-items: center; gap: 10px;
     padding: 12px 16px;
-    border-bottom: 1px solid var(--border-color,#2d3f55);
-    background: rgba(255,255,255,.015);
+    border-bottom: 1px solid var(--border-color,#e2e8f0);
+    background: var(--bg-body,#f1f5f9);
     flex-wrap: wrap;
 }
 .cs-search-wrap {
     display: flex; align-items: center;
-    border: 1px solid var(--border-color,#2d3f55);
+    border: 1px solid var(--border-color,#e2e8f0);
     border-radius: 8px;
-    background: var(--bg-secondary,#0f172a);
+    background: var(--bg-input,#ffffff);
     padding: 6px 12px; gap: 8px; flex: 1; max-width: 300px;
 }
 .cs-search-wrap input {
     border: none; background: transparent;
-    color: var(--text-primary,#e2e8f0); font-size: 13px; outline: none; width: 100%;
+    color: var(--text-primary,#1c2434); font-size: 13px; outline: none; width: 100%;
 }
 .cs-btn {
     display: inline-flex; align-items: center; gap: 6px;
@@ -29,8 +29,8 @@
     font-weight: 700; cursor: pointer; border: none;
     transition: all .15s; white-space: nowrap;
 }
-.cs-btn.print  { background: rgba(99,102,241,.15); color:#818cf8; border:1px solid rgba(99,102,241,.3); }
-.cs-btn.excel  { background: rgba(16,185,129,.12);  color:#34d399;  border:1px solid rgba(16,185,129,.3); }
+.cs-btn.print  { background: rgba(99,102,241,.15); color:#6366f1; border:1px solid rgba(99,102,241,.3); }
+.cs-btn.excel  { background: rgba(16,185,129,.12);  color:#059669;  border:1px solid rgba(16,185,129,.3); }
 .cs-btn.print:hover { background:#6366f1; color:#fff; }
 .cs-btn.excel:hover { background:#10b981; color:#fff; }
 .cs-count { margin-left:auto; font-size:12px; color:var(--text-muted,#64748b); }
@@ -43,25 +43,25 @@
 }
 .cs-table thead th {
     position: sticky; top: 0; z-index: 2;
-    background: var(--bg-secondary,#0f172a);
+    background: var(--bg-table-header,#f9fafb);
     color: var(--text-muted,#64748b);
     font-size: 10px; font-weight: 700;
     text-transform: uppercase; letter-spacing: .5px;
     padding: 10px 14px; text-align: left;
-    border-bottom: 2px solid var(--border-color,#2d3f55);
+    border-bottom: 2px solid var(--border-color,#e2e8f0);
     white-space: nowrap; cursor: pointer; user-select: none;
 }
-.cs-table thead th:hover { color: var(--text-primary,#e2e8f0); }
+.cs-table thead th:hover { color: var(--text-primary,#1c2434); }
 .cs-table thead th .sort-icon { margin-left: 4px; opacity: .4; font-size: 9px; }
 .cs-table thead th.sorted .sort-icon { opacity: 1; color: #6366f1; }
 .cs-table tbody tr {
-    border-bottom: 1px solid rgba(255,255,255,.04);
+    border-bottom: 1px solid var(--border-color,#e2e8f0);
     transition: background .1s;
 }
 .cs-table tbody tr:hover { background: rgba(99,102,241,.06); }
 .cs-table tbody td {
     padding: 9px 14px;
-    color: var(--text-primary,#e2e8f0);
+    color: var(--text-primary,#1c2434);
     white-space: nowrap;
 }
 .cs-table tfoot td {
@@ -69,8 +69,8 @@
     font-weight: 800;
     font-size: 13px;
     background: rgba(99,102,241,.08);
-    border-top: 2px solid var(--border-color,#2d3f55);
-    color: var(--text-primary,#e2e8f0);
+    border-top: 2px solid var(--border-color,#e2e8f0);
+    color: var(--text-primary,#1c2434);
     position: sticky; bottom: 0;
 }
 .cs-table tbody td.num { text-align: right; font-variant-numeric: tabular-nums; }
@@ -80,8 +80,8 @@
 .cs-table .col-n {
     width: 40px; text-align: center;
     color: var(--text-muted,#64748b); font-size: 11px;
-    background: rgba(255,255,255,.02);
-    border-right: 1px solid rgba(255,255,255,.04);
+    background: rgba(0,0,0,.02);
+    border-right: 1px solid var(--border-color,#e2e8f0);
 }
 .cs-table tfoot .col-n { background: rgba(99,102,241,.08); }
 
@@ -106,16 +106,16 @@
 
 <div class="card" style="width:100%; height:100%;">
     <div class="card-header">
-        <h3 class="card-title">📋 Classroom Summary</h3>
+        <h3 class="card-title">Classroom Summary</h3>
         <div style="display:flex; gap:8px; align-items:center;">
-            <a href="{{ route('reports.classroom') }}" class="btn btn-secondary btn-sm">← Classroom Report</a>
-            <button class="cs-btn print" onclick="window.print()">🖨️ Print</button>
-            <button class="cs-btn excel" onclick="exportCsv()">📊 Export Excel</button>
+            <a href="{{ route('reports.classroom') }}" class="btn btn-secondary btn-sm"><i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Classroom Report</a>
+            <button class="cs-btn print" onclick="window.print()">Print</button>
+            <button class="cs-btn excel" onclick="exportCsv()">Export Excel</button>
         </div>
     </div>
 
     {{-- Stat chips --}}
-    <div style="display:flex; gap:14px; padding:14px 16px; border-bottom:1px solid var(--border-color,#2d3f55); flex-wrap:wrap;">
+    <div style="display:flex; gap:14px; padding:14px 16px; border-bottom:1px solid var(--border-color,#e2e8f0); flex-wrap:wrap;">
         <div class="stat-card" style="flex:1; min-width:120px;">
             <div class="stat-label">Total Classrooms</div>
             <div class="stat-value">{{ $totalActive + $totalArchived }}</div>
@@ -137,7 +137,7 @@
     {{-- Toolbar --}}
     <div class="cs-toolbar">
         <div class="cs-search-wrap">
-            <span style="color:var(--text-muted,#64748b); font-size:13px;">🔍</span>
+            <span style="color:var(--text-muted,#64748b); font-size:13px;"><i data-lucide="search" style="width:14px;height:14px;"></i></span>
             <input type="text" id="csSearch" placeholder="Search classroom, grade, teacher…" oninput="filterTable()">
         </div>
         <select id="csStatusFilter" class="form-control" style="width:auto; font-size:13px;" onchange="filterTable()">
@@ -200,7 +200,7 @@
 
 {{-- Print area --}}
 <div class="cs-print-wrap" id="csPrint">
-    <div class="pt-title">📋 Classroom Summary Report</div>
+    <div class="pt-title">Classroom Summary Report</div>
     <div class="pt-sub">Generated: {{ now()->format('d M Y, H:i') }} &nbsp;·&nbsp; Total: {{ $classrooms->count() }} classrooms</div>
     <table>
         <thead>

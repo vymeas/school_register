@@ -61,7 +61,7 @@
                     <td><span class="badge {{ $studentStatus }}">{{ ucfirst($studentStatus) }}</span></td>
                 </tr>
             @empty
-                <tr><td colspan="8"><div class="empty-state"><div class="empty-icon">💳</div><h3>No payments</h3><p>Record your first payment.</p><a href="{{ route('payments.create') }}" class="btn btn-primary">+ Record Payment</a></div></td></tr>
+                <tr><td colspan="8"><div class="empty-state"><div class="empty-icon"><i data-lucide="credit-card" style="width:14px;height:14px;"></i></div><h3>No payments</h3><p>Record your first payment.</p><a href="{{ route('payments.create') }}" class="btn btn-primary">+ Record Payment</a></div></td></tr>
             @endforelse
             </tbody>
         </table>
@@ -80,7 +80,7 @@
     <div class="modal">
         <div class="modal-header">
             <h3>Payment History</h3>
-            <button class="modal-close" onclick="closeModal('viewPaymentModal')">✕</button>
+            <button class="modal-close" onclick="closeModal('viewPaymentModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
         </div>
         <div class="modal-body" id="paymentDetails" style="padding: 20px;">
             <div class="modal-toolbar" style="display: flex; gap: 10px; margin-bottom: 15px; background: #f8f9fa; padding: 10px; border-radius: 8px; flex-wrap: nowrap; align-items: center; justify-content: space-between;">
@@ -124,7 +124,7 @@
     <div class="modal" style="max-width: 900px; width: 95%;">
         <div class="modal-header">
             <h3>Receipt Voucher (វិក្កយបត្រ)</h3>
-            <button class="modal-close" onclick="closeModal('receiptVoucherModal')">✕</button>
+            <button class="modal-close" onclick="closeModal('receiptVoucherModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
         </div>
         <div class="modal-body" style="padding: 20px;">
             <div id="voucherStudentHeader" class="info-grid" style="grid-template-columns: 1fr 1fr 1fr; border: 1px solid #ddd; margin-bottom: 20px;">
@@ -182,10 +182,13 @@
 
 @push('scripts')
 <script>
-document.getElementById('planSelect').addEventListener('change', function() {
-    const opt = this.options[this.selectedIndex];
-    document.getElementById('amountInput').value = opt.dataset.price || '';
-});
+const planSelectEl = document.getElementById('planSelect');
+if (planSelectEl) {
+    planSelectEl.addEventListener('change', function() {
+        const opt = this.options[this.selectedIndex];
+        document.getElementById('amountInput').value = opt.dataset.price || '';
+    });
+}
 
 let currentHistory = [];
 let currentStudent = null;
@@ -314,12 +317,17 @@ function printHistory() {
 function repayStudent(studentId, planId) {
     window.location.href = `{{ route('payments.create') }}?student_id=${studentId}&plan_id=${planId}`;
 }
-document.getElementById('planSelect').dispatchEvent(new Event('change'));
+if (document.getElementById('planSelect')) {
+    document.getElementById('planSelect').dispatchEvent(new Event('change'));
+}
 
-document.getElementById('enrollmentSelect').addEventListener('change', function() {
-    const opt = this.options[this.selectedIndex];
-    document.getElementById('studentIdInput').value = opt.dataset.studentId || '';
-});
+const enrollmentSelectEl = document.getElementById('enrollmentSelect');
+if (enrollmentSelectEl) {
+    enrollmentSelectEl.addEventListener('change', function() {
+        const opt = this.options[this.selectedIndex];
+        document.getElementById('studentIdInput').value = opt.dataset.studentId || '';
+    });
+}
 
 document.getElementById('methodFilter').addEventListener('change', function() {
     applyFilters();

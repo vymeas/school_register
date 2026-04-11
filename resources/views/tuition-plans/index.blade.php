@@ -19,10 +19,10 @@
                     <td>{{ $plan->duration_month }} month{{ $plan->duration_month > 1 ? 's' : '' }}</td>
                     <td><strong>${{ number_format($plan->price, 2) }}</strong></td>
                     <td><span class="badge {{ $plan->status }}">{{ ucfirst($plan->status) }}</span></td>
-                    <td><div class="btn-group"><button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/tuition-plans/{{ $plan->id }}', 'tuition plan')" data-tip="Delete Plan">🗑</button></div></td>
+                    <td><div class="btn-group"><button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/tuition-plans/{{ $plan->id }}', 'tuition plan')" data-tip="Delete Plan"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button></div></td>
                 </tr>
             @empty
-                <tr><td colspan="5"><div class="empty-state"><div class="empty-icon">💰</div><h3>No tuition plans</h3></div></td></tr>
+                <tr><td colspan="5"><div class="empty-state"><div class="empty-icon"><i data-lucide="banknote"></i></div><h3>No tuition plans</h3></div></td></tr>
             @endforelse
             </tbody>
         </table>
@@ -31,7 +31,7 @@
 
 <div class="modal-overlay" id="planModal">
     <div class="modal">
-        <div class="modal-header"><h3>Add Tuition Plan</h3><button class="modal-close" onclick="closeModal('planModal')">✕</button></div>
+        <div class="modal-header"><h3>Add Tuition Plan</h3><button class="modal-close" onclick="closeModal('planModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button></div>
         <div class="modal-body">
             <form id="planForm" method="POST" action="{{ route('tuition-plans.store') }}">
                 @csrf

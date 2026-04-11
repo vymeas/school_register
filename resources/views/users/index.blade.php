@@ -7,7 +7,7 @@
     <div class="card-header">
         <div class="toolbar">
             <div class="search-box">
-                <span class="search-icon">🔍</span>
+                <span class="search-icon"><i data-lucide="search" style="width:14px;height:14px;"></i></span>
                 <input type="text" id="searchInput" placeholder="Search users..." value="{{ request('search') }}">
             </div>
             <select class="form-control" style="width:auto;" id="roleFilter">
@@ -33,10 +33,10 @@
                     <td>{{ $user->email ?? '—' }}</td>
                     <td>{{ $user->phone ?? '—' }}</td>
                     <td><span class="badge {{ $user->status }}">{{ ucfirst($user->status) }}</span></td>
-                    <td><div class="btn-group"><button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/users/{{ $user->id }}', 'user')" data-tip="Delete User">🗑</button></div></td>
+                    <td><div class="btn-group"><button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/users/{{ $user->id }}', 'user')" data-tip="Delete User"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button></div></td>
                 </tr>
             @empty
-                <tr><td colspan="7"><div class="empty-state"><div class="empty-icon">👥</div><h3>No users</h3></div></td></tr>
+                <tr><td colspan="7"><div class="empty-state"><div class="empty-icon"><i data-lucide="users"></i></div><h3>No users</h3></div></td></tr>
             @endforelse
             </tbody>
         </table>
@@ -45,7 +45,7 @@
 
 <div class="modal-overlay" id="userModal">
     <div class="modal">
-        <div class="modal-header"><h3>Add User</h3><button class="modal-close" onclick="closeModal('userModal')">✕</button></div>
+        <div class="modal-header"><h3>Add User</h3><button class="modal-close" onclick="closeModal('userModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button></div>
         <div class="modal-body">
             <form id="userForm" method="POST" action="{{ route('users.store') }}">
                 @csrf

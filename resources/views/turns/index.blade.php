@@ -28,11 +28,11 @@
                     <td><span class="badge info">{{ $turn->classrooms_count }}</span></td>
                     <td>
                         <div class="btn-group">
-                            <button class="btn btn-sm btn-secondary" onclick="editTurn({{ $turn->id }}, '{{ $turn->name }}', '{{ $turn->start_time }}', '{{ $turn->end_time }}')" data-tip="Edit Turn">✏️</button>
+                            <button class="btn btn-sm btn-secondary" onclick="editTurn({{ $turn->id }}, '{{ $turn->name }}', '{{ $turn->start_time }}', '{{ $turn->end_time }}')" data-tip="Edit Turn"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
                             <form action="{{ route('turns.destroy', $turn) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" data-tip="Delete Turn">🗑</button>
+                                <button type="submit" class="btn btn-sm btn-danger" data-tip="Delete Turn"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
                             </form>
                         </div>
                     </td>
@@ -41,7 +41,7 @@
                 <tr>
                     <td colspan="5">
                         <div class="empty-state">
-                            <div class="empty-icon">🕒</div>
+                            <div class="empty-icon"><i data-lucide="clock-4" style="width:40px;height:40px;"></i></div>
                             <h3>No turns defined</h3>
                             <p>Add study time slots (e.g. Morning, Afternoon) for classrooms.</p>
                             <button class="btn btn-primary" onclick="openAddTurnModal()">+ Add Turn</button>
@@ -59,7 +59,7 @@
     <div class="modal">
         <div class="modal-header">
             <h3 id="turnModalTitle">Add Turn</h3>
-            <button class="modal-close" onclick="closeModal('turnModal')">✕</button>
+            <button class="modal-close" onclick="closeModal('turnModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
         </div>
         <div class="modal-body">
             <form id="turnForm" method="POST" action="{{ route('turns.store') }}">

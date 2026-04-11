@@ -29,13 +29,13 @@
                     <td>{{ $grade->classrooms_count }}</td>
                     <td>
                         <div class="btn-group">
-                            <button class="btn btn-sm btn-secondary" onclick="editGrade({{ json_encode($grade) }})" data-tip="Edit Grade">✎</button>
-                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/grades/{{ $grade->id }}', 'grade')" data-tip="Delete Grade">🗑</button>
+                            <button class="btn btn-sm btn-secondary" onclick="editGrade({{ json_encode($grade) }})" data-tip="Edit Grade"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/grades/{{ $grade->id }}', 'grade')" data-tip="Delete Grade"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
                         </div>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📚</div><h3>No grades</h3><p>Add the first grade.</p></div></td></tr>
+                <tr><td colspan="5"><div class="empty-state"><div class="empty-icon"><i data-lucide="book-open"></i></div><h3>No grades</h3><p>Add the first grade.</p></div></td></tr>
             @endforelse
             </tbody>
         </table>
@@ -47,7 +47,7 @@
     <div class="modal">
         <div class="modal-header">
             <h3 id="modalTitle">Add Grade</h3>
-            <button class="modal-close" onclick="closeModal('gradeModal')">✕</button>
+            <button class="modal-close" onclick="closeModal('gradeModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
         </div>
         <div class="modal-body">
             <form id="gradeForm" method="POST" action="{{ route('grades.store') }}">
