@@ -26,9 +26,9 @@
     <div style="font-size:12px;color:var(--text-muted,#64748b);">{{ $student->student_code }}</div>
   </div>
   <div style="display:flex;gap:8px;">
-    <a href="{{ route('reports.students') }}" class="btn btn-secondary btn-sm">← Back</a>
-    <button class="btn btn-secondary btn-sm" onclick="window.print()" style="border-color:rgba(99,102,241,.4);color:#818cf8;">🖨️ Print Profile</button>
-    <a href="{{ route('reports.payment.receipt', $student->enrollments->flatMap->payments->last()?->id ?? 0) }}" class="btn btn-primary btn-sm" style="font-size:12px;">🧾 Last Receipt</a>
+    <a href="{{ route('reports.students') }}" class="btn btn-secondary btn-sm">Back</a>
+    <button class="btn btn-secondary btn-sm" onclick="window.print()" style="border-color:rgba(99,102,241,.4);color:#818cf8;">Print Profile</button>
+    <a href="{{ route('reports.payment.receipt', $student->enrollments->flatMap->payments->last()?->id ?? 0) }}" class="btn btn-primary btn-sm" style="font-size:12px;">Last Receipt</a>
   </div>
 </div>
 
@@ -91,7 +91,7 @@
               @else —
               @endif
             </td>
-            <td><a href="{{ route('reports.payment.receipt',$pay->id) }}" style="font-size:11px;color:#818cf8;">🧾 View</a></td>
+            <td><a href="{{ route('reports.payment.receipt',$pay->id) }}" style="font-size:11px;color:#818cf8;">View</a></td>
           </tr>
           @endforeach
         </tbody>
@@ -116,7 +116,7 @@
     @endforeach
   </div>
   @foreach($student->enrollments as $enrollment)
-  <div style="font-weight:700;margin:10px 0 6px;font-size:13px;">📚 {{ $enrollment->classroom?->name ?? '—' }} · {{ $enrollment->grade?->name ?? '—' }}</div>
+  <div style="font-weight:700;margin:10px 0 6px;font-size:13px;">{{ $enrollment->classroom?->name ?? '—' }} · {{ $enrollment->grade?->name ?? '—' }}</div>
   <table>
     <thead><tr><th>#</th><th>Date</th><th>Plan</th><th>Method</th><th>Amount ($)</th><th>Valid Until</th></tr></thead>
     <tbody>

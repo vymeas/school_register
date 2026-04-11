@@ -21,10 +21,10 @@
 
 <div class="card" style="width:100%;height:100%;">
   <div class="card-header">
-    <h3 class="card-title">📚 Term &amp; Grade Report</h3>
+    <h3 class="card-title">Term &amp; Grade Report</h3>
     <div style="display:flex;gap:8px;align-items:center;">
-      <button class="xbtn pr" onclick="window.print()">🖨️ Print</button>
-      <button class="xbtn ex" onclick="exportTgCsv()">📊 Export</button>
+      <button class="xbtn pr" onclick="window.print()">Print</button>
+      <button class="xbtn ex" onclick="exportTgCsv()">Export</button>
     </div>
   </div>
 
@@ -40,7 +40,7 @@
     <div class="tg-card">
       <div class="tg-term-hdr">
         <div>
-          <div class="tg-term-name">📅 {{ $term->name }}</div>
+          <div class="tg-term-name">{{ $term->name }}</div>
           <div style="font-size:11px;color:var(--text-muted,#94a3b8);margin-top:3px;">
             {{ $term->start_date?->format('d M Y') ?? '—' }} – {{ $term->end_date?->format('d M Y') ?? '—' }}
             @if($term->status === 'active') <span class="badge active" style="margin-left:6px;font-size:9px;">Active</span>@endif
@@ -84,12 +84,12 @@
       </table>
     </div>
     @empty
-      <div class="empty-state"><div class="empty-icon">📚</div><h3>No terms found</h3></div>
+      <div class="empty-state"><div class="empty-icon"><i data-lucide="book-open"></i></div><h3>No terms found</h3></div>
     @endforelse
 
     {{-- Grand Total --}}
     <div style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);border-radius:10px;padding:14px 20px;display:flex;gap:30px;align-items:center;">
-      <span style="font-weight:800;font-size:14px;color:var(--text-primary,#e2e8f0);">🏆 GRAND TOTAL</span>
+      <span style="font-weight:800;font-size:14px;color:var(--text-primary,#e2e8f0);">GRAND TOTAL</span>
       <span>Classrooms: <strong>{{ $grandClassrooms }}</strong></span>
       <span>Students: <strong style="color:#34d399;">{{ $grandStudents }}</strong></span>
       <span>Revenue: <strong style="color:#34d399;">${{ number_format($grandRevenue,2) }}</strong></span>
@@ -99,13 +99,13 @@
 
 {{-- Print area --}}
 <div class="rpt-print">
-  <h2>📚 Term &amp; Grade Summary Report</h2>
+  <h2>Term &amp; Grade Summary Report</h2>
   <div class="sub">Generated: {{ now()->format('d M Y, H:i') }} · By: {{ auth()->user()->full_name ?? 'Admin' }}</div>
   <table>
     <thead><tr><th>Term</th><th>Grade</th><th>Classrooms</th><th>Students</th><th>Revenue ($)</th></tr></thead>
     <tbody>
       @foreach($terms as $term)
-        <tr class="term-row"><td colspan="5">📅 {{ $term->name }} ({{ $term->start_date?->format('d M Y') }} – {{ $term->end_date?->format('d M Y') }})</td></tr>
+        <tr class="term-row"><td colspan="5">{{ $term->name }} ({{ $term->start_date?->format('d M Y') }} – {{ $term->end_date?->format('d M Y') }})</td></tr>
         @foreach($term->grades as $grade)
         @php $r=$grade->classrooms->sum(fn($c)=>$c->enrollments->sum(fn($e)=>$e->payments->sum('amount')??0)); @endphp
         <tr><td></td><td>{{ $grade->name }}</td><td>{{ $grade->classrooms->count() }}</td><td>{{ $grade->classrooms->sum(fn($c)=>$c->enrollments->count()) }}</td><td>${{ number_format($r,2) }}</td></tr>

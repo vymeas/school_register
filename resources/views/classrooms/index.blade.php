@@ -23,7 +23,7 @@
             </select>
         </div>
         <button class="btn btn-primary" onclick="openAddModal()">+ Add Classroom</button>
-        <a href="{{ route('classrooms.archived') }}" class="btn btn-secondary" style="margin-left:8px;">📦 Archived</a>
+        <a href="{{ route('classrooms.archived') }}" class="btn btn-secondary" style="margin-left:8px;">Archived</a>
     </div>
     <div class="table-responsive">
         <table class="data-table">
@@ -45,14 +45,14 @@
                     <td>{{ $classroom->enrollment_students_count ?? 0 }}</td>
                     <td>
                         <div class="btn-group">
-                            <button class="btn btn-sm btn-secondary" onclick="viewClassroom({{ $classroom->id }})" data-tip="View Details">👁</button>
-                            <button class="btn btn-sm btn-secondary" onclick="editClassroom({{ $classroom->id }}, '{{ $classroom->name }}', {{ $classroom->grade_id }}, {{ $classroom->capacity }}, {{ $classroom->grade->term_id ?? 'null' }}, {{ $classroom->turn_id ?? 'null' }}, {{ $classroom->teacher_id ?? 'null' }})" data-tip="Edit Classroom">✏️</button>
-                            <button class="btn btn-sm btn-warning" onclick="confirmArchive({{ $classroom->id }}, '{{ addslashes($classroom->name) }}')" data-tip="Archive Classroom">📦</button>
+                            <button class="btn btn-sm btn-secondary" onclick="viewClassroom({{ $classroom->id }})" data-tip="View Details"><i data-lucide="eye" style="width:14px;height:14px;"></i></button>
+                            <button class="btn btn-sm btn-secondary" onclick="editClassroom({{ $classroom->id }}, '{{ $classroom->name }}', {{ $classroom->grade_id }}, {{ $classroom->capacity }}, {{ $classroom->grade->term_id ?? 'null' }}, {{ $classroom->turn_id ?? 'null' }}, {{ $classroom->teacher_id ?? 'null' }})" data-tip="Edit Classroom"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
+                            <button class="btn btn-sm btn-warning" onclick="confirmArchive({{ $classroom->id }}, '{{ addslashes($classroom->name) }}')" data-tip="Archive Classroom"><i data-lucide="archive"></i></button>
                         </div>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🏫</div><h3>No classrooms</h3><p>Create your first classroom.</p><button class="btn btn-primary" onclick="openAddModal()">+ Add Classroom</button></div></td></tr>
+                <tr><td colspan="7"><div class="empty-state"><div class="empty-icon"><i data-lucide="school"></i></div><h3>No classrooms</h3><p>Create your first classroom.</p><button class="btn btn-primary" onclick="openAddModal()">+ Add Classroom</button></div></td></tr>
             @endforelse
             </tbody>
         </table>
@@ -286,17 +286,17 @@
         {{-- Banner Header --}}
         <div class="cr-modal-banner">
             <div class="cr-banner-top">
-                <div class="cr-banner-icon">🏫</div>
+                <div class="cr-banner-icon"><i data-lucide="school"></i></div>
                 <div class="cr-banner-title">
                     <h2 id="viewClassroomName">—</h2>
                     <p id="viewClassroomSub">Classroom Details</p>
                 </div>
-                <button class="cr-banner-close" onclick="closeModal('classroomViewModal')">✕</button>
+                <button class="cr-banner-close" onclick="closeModal('classroomViewModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
             </div>
             <div class="cr-chips">
-                <div class="cr-chip"><span>📅 Term:</span> <strong id="viewTermName">—</strong></div>
-                <div class="cr-chip"><span>📚 Grade:</span> <strong id="viewGradeName">—</strong></div>
-                <div class="cr-chip"><span>🕒 Turn:</span> <strong id="viewTurnName">—</strong></div>
+                <div class="cr-chip"><span>Term:</span> <strong id="viewTermName">—</strong></div>
+                <div class="cr-chip"><span>Grade:</span> <strong id="viewGradeName">—</strong></div>
+                <div class="cr-chip"><span>Turn:</span> <strong id="viewTurnName">—</strong></div>
             </div>
         </div>
 
@@ -322,14 +322,14 @@
         {{-- Info Grid --}}
         <div class="cr-info-grid">
             <div class="cr-info-item">
-                <div class="cr-info-icon">👨‍🏫</div>
+                <div class="cr-info-icon"><i data-lucide="user-round-check"></i></div>
                 <div class="cr-info-content">
                     <label>Teacher</label>
                     <span id="viewTeacherName">—</span>
                 </div>
             </div>
             <div class="cr-info-item">
-                <div class="cr-info-icon">📊</div>
+                <div class="cr-info-icon"><i data-lucide="layout-dashboard"></i></div>
                 <div class="cr-info-content">
                     <label>Fill Rate</label>
                     <span id="viewFillRate">—</span>
@@ -341,10 +341,10 @@
         <div class="cr-student-section">
             <div class="cr-section-header">
                 <div class="cr-section-title">
-                    👥 Students Roster
+                    Students Roster
                     <span class="cr-student-count-badge" id="viewStudentBadge">0</span>
                 </div>
-                <input type="text" class="cr-search-input" id="crStudentSearch" placeholder="🔍 Search students..." oninput="filterCrStudents(this.value)">
+                <input type="text" class="cr-search-input" id="crStudentSearch" placeholder="Search students..." oninput="filterCrStudents(this.value)">
             </div>
             <div id="viewStudentList" class="table-responsive" style="max-height: 320px; overflow-y: auto;"></div>
         </div>
@@ -354,7 +354,7 @@
 
 <div class="modal-overlay" id="classroomModal">
     <div class="modal">
-        <div class="modal-header"><h3 id="modalTitle">Add Classroom</h3><button class="modal-close" onclick="closeModal('classroomModal')">✕</button></div>
+        <div class="modal-header"><h3 id="modalTitle">Add Classroom</h3><button class="modal-close" onclick="closeModal('classroomModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button></div>
         <div class="modal-body">
             <form id="classroomForm" method="POST" action="{{ route('classrooms.store') }}">
                 @csrf
@@ -505,7 +505,7 @@ async function viewClassroom(id) {
 function renderCrStudentTable(rows) {
     const container = document.getElementById('viewStudentList');
     if (!rows.length) {
-        container.innerHTML = '<div class="empty-state" style="padding:30px;"><div class="empty-icon">👥</div><h3>No students enrolled</h3><p>No matching enrollments found for this classroom.</p></div>';
+        container.innerHTML = '<div class="empty-state" style="padding:30px;"><div class="empty-icon"><i data-lucide="users"></i></div><h3>No students enrolled</h3><p>No matching enrollments found for this classroom.</p></div>';
         return;
     }
     container.innerHTML = `

@@ -42,21 +42,21 @@
 {{-- Banner --}}
 <div class="archived-banner">
     <div class="archived-banner-left">
-        <div class="archived-banner-icon">📦</div>
+        <div class="archived-banner-icon"><i data-lucide="archive"></i></div>
         <div class="archived-banner-text">
             <h2>Archived Classrooms</h2>
             <p>Classrooms below have been archived and are hidden from the main list. You can restore them at any time.</p>
         </div>
     </div>
     <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-        <span class="archived-count-badge">📦 {{ $classrooms->count() }} archived</span>
-        <a href="{{ route('classrooms.index') }}" class="btn btn-secondary">← Back to Classrooms</a>
+        <span class="archived-count-badge">{{ $classrooms->count() }} archived</span>
+        <a href="{{ route('classrooms.index') }}" class="btn btn-secondary">Back to Classrooms</a>
     </div>
 </div>
 
 @if(session('success'))
     <div class="alert alert-success" style="margin-bottom:16px; padding:12px 18px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:var(--radius-sm); color:#10b981; font-size:13px; font-weight:600;">
-        ✅ {{ session('success') }}
+        {{ session('success') }}
     </div>
 @endif
 
@@ -106,7 +106,7 @@
                             @csrf
                             <button type="submit" class="btn btn-sm btn-success"
                                 onclick="return confirm('Restore classroom \'{{ addslashes($classroom->name) }}\'?')">
-                                ♻️ Restore
+                                Restore
                             </button>
                         </form>
                     </td>
@@ -115,10 +115,10 @@
                 <tr>
                     <td colspan="8">
                         <div class="empty-state">
-                            <div class="empty-icon">📦</div>
+                            <div class="empty-icon"><i data-lucide="archive"></i></div>
                             <h3>No archived classrooms</h3>
                             <p>All classrooms are currently active.</p>
-                            <a href="{{ route('classrooms.index') }}" class="btn btn-primary">← Back to Classrooms</a>
+                            <a href="{{ route('classrooms.index') }}" class="btn btn-primary">Back to Classrooms</a>
                         </div>
                     </td>
                 </tr>

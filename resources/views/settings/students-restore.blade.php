@@ -6,12 +6,12 @@
 <div class="card">
     <div class="card-header">
         <div>
-            <h2 style="margin:0;">🗂 Deleted Students</h2>
+            <h2 style="margin:0;">Deleted Students</h2>
             <p style="margin:4px 0 0; font-size:13px; color:var(--text-muted);">
                 Students removed from the active list. Restore to make them visible again.
             </p>
         </div>
-        <a href="{{ route('students.index') }}" class="btn btn-secondary">← Back to Students</a>
+        <a href="{{ route('students.index') }}" class="btn btn-secondary">Back to Students</a>
     </div>
     <div class="table-responsive">
         <table class="data-table">
@@ -34,9 +34,9 @@
                     <td>{{ $student->date_of_birth ? $student->date_of_birth->format('d M Y') : '—' }}</td>
                     <td>
                         @if($student->study_status === 'studying')
-                            <span class="badge active" style="background:rgba(16,185,129,0.12); color:#10b981;">📖 Studying</span>
+                            <span class="badge active" style="background:rgba(16,185,129,0.12); color:#10b981;">Studying</span>
                         @else
-                            <span class="badge expired" style="background:rgba(239,68,68,0.1); color:#ef4444;">🚫 Dropped</span>
+                            <span class="badge expired" style="background:rgba(239,68,68,0.1); color:#ef4444;">Dropped</span>
                         @endif
                     </td>
                     <td>
@@ -45,7 +45,7 @@
                                 class="btn btn-sm btn-primary"
                                 onclick="confirmRestore('/api/students/{{ $student->id }}/restore', 'student')"
                                 data-tip="Restore Student"
-                            >♻ Restore</button>
+                            >Restore</button>
                         </div>
                     </td>
                 </tr>
@@ -53,7 +53,7 @@
                 <tr>
                     <td colspan="6">
                         <div class="empty-state">
-                            <div class="empty-icon">♻️</div>
+                            <div class="empty-icon"><i data-lucide="rotate-ccw"></i></div>
                             <h3>No deleted students</h3>
                             <p>There are no deleted students to restore.</p>
                         </div>

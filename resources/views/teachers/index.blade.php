@@ -7,7 +7,7 @@
     <div class="card-header">
         <div class="toolbar">
             <div class="search-box">
-                <span class="search-icon">🔍</span>
+                <span class="search-icon"><i data-lucide="search" style="width:14px;height:14px;"></i></span>
                 <input type="text" id="searchInput" placeholder="Search by name, email, or ID..." value="{{ request('search') }}">
             </div>
         </div>
@@ -30,13 +30,13 @@
                     <td><span class="badge {{ $teacher->status }}">{{ ucfirst($teacher->status) }}</span></td>
                     <td>
                         <div class="btn-group">
-                            <button class="btn btn-sm btn-secondary" onclick="editTeacher({{ json_encode($teacher) }})" data-tip="Edit Teacher">✎</button>
-                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/teachers/{{ $teacher->id }}', 'teacher')" data-tip="Delete Teacher">🗑</button>
+                            <button class="btn btn-sm btn-secondary" onclick="editTeacher({{ json_encode($teacher) }})" data-tip="Edit Teacher"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/teachers/{{ $teacher->id }}', 'teacher')" data-tip="Delete Teacher"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
                         </div>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="8"><div class="empty-state"><div class="empty-icon">👨‍🏫</div><h3>No teachers found</h3><p>Add your first teacher.</p><button class="btn btn-primary" onclick="openModal('teacherModal')">+ Add Teacher</button></div></td></tr>
+                <tr><td colspan="8"><div class="empty-state"><div class="empty-icon"><i data-lucide="user-round-check"></i></div><h3>No teachers found</h3><p>Add your first teacher.</p><button class="btn btn-primary" onclick="openModal('teacherModal')">+ Add Teacher</button></div></td></tr>
             @endforelse
             </tbody>
         </table>
@@ -51,7 +51,7 @@
 
 <div class="modal-overlay" id="teacherModal">
     <div class="modal">
-        <div class="modal-header"><h3 id="teacherModalTitle">Add New Teacher</h3><button class="modal-close" onclick="closeModal('teacherModal')">✕</button></div>
+        <div class="modal-header"><h3 id="teacherModalTitle">Add New Teacher</h3><button class="modal-close" onclick="closeModal('teacherModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button></div>
         <div class="modal-body">
             <form id="teacherForm" method="POST" action="{{ route('teachers.store') }}">
                 @csrf
@@ -60,7 +60,7 @@
                     <label class="form-label">Teacher ID</label>
                     <div style="display: flex; gap: 8px;">
                         <input type="text" name="teacher_code" id="teacherCodeInput" class="form-control" placeholder="e.g. TCH-A1B2C3" style="flex: 1;">
-                        <button type="button" class="btn btn-secondary" onclick="generateTeacherCode()" style="white-space: nowrap;">⚡ Generate</button>
+                        <button type="button" class="btn btn-secondary" onclick="generateTeacherCode()" style="white-space: nowrap;">Generate</button>
                     </div>
                     <small style="color: var(--text-muted, #94a3b8); margin-top: 4px; display: block;">Leave empty to auto-generate, or type your own unique ID.</small>
                 </div>

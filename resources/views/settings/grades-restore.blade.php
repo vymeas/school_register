@@ -20,12 +20,12 @@
                     <td>{{ $grade->classrooms_count }}</td>
                     <td>
                         <div class="btn-group">
-                            <button class="btn btn-sm btn-primary" onclick="confirmRestore('/api/grades/{{ $grade->id }}/restore', 'grade')" data-tip="Restore Grade">♻ Restore</button>
+                            <button class="btn btn-sm btn-primary" onclick="confirmRestore('/api/grades/{{ $grade->id }}/restore', 'grade')" data-tip="Restore Grade">Restore</button>
                         </div>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="5"><div class="empty-state"><div class="empty-icon">♻️</div><h3>No deleted grades</h3><p>There are no deleted grades to restore.</p></div></td></tr>
+                <tr><td colspan="5"><div class="empty-state"><div class="empty-icon"><i data-lucide="rotate-ccw"></i></div><h3>No deleted grades</h3><p>There are no deleted grades to restore.</p></div></td></tr>
             @endforelse
             </tbody>
         </table>

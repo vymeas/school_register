@@ -7,8 +7,8 @@
 .cr-stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
 @media(max-width:800px){ .cr-stat-grid { grid-template-columns: 1fr 1fr; } }
 .cr-classroom-card {
-    background: var(--bg-card,#1e293b);
-    border: 1px solid var(--border-color,#2d3f55);
+    background: var(--bg-card,#ffffff);
+    border: 1px solid var(--border-color,#e2e8f0);
     border-radius: 12px;
     overflow: hidden;
     margin-bottom: 16px;
@@ -16,8 +16,8 @@
 .cr-classroom-header {
     display: flex; align-items: center; gap: 12px;
     padding: 14px 18px;
-    background: rgba(255,255,255,.025);
-    border-bottom: 1px solid var(--border-color,#2d3f55);
+    background: rgba(0,0,0,.02);
+    border-bottom: 1px solid var(--border-color,#e2e8f0);
     cursor: pointer;
     user-select: none;
 }
@@ -29,14 +29,14 @@
     font-size: 15px; color: #fff; font-weight: 800; flex-shrink: 0;
 }
 .cr-header-info { flex: 1; min-width: 0; }
-.cr-header-name { font-size: 14px; font-weight: 700; color: var(--text-primary,#e2e8f0); }
+.cr-header-name { font-size: 14px; font-weight: 700; color: var(--text-primary,#1c2434); }
 .cr-header-sub  { font-size: 11px; color: var(--text-muted,#64748b); margin-top: 2px; }
 .cr-header-stats { display: flex; gap: 14px; flex-shrink: 0; }
 .cr-stat-chip {
     display: flex; flex-direction: column; align-items: center;
     min-width: 52px;
 }
-.cr-stat-chip .val { font-size: 16px; font-weight: 800; color: var(--text-primary,#e2e8f0); }
+.cr-stat-chip .val { font-size: 16px; font-weight: 800; color: var(--text-primary,#1c2434); }
 .cr-stat-chip .lbl { font-size: 10px; color: var(--text-muted,#64748b); text-transform: uppercase; letter-spacing: .4px; }
 .cr-chevron { color: var(--text-muted,#64748b); font-size: 12px; transition: transform .25s; flex-shrink: 0; }
 .cr-chevron.open { transform: rotate(180deg); }
@@ -49,13 +49,13 @@
     font-size: 10px; font-weight: 700; text-transform: uppercase;
     letter-spacing: .5px; color: var(--text-muted,#64748b);
     padding: 10px 16px; text-align: left;
-    border-bottom: 1px solid var(--border-color,#2d3f55);
-    background: rgba(255,255,255,.015);
+    border-bottom: 1px solid var(--border-color,#e2e8f0);
+    background: var(--bg-table-header,#f9fafb);
 }
 .cr-student-table td {
     padding: 9px 16px; font-size: 13px;
-    color: var(--text-primary,#e2e8f0);
-    border-bottom: 1px solid rgba(255,255,255,.04);
+    color: var(--text-primary,#1c2434);
+    border-bottom: 1px solid var(--border-color,#e2e8f0);
 }
 .cr-student-table tr:last-child td { border-bottom: none; }
 .cr-student-table tr:hover td { background: rgba(99,102,241,.05); }
@@ -67,8 +67,8 @@
     align-items: center;
     gap: 10px;
     padding: 12px 20px;
-    border-bottom: 1px solid var(--border-color,#2d3f55);
-    background: rgba(255,255,255,.015);
+    border-bottom: 1px solid var(--border-color,#e2e8f0);
+    background: var(--bg-body,#f1f5f9);
     flex-wrap: wrap;
 }
 .cr-filter-label {
@@ -79,10 +79,10 @@
 }
 .cr-filter-select {
     padding: 7px 12px;
-    border: 1px solid var(--border-color,#2d3f55);
+    border: 1px solid var(--border-color,#e2e8f0);
     border-radius: 8px;
-    background: var(--bg-secondary,#0f172a);
-    color: var(--text-primary,#e2e8f0);
+    background: var(--bg-input,#ffffff);
+    color: var(--text-primary,#1c2434);
     font-size: 13px;
     cursor: pointer;
     outline: none;
@@ -103,15 +103,15 @@
     margin-left: auto;
     padding: 6px 14px;
     border-radius: 7px;
-    border: 1px solid rgba(148,163,184,.2);
+    border: 1px solid var(--border-color,#e2e8f0);
     background: transparent;
-    color: var(--text-muted,#94a3b8);
+    color: var(--text-muted,#64748b);
     font-size: 12px; font-weight: 600;
     cursor: pointer; text-decoration: none;
     transition: all .14s;
     white-space: nowrap;
 }
-.cr-filter-reset:hover { background: rgba(255,255,255,.05); color: var(--text-primary,#e2e8f0); }
+.cr-filter-reset:hover { background: var(--bg-body,#f1f5f9); color: var(--text-primary,#1c2434); }
 .cr-active-badge {
     display: inline-flex; align-items: center; gap: 5px;
     padding: 3px 10px;
@@ -131,8 +131,8 @@
     transition: all .15s; white-space: nowrap;
     text-decoration: none;
 }
-.cr-export-btn.print  { background: rgba(99,102,241,.15); color: #818cf8; border: 1px solid rgba(99,102,241,.3); }
-.cr-export-btn.excel  { background: rgba(16,185,129,.12); color: #34d399;  border: 1px solid rgba(16,185,129,.3); }
+.cr-export-btn.print  { background: rgba(99,102,241,.15); color: #6366f1; border: 1px solid rgba(99,102,241,.3); }
+.cr-export-btn.excel  { background: rgba(16,185,129,.12); color: #059669;  border: 1px solid rgba(16,185,129,.3); }
 .cr-export-btn.print:hover  { background: #6366f1; color: #fff; }
 .cr-export-btn.excel:hover  { background: #10b981; color: #fff; }
 
@@ -163,18 +163,18 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">🏫 Classroom Report</h3>
+        <h3 class="card-title">Classroom Report</h3>
         <div style="display:flex; gap:8px; align-items:center;">
-            <a href="{{ route('reports.index') }}" class="btn btn-secondary btn-sm">← Payment Report</a>
-            <button class="cr-export-btn print" onclick="printReport('detail')">🖨️ Print Detail</button>
-            <button class="cr-export-btn" style="background:rgba(251,191,36,.12);color:#f59e0b;border:1px solid rgba(251,191,36,.3);" onclick="printReport('summary')">📋 Print Summary</button>
-            <button class="cr-export-btn excel" onclick="exportExcel()">📊 Export Excel</button>
+            <a href="{{ route('reports.index') }}" class="btn btn-secondary btn-sm"><i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Payment Report</a>
+            <button class="cr-export-btn print" onclick="printReport('detail')">Print Detail</button>
+            <button class="cr-export-btn" style="background:rgba(251,191,36,.12);color:#f59e0b;border:1px solid rgba(251,191,36,.3);" onclick="printReport('summary')">Print Summary</button>
+            <button class="cr-export-btn excel" onclick="exportExcel()">Export Excel</button>
         </div>
     </div>
 
     {{-- ── Filter Bar ── --}}
     <div class="cr-filter-bar">
-        <span class="cr-filter-label">🔎 Filter:</span>
+        <span class="cr-filter-label">Filter:</span>
 
         {{-- Term select --}}
         <select id="termFilter" class="cr-filter-select" onchange="applyTermFilter(this.value)">
@@ -203,11 +203,11 @@
         {{-- Active filter badges --}}
         @if($selTermId)
             @php $selTerm = $terms->firstWhere('id', $selTermId); @endphp
-            <span class="cr-active-badge">📅 {{ $selTerm?->name ?? 'Term' }}</span>
+            <span class="cr-active-badge">{{ $selTerm?->name ?? 'Term' }}</span>
         @endif
         @if($selGradeId)
             @php $selGrade = $grades->firstWhere('id', $selGradeId); @endphp
-            <span class="cr-active-badge">📚 {{ $selGrade?->name ?? 'Grade' }}</span>
+            <span class="cr-active-badge">{{ $selGrade?->name ?? 'Grade' }}</span>
         @endif
 
         @if($selTermId || $selGradeId)
@@ -332,7 +332,7 @@
             </div>
         @empty
             <div class="empty-state">
-                <div class="empty-icon">🏫</div>
+                <div class="empty-icon"><i data-lucide="school"></i></div>
                 <h3>No classrooms found</h3>
                 <p>Create classrooms first to see the report.</p>
             </div>
@@ -342,7 +342,7 @@
 
 {{-- ══ Hidden flat table used for PRINT ══ --}}
 <div class="print-only" id="printArea">
-    <div class="pt-title">🏫 Classroom Report</div>
+    <div class="pt-title">Classroom Report</div>
     <div class="pt-sub">
         Generated: {{ now()->format('d M Y, H:i') }}
         @if($selTermId) &nbsp;|&nbsp; Term: {{ $terms->firstWhere('id',$selTermId)?->name }} @endif
@@ -372,7 +372,7 @@
                 {{-- Classroom header row --}}
                 <tr class="classroom-row">
                     <td colspan="10">
-                        🏫 {{ $classroom->name }}
+                        {{ $classroom->name }}
                         &nbsp;·&nbsp; {{ $classroom->teacher->name ?? 'No Teacher' }}
                         &nbsp;·&nbsp; {{ $classroom->grade->name ?? '—' }}
                         &nbsp;·&nbsp; {{ $classroom->grade?->term?->name ?? '—' }}
@@ -413,7 +413,7 @@
 
 {{-- ══ Hidden SUMMARY print area (grouped by Term → Grade) ══ --}}
 <div class="print-only" id="printSummary" style="display:none;">
-    <div class="pt-title">🏫 Classroom Summary Report</div>
+    <div class="pt-title">Classroom Summary Report</div>
     <div class="pt-sub">
         Generated: {{ now()->format('d M Y, H:i') }}
         @if($selTermId) &nbsp;|&nbsp; Term: {{ $terms->firstWhere('id',$selTermId)?->name }} @endif
@@ -461,7 +461,7 @@
             @endphp
             {{-- Term heading --}}
             <tr class="term-heading">
-                <td colspan="5">📅 {{ $termName }}</td>
+                <td colspan="5">{{ $termName }}</td>
             </tr>
             @foreach($gradeGroups as $gradeName => $crs)
                 @php
@@ -474,7 +474,7 @@
                 @endphp
                 {{-- Grade heading --}}
                 <tr class="grade-heading">
-                    <td style="padding-left:20px;">📚 {{ $gradeName }}</td>
+                    <td style="padding-left:20px;">{{ $gradeName }}</td>
                     <td style="text-align:center;">{{ count($crs) }}</td>
                     <td style="text-align:center;">{{ $gradeStudents }}</td>
                     <td style="text-align:center;">{{ $gradePaid }}</td>
@@ -484,7 +484,7 @@
                 @foreach($crs as $cr)
                     <tr>
                         <td style="padding-left:40px;">
-                            🏫 {{ $cr->name }}
+                            {{ $cr->name }}
                             <span class="ps-classroom-list">· {{ $cr->teacher->name ?? 'No Teacher' }}</span>
                         </td>
                         <td style="text-align:center;color:#64748b;">1</td>
@@ -506,7 +506,7 @@
         @endforeach
         {{-- Grand total --}}
         <tr class="total-row">
-            <td style="font-size:13px;">🏆 GRAND TOTAL</td>
+            <td style="font-size:13px;">GRAND TOTAL</td>
             <td style="text-align:center; font-size:13px;">{{ $grandClassrooms }}</td>
             <td style="text-align:center; font-size:13px;">{{ $grandStudents }}</td>
             <td style="text-align:center;">—</td>

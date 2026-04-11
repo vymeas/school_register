@@ -5,17 +5,17 @@
 @section('content')
 <div class="stats-grid">
     <div class="stat-card">
-        <div class="stat-icon purple">🎓</div>
+        <div class="stat-icon purple"><i data-lucide="graduation-cap"></i></div>
         <div class="stat-value">{{ $totalStudents }}</div>
         <div class="stat-label">Total Students</div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon green">💳</div>
+        <div class="stat-icon green"><i data-lucide="credit-card" style="width:14px;height:14px;"></i></div>
         <div class="stat-value">{{ $totalPayments }}</div>
         <div class="stat-label">Total Payments</div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon blue">💰</div>
+        <div class="stat-icon blue"><i data-lucide="banknote"></i></div>
         <div class="stat-value">${{ number_format($totalRevenue, 2) }}</div>
         <div class="stat-label">Total Revenue</div>
     </div>

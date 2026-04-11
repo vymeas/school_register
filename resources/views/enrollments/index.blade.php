@@ -59,7 +59,7 @@
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="9"><div class="empty-state"><div class="empty-icon">📝</div><h3>No enrollments</h3></div></td></tr>
+                <tr><td colspan="9"><div class="empty-state"><div class="empty-icon"><i data-lucide="clipboard-list"></i></div><h3>No enrollments</h3></div></td></tr>
             @endforelse
             </tbody>
         </table>
@@ -74,7 +74,7 @@
 
 <div class="modal-overlay" id="enrollModal">
     <div class="modal">
-        <div class="modal-header"><h3>Add Enrollment</h3><button class="modal-close" onclick="closeModal('enrollModal')">✕</button></div>
+        <div class="modal-header"><h3>Add Enrollment</h3><button class="modal-close" onclick="closeModal('enrollModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button></div>
         <div class="modal-body">
             <form id="enrollForm" method="POST" action="{{ route('enrollments.store') }}">
                 @csrf
@@ -96,7 +96,7 @@
 
 <div class="modal-overlay" id="upgradeModal">
     <div class="modal">
-        <div class="modal-header"><h3>Upgrade Enrollment</h3><button class="modal-close" onclick="closeModal('upgradeModal')">✕</button></div>
+        <div class="modal-header"><h3>Upgrade Enrollment</h3><button class="modal-close" onclick="closeModal('upgradeModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button></div>
         <div class="modal-body">
             <form id="upgradeForm" method="POST">
                 @csrf
@@ -117,7 +117,7 @@
 
 <div class="modal-overlay" id="transferModal">
     <div class="modal">
-        <div class="modal-header"><h3>Transfer Enrollment</h3><button class="modal-close" onclick="closeModal('transferModal')">✕</button></div>
+        <div class="modal-header"><h3>Transfer Enrollment</h3><button class="modal-close" onclick="closeModal('transferModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button></div>
         <div class="modal-body">
             <form id="transferForm" method="POST">
                 @csrf

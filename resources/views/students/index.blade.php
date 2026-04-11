@@ -7,7 +7,7 @@
     <div class="card-header">
         <div class="toolbar">
             <div class="search-box">
-                <span class="search-icon">🔍</span>
+                <span class="search-icon"><i data-lucide="search" style="width:14px;height:14px;"></i></span>
                 <input type="text" id="searchInput" placeholder="Search students..." value="{{ request('search') }}">
             </div>
             <select class="form-control" style="width:auto;" id="statusFilter">
@@ -43,8 +43,8 @@
             </select>
             <select class="form-control" style="width:auto;" id="studyStatusFilter">
                 <option value="">All Study Status</option>
-                <option value="studying" {{ request('study_status')=='studying'?'selected':'' }}>📖 Studying</option>
-                <option value="dropped"  {{ request('study_status')=='dropped' ?'selected':'' }}>🚫 Dropped</option>
+                <option value="studying" {{ request('study_status')=='studying'?'selected':'' }}>Studying</option>
+                <option value="dropped"  {{ request('study_status')=='dropped' ?'selected':'' }}>Dropped</option>
             </select>
         </div>
         <button class="btn btn-primary" onclick="openModal('studentModal')">+ Add Student</button>
@@ -75,7 +75,7 @@
                         @if($enr)
                             <div style="line-height:1.5;">
                                 <div style="font-size:13px; font-weight:700; color:var(--accent-primary);">
-                                    🏫 {{ $enr->classroom->name ?? '—' }}
+                                    {{ $enr->classroom->name ?? '—' }}
                                 </div>
                                 <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">
                                     {{ $enr->term->name ?? '—' }}
@@ -93,14 +93,14 @@
                     <td>
                         @if($student->study_status === 'studying')
                             @if($student->status === 'active')
-                                <span class="badge active">✅ Active</span>
+                                <span class="badge active">Active</span>
                             @elseif($student->status === 'expired')
-                                <span class="badge expired">⏳ Expired</span>
+                                <span class="badge expired">Expired</span>
                             @else
-                                <span class="badge pending">🕒 Pending</span>
+                                <span class="badge pending">Pending</span>
                             @endif
                         @else
-                            <span class="badge expired">🚫 Dropped</span>
+                            <span class="badge expired">Dropped</span>
                         @endif
                     </td>
                     {{-- Payment Status --}}
@@ -118,7 +118,7 @@
                                 Paid until: <strong style="color:var(--text-primary);">{{ $paidUntil->format('d M Y') }}</strong>
                             </div>
                         @elseif($payStatus === 'expired')
-                            <span class="badge expired">✕ Expired</span>
+                            <span class="badge expired">Expired</span>
                             <div style="font-size:10px; color:var(--text-muted); margin-top:3px;">
                                 Was: <strong>{{ $paidUntil->format('d M Y') }}</strong>
                             </div>
@@ -129,9 +129,9 @@
 
                     <td>
                         <div class="btn-group">
-                            <a href="{{ route('students.show', $student) }}" class="btn btn-sm btn-secondary" data-tip="View Profile">👁</a>
-                            <button class="btn btn-sm btn-secondary" onclick="editStudent({{ $student->id }})" data-tip="Edit Student">✏️</button>
-                            <a href="{{ route('payments.create', ['student_id' => $student->id]) }}" class="btn btn-sm btn-success" data-tip="Record Payment">💳</a>
+                            <a href="{{ route('students.show', $student) }}" class="btn btn-sm btn-secondary" data-tip="View Profile"><i data-lucide="eye" style="width:14px;height:14px;"></i></a>
+                            <button class="btn btn-sm btn-secondary" onclick="editStudent({{ $student->id }})" data-tip="Edit Student"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
+                            <a href="{{ route('payments.create', ['student_id' => $student->id]) }}" class="btn btn-sm btn-success" data-tip="Record Payment"><i data-lucide="credit-card" style="width:14px;height:14px;"></i></a>
                             {{-- Quick study status toggle --}}
                             <form method="POST" action="{{ route('students.study-status', $student) }}" style="display:inline;">
                                 @csrf
@@ -141,16 +141,16 @@
                                     <button type="submit" class="btn btn-sm btn-warning"
                                         title="Mark as Dropped"
                                         data-tip="Mark as Dropped"
-                                        onclick="return confirm('Mark {{ addslashes($student->full_name) }} as Dropped?')">🚫</button>
+                                        onclick="return confirm('Mark {{ addslashes($student->full_name) }} as Dropped?')"><i data-lucide="ban" style="width:14px;height:14px;"></i></button>
                                 @else
                                     <input type="hidden" name="study_status" value="studying">
                                     <button type="submit" class="btn btn-sm btn-success"
                                         title="Mark as Studying"
                                         data-tip="Mark as Studying"
-                                        onclick="return confirm('Mark {{ addslashes($student->full_name) }} as Studying again?')">📖</button>
+                                        onclick="return confirm('Mark {{ addslashes($student->full_name) }} as Studying again?')"><i data-lucide="book-open-check" style="width:14px;height:14px;"></i></button>
                                 @endif
                             </form>
-                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/students/{{ $student->id }}', 'student')" data-tip="Delete Student">🗑</button>
+                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/students/{{ $student->id }}', 'student')" data-tip="Delete Student"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
                         </div>
                     </td>
                 </tr>
@@ -158,7 +158,7 @@
                 <tr>
                     <td colspan="7">
                         <div class="empty-state">
-                            <div class="empty-icon">🎓</div>
+                            <div class="empty-icon"><i data-lucide="graduation-cap"></i></div>
                             <h3>No students found</h3>
                             <p>Start by adding your first student.</p>
                             <button class="btn btn-primary" onclick="openModal('studentModal')">+ Add Student</button>
@@ -188,7 +188,7 @@
     <div class="modal">
         <div class="modal-header">
             <h3 id="studentModalTitle">Add New Student</h3>
-            <button class="modal-close" onclick="closeModal('studentModal')">✕</button>
+            <button class="modal-close" onclick="closeModal('studentModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button>
         </div>
         <div class="modal-body">
             <form id="studentForm" method="POST" action="{{ route('students.store') }}">

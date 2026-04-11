@@ -6,30 +6,30 @@
 @media print{body *{visibility:hidden!important}.rpt-print,.rpt-print *{visibility:visible!important}.rpt-print{position:fixed;top:0;left:0;width:100%;padding:24px;background:#fff;display:block!important}.rpt-print table{width:100%;border-collapse:collapse;font-size:11px;page-break-inside:auto}.rpt-print tr{page-break-inside:avoid}.rpt-print th{background:#b91c1c!important;color:#fff!important;padding:7px 10px;-webkit-print-color-adjust:exact;print-color-adjust:exact}.rpt-print td{padding:6px 10px;border-bottom:1px solid #fecaca;color:#1e293b}.rpt-print tfoot td{background:#fee2e2!important;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact}.rpt-print h2{font-size:18px;font-weight:800;color:#991b1b;margin-bottom:4px}.rpt-print .sub{font-size:11px;color:#64748b;margin-bottom:14px}.rpt-print .rf{margin-top:14px;font-size:10px;color:#94a3b8;text-align:right}}
 .rpt-print{display:none}
 .od-tbl{width:100%;border-collapse:collapse}
-.od-tbl th{background:var(--bg-secondary,#0f172a);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted,#64748b);padding:10px 14px;text-align:left;border-bottom:2px solid var(--border-color,#2d3f55);white-space:nowrap}
-.od-tbl td{padding:9px 14px;font-size:13px;color:var(--text-primary,#e2e8f0);border-bottom:1px solid rgba(255,255,255,.04)}
+.od-tbl th{background:var(--bg-table-header,#f9fafb);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted,#64748b);padding:10px 14px;text-align:left;border-bottom:2px solid var(--border-color,#e2e8f0);white-space:nowrap}
+.od-tbl td{padding:9px 14px;font-size:13px;color:var(--text-primary,#1c2434);border-bottom:1px solid var(--border-color,#e2e8f0)}
 .od-tbl tbody tr:hover{background:rgba(239,68,68,.05)}
 .od-tbl tfoot td{background:rgba(239,68,68,.08);font-weight:800;padding:10px 14px;border-top:2px solid rgba(239,68,68,.3)}
 .days-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700}
-.days-critical{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
-.days-warn{background:rgba(251,191,36,.12);color:#f59e0b;border:1px solid rgba(251,191,36,.3)}
-.days-none{background:rgba(100,116,139,.1);color:#94a3b8;border:1px solid rgba(100,116,139,.2)}
-.batch-bar{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:10px 16px;margin-bottom:14px;display:none;align-items:center;gap:12px;flex-wrap:wrap}
+.days-critical{background:rgba(239,68,68,.12);color:#dc2626;border:1px solid rgba(239,68,68,.3)}
+.days-warn{background:rgba(251,191,36,.12);color:#d97706;border:1px solid rgba(251,191,36,.3)}
+.days-none{background:rgba(100,116,139,.1);color:#475569;border:1px solid rgba(100,116,139,.2)}
+.batch-bar{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:10px 16px;margin-bottom:14px;display:none;align-items:center;gap:12px;flex-wrap:wrap}
 .batch-bar.active{display:flex}
 .xbtn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
-.xbtn.pr{background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)}.xbtn.pr:hover{background:#6366f1;color:#fff}
-.xbtn.ex{background:rgba(16,185,129,.12);color:#34d399;border:1px solid rgba(16,185,129,.3)}.xbtn.ex:hover{background:#10b981;color:#fff}
-.xbtn.danger{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}.xbtn.danger:hover{background:#ef4444;color:#fff}
+.xbtn.pr{background:rgba(99,102,241,.15);color:#6366f1;border:1px solid rgba(99,102,241,.3)}.xbtn.pr:hover{background:#6366f1;color:#fff}
+.xbtn.ex{background:rgba(16,185,129,.12);color:#059669;border:1px solid rgba(16,185,129,.3)}.xbtn.ex:hover{background:#10b981;color:#fff}
+.xbtn.danger{background:rgba(239,68,68,.12);color:#dc2626;border:1px solid rgba(239,68,68,.3)}.xbtn.danger:hover{background:#ef4444;color:#fff}
 </style>
 
 <div class="card" style="width:100%;height:100%;">
   <div class="card-header">
-    <h3 class="card-title">⚠️ Overdue &amp; Debt Report</h3>
+    <h3 class="card-title">Overdue &amp; Debt Report</h3>
     <div style="display:flex;gap:8px;align-items:center;">
-      <a href="{{ route('reports.payment.revenue') }}" class="btn btn-secondary btn-sm">← Revenue</a>
-      <button class="xbtn pr" onclick="window.print()">🖨️ Print All</button>
-      <button class="xbtn danger" id="batchPrintBtn" onclick="batchPrint()" style="display:none;">🖨️ Print Selected (<span id="batchCnt">0</span>)</button>
-      <button class="xbtn ex" onclick="exportOdCsv()">📊 Export</button>
+      <a href="{{ route('reports.payment.revenue') }}" class="btn btn-secondary btn-sm"><i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Revenue</a>
+      <button class="xbtn pr" onclick="window.print()">Print All</button>
+      <button class="xbtn danger" id="batchPrintBtn" onclick="batchPrint()" style="display:none;">Print Selected (<span id="batchCnt">0</span>)</button>
+      <button class="xbtn ex" onclick="exportOdCsv()">Export</button>
     </div>
   </div>
 
@@ -39,14 +39,14 @@
     $expired   = $total - $neverPaid;
   @endphp
 
-  <div style="padding:14px 16px;border-bottom:1px solid var(--border-color,#2d3f55);">
+  <div style="padding:14px 16px;border-bottom:1px solid var(--border-color,#e2e8f0);">
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:12px;">
       <div class="stat-card"><div class="stat-label">Total Overdue</div><div class="stat-value" style="color:#f87171;">{{ $total }}</div></div>
       <div class="stat-card"><div class="stat-label">Expired Payment</div><div class="stat-value" style="color:#f59e0b;">{{ $expired }}</div></div>
       <div class="stat-card"><div class="stat-label">Never Paid</div><div class="stat-value" style="color:#94a3b8;">{{ $neverPaid }}</div></div>
     </div>
     <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--text-primary,#e2e8f0);">
-      ⚠️ <strong>{{ $total }}</strong> student{{ $total != 1 ? 's' : '' }} require immediate payment follow-up.
+      <strong>{{ $total }}</strong> student{{ $total != 1 ? 's' : '' }} require immediate payment follow-up.
       Select rows to batch print reminder notices.
     </div>
   </div>
@@ -54,8 +54,8 @@
   {{-- Batch action bar --}}
   <div class="batch-bar" id="batchBar">
     <span style="font-size:13px;color:var(--text-primary,#e2e8f0);"><strong id="batchCnt2">0</strong> selected</span>
-    <button class="xbtn danger" onclick="batchPrint()">🖨️ Print Notices</button>
-    <button class="xbtn ex" onclick="exportSelected()">📊 Export Selected</button>
+    <button class="xbtn danger" onclick="batchPrint()">Print Notices</button>
+    <button class="xbtn ex" onclick="exportSelected()">Export Selected</button>
     <button onclick="clearSelection()" style="background:transparent;border:none;color:var(--text-muted,#64748b);cursor:pointer;font-size:12px;">✕ Clear</button>
   </div>
 
@@ -105,11 +105,11 @@
             @endif
           </td>
           <td>
-            <a href="{{ route('payments.create', ['student_id' => $s->id]) }}" class="btn btn-primary btn-sm" style="font-size:11px;padding:3px 8px;">💳 Pay</a>
+            <a href="{{ route('payments.create', ['student_id' => $s->id]) }}" class="btn btn-primary btn-sm" style="font-size:11px;padding:3px 8px;">Pay</a>
           </td>
         </tr>
         @empty
-        <tr><td colspan="11"><div style="padding:40px;text-align:center;color:var(--text-muted,#64748b);">✅ No overdue students found!</div></td></tr>
+        <tr><td colspan="11"><div style="padding:40px;text-align:center;color:var(--text-muted,#64748b);">No overdue students found!</div></td></tr>
         @endforelse
       </tbody>
       <tfoot>
@@ -125,7 +125,7 @@
 
 {{-- Print area (all) --}}
 <div class="rpt-print" id="odPrintAll" style="display:none;">
-  <h2>⚠️ Overdue &amp; Debt Report</h2>
+  <h2>Overdue &amp; Debt Report</h2>
   <div class="sub">Generated: {{ now()->format('d M Y, H:i') }} · By: {{ auth()->user()->full_name??'Admin' }} · {{ $total }} overdue students</div>
   <table>
     <thead><tr><th>#</th><th>Student</th><th>Code</th><th>Contact</th><th>Classroom</th><th>Grade</th><th>Last Payment</th><th>Paid Until</th><th>Days Overdue</th></tr></thead>
@@ -149,7 +149,7 @@
 
 {{-- Batch print area --}}
 <div class="rpt-print" id="odPrintBatch" style="display:none;">
-  <h2>⚠️ Overdue Payment Reminder Notices</h2>
+  <h2>Overdue Payment Reminder Notices</h2>
   <div class="sub">Generated: {{ now()->format('d M Y, H:i') }} · By: {{ auth()->user()->full_name??'Admin' }}</div>
   <div id="batchNotices"></div>
   <div class="rf">School Register · Overdue Notices · {{ now()->format('d M Y') }}</div>
@@ -178,7 +178,7 @@ function batchPrint(){
   if(!rows.length){alert('Please select at least one student.');return;}
   const notices=rows.map(r=>`
     <div style="border:1px solid #e2e8f0;border-radius:6px;padding:16px;margin-bottom:20px;page-break-inside:avoid;">
-      <div style="font-size:14px;font-weight:800;margin-bottom:8px;">⚠️ PAYMENT REMINDER NOTICE</div>
+      <div style="font-size:14px;font-weight:800;margin-bottom:8px;">PAYMENT REMINDER NOTICE</div>
       <div style="font-size:11px;color:#64748b;margin-bottom:10px;">Date: {{ now()->format('d M Y') }}</div>
       <table style="width:100%;border-collapse:collapse;font-size:11px;">
         <tr><td style="padding:4px 0;color:#64748b;width:140px;">Student Name</td><td><strong>${r.dataset.name}</strong></td></tr>
