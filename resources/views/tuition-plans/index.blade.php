@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Tuition Plans')
-@section('page-title', 'Tuition Plans')
+@section('title', __('Tuition Plans'))
+@section('page-title', __('Tuition Plans'))
 
 @section('content')
 <div class="card">
@@ -10,7 +10,7 @@
     </div>
     <div class="table-responsive">
         <table class="data-table">
-            <thead><tr><th>Name</th><th>Classroom</th><th>Duration</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+            <thead><tr><th>{{ __('Name') }}</th><th>{{ __('Classroom') }}</th><th>{{ __('Duration') }}</th><th>{{ __('Price') }}</th><th>{{ __('Status') }}</th><th>{{ __('Actions') }}</th></tr></thead>
             <tbody>
             @forelse($plans as $plan)
                 <tr>
@@ -19,7 +19,11 @@
                     <td>{{ $plan->duration_month }} month{{ $plan->duration_month > 1 ? 's' : '' }}</td>
                     <td><strong>${{ number_format($plan->price, 2) }}</strong></td>
                     <td><span class="badge {{ $plan->status }}">{{ ucfirst($plan->status) }}</span></td>
-                    <td><div class="btn-group"><button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/tuition-plans/{{ $plan->id }}', 'tuition plan')" data-tip="Delete Plan"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button></div></td>
+                    <td><div class="btn-group">
+                        @if(auth()->user()->role !== 'accountant')
+                        <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/tuition-plans/{{ $plan->id }}', 'tuition plan')" data-tip="Delete Plan"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
+                        @endif
+                    </div></td>
                 </tr>
             @empty
                 <tr><td colspan="5"><div class="empty-state"><div class="empty-icon"><i data-lucide="banknote"></i></div><h3>No tuition plans</h3></div></td></tr>

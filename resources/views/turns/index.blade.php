@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Turns')
-@section('page-title', 'Turns')
+@section('title', __('Turns'))
+@section('page-title', __('Turns'))
 
 @section('content')
 <div class="card">
@@ -12,11 +12,11 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Classrooms</th>
-                    <th>Actions</th>
+                    <th>{{ __('Name') }}</th>
+                    <th>{{ __('Start Time') }}</th>
+                    <th>{{ __('End Time') }}</th>
+                    <th>{{ __('Classrooms') }}</th>
+                    <th>{{ __('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,12 +28,16 @@
                     <td><span class="badge info">{{ $turn->classrooms_count }}</span></td>
                     <td>
                         <div class="btn-group">
+                            @if(auth()->user()->role !== 'accountant')
                             <button class="btn btn-sm btn-secondary" onclick="editTurn({{ $turn->id }}, '{{ $turn->name }}', '{{ $turn->start_time }}', '{{ $turn->end_time }}')" data-tip="Edit Turn"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
+                            @endif
+                            @if(auth()->user()->role !== 'accountant')
                             <form action="{{ route('turns.destroy', $turn) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger" data-tip="Delete Turn"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
                             </form>
+                            @endif
                         </div>
                     </td>
                 </tr>

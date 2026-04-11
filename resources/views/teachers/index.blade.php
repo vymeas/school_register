@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Teachers')
-@section('page-title', 'Teachers')
+@section('title', __('Teachers'))
+@section('page-title', __('Teachers'))
 
 @section('content')
 <div class="card">
@@ -16,7 +16,7 @@
     <div class="table-responsive">
         <table class="data-table">
             <thead>
-                <tr><th>Teacher ID</th><th>Name</th><th>Gender</th><th>Date of Birth</th><th>Phone</th><th>Email</th><th>Status</th><th>Actions</th></tr>
+                <tr><th>{{ __('Teacher ID') }}</th><th>{{ __('Name') }}</th><th>{{ __('Gender') }}</th><th>{{ __('Date of Birth') }}</th><th>{{ __('Phone') }}</th><th>{{ __('Email') }}</th><th>{{ __('Status') }}</th><th>{{ __('Actions') }}</th></tr>
             </thead>
             <tbody>
             @forelse ($teachers as $teacher)
@@ -30,8 +30,12 @@
                     <td><span class="badge {{ $teacher->status }}">{{ ucfirst($teacher->status) }}</span></td>
                     <td>
                         <div class="btn-group">
+                            @if(auth()->user()->role !== 'accountant')
                             <button class="btn btn-sm btn-secondary" onclick="editTeacher({{ json_encode($teacher) }})" data-tip="Edit Teacher"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
+                            @endif
+                            @if(auth()->user()->role !== 'accountant')
                             <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/teachers/{{ $teacher->id }}', 'teacher')" data-tip="Delete Teacher"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
+                            @endif
                         </div>
                     </td>
                 </tr>

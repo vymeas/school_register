@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Payments')
-@section('page-title', 'Payments')
+@section('title', __('Payments'))
+@section('page-title', __('Payments'))
 
 @section('content')
 <div class="card">
@@ -37,7 +37,7 @@
     </div>
     <div class="table-responsive">
         <table class="data-table">
-            <thead><tr><th>Student</th><th>Enrollment</th><th>Tuition Plan</th><th>Amount</th><th>Method</th><th>Payment</th><th>Paid Until</th><th>Status</th></tr></thead>
+            <thead><tr><th>{{ __('Student') }}</th><th>{{ __('Enrollment') }}</th><th>{{ __('Tuition Plan') }}</th><th>{{ __('Amount') }}</th><th>{{ __('Method') }}</th><th>{{ __('Payment') }}</th><th>{{ __('Paid Until') }}</th><th>{{ __('Status') }}</th></tr></thead>
             <tbody>
             @forelse($payments as $payment)
                 @php

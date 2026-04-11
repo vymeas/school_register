@@ -76,7 +76,7 @@ class ClassroomController extends Controller
     public function destroy(string $id): JsonResponse
     {
         $classroom = Classroom::findOrFail($id);
-        $classroom->update(['is_archived' => true]);
+        $classroom->update(['is_delete' => true]);
 
         return response()->json([
             'message' => 'Classroom archived successfully.',

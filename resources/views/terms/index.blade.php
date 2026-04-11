@@ -12,11 +12,11 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('Name') }}</th>
+                    <th>{{ __('Start Date') }}</th>
+                    <th>{{ __('End Date') }}</th>
+                    <th>{{ __('Status') }}</th>
+                    <th>{{ __('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,6 +28,7 @@
                     <td><span class="badge {{ $term->status }}">{{ ucfirst($term->status) }}</span></td>
                     <td>
                         <div class="btn-group">
+                            @if(auth()->user()->role !== 'accountant')
                             <button class="btn btn-sm btn-secondary"
                                 data-tip="Edit Term"
                                 onclick="editTerm(
@@ -37,7 +38,10 @@
                                     '{{ $term->end_date->format('Y-m-d') }}',
                                     '{{ $term->status }}'
                                 )"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
+                            @endif
+                            @if(auth()->user()->role !== 'accountant')
                             <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/terms/{{ $term->id }}', 'term')" data-tip="Delete Term"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
+                            @endif
                         </div>
                     </td>
                 </tr>

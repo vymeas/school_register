@@ -166,7 +166,7 @@
             </thead>
             <tbody id="csBody">
                 @foreach($classrooms as $i => $cr)
-                <tr data-status="{{ $cr->is_archived ? 'archived' : 'available' }}"
+                <tr data-status="{{ $cr->is_delete ? 'archived' : 'available' }}"
                     data-search="{{ strtolower($cr->name . ' ' . ($cr->grade->name??'') . ' ' . ($cr->grade?->term?->name??'') . ' ' . ($cr->teacher->name??'')) }}">
                     <td class="col-n">{{ $i + 1 }}</td>
                     <td><strong>{{ $cr->name }}</strong></td>
@@ -177,7 +177,7 @@
                     <td class="num">{{ $cr->capacity ?? '—' }}</td>
                     <td class="num"><strong>{{ $cr->enrollments->count() }}</strong></td>
                     <td>
-                        @if($cr->is_archived)
+                        @if($cr->is_delete)
                             <span class="st-archived">● Archived</span>
                         @else
                             <span class="st-available">● Available</span>
@@ -220,7 +220,7 @@
                 <td>{{ $cr->turn->name ?? '—' }}</td>
                 <td>{{ $cr->capacity ?? '—' }}</td>
                 <td>{{ $cr->enrollments->count() }}</td>
-                <td>{{ $cr->is_archived ? 'Archived' : 'Available' }}</td>
+                <td>{{ $cr->is_delete ? 'Archived' : 'Available' }}</td>
             </tr>
             @endforeach
         </tbody>

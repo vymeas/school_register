@@ -145,6 +145,20 @@
     .nav-icon { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; flex-shrink: 0; }
     .nav-icon svg, .nav-icon i[data-lucide] { width: 18px; height: 18px; }
     .nav-sub-label i[data-lucide] { width: 13px; height: 13px; }
+
+    /* Language Switcher */
+    .lang-switcher {
+        display: flex; gap: 8px; margin-right: 16px;
+        background: var(--bg-card); padding: 4px; border-radius: 8px;
+        border: 1px solid var(--border-color);
+    }
+    .lang-item {
+        padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800;
+        cursor: pointer; text-decoration: none; color: var(--text-muted);
+        transition: all 0.2s;
+    }
+    .lang-item.active { background: var(--accent-primary); color: #fff; }
+    .lang-item:hover:not(.active) { background: var(--bg-body); color: var(--text-primary); }
     </style>
     @stack('styles')
 </head>
@@ -163,49 +177,51 @@
             </div>
         </div>
         <nav class="sidebar-nav">
-            <div class="nav-section-title">Menu</div>
+            <div class="nav-section-title">{{ __('Menu') }}</div>
             <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span> <span>Dashboard</span>
+                <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span> <span>{{ __('Dashboard') }}</span>
             </a>
 
-            <div class="nav-section-title">Management</div>
+            <div class="nav-section-title">{{ __('Management') }}</div>
             <a href="{{ route('students.index') }}" class="nav-item {{ request()->routeIs('students.*') ? 'active' : '' }}">
-                <span class="nav-icon"><i data-lucide="graduation-cap"></i></span> <span>Students</span>
+                <span class="nav-icon"><i data-lucide="graduation-cap"></i></span> <span>{{ __('Students') }}</span>
             </a>
             <a href="{{ route('teachers.index') }}" class="nav-item {{ request()->routeIs('teachers.*') ? 'active' : '' }}">
-                <span class="nav-icon"><i data-lucide="user-round-check"></i></span> <span>Teachers</span>
+                <span class="nav-icon"><i data-lucide="user-round-check"></i></span> <span>{{ __('Teachers') }}</span>
             </a>
             <a href="{{ route('classrooms.index') }}" class="nav-item {{ request()->routeIs('classrooms.index') || request()->routeIs('classrooms.store') ? 'active' : '' }}">
-                <span class="nav-icon"><i data-lucide="school"></i></span> <span>Classrooms</span>
+                <span class="nav-icon"><i data-lucide="school"></i></span> <span>{{ __('Classrooms') }}</span>
             </a>
             <a href="{{ route('grades.index') }}" class="nav-item {{ request()->routeIs('grades.*') ? 'active' : '' }}">
-                <span class="nav-icon"><i data-lucide="book-open"></i></span> <span>Grades</span>
+                <span class="nav-icon"><i data-lucide="book-open"></i></span> <span>{{ __('Grades') }}</span>
             </a>
             <a href="{{ route('terms.index') }}" class="nav-item {{ request()->routeIs('terms.*') ? 'active' : '' }}">
-                <span class="nav-icon"><i data-lucide="calendar-range"></i></span> <span>Terms</span>
+                <span class="nav-icon"><i data-lucide="calendar-range"></i></span> <span>{{ __('Terms') }}</span>
             </a>
             <a href="{{ route('turns.index') }}" class="nav-item {{ request()->routeIs('turns.*') ? 'active' : '' }}">
-                <span class="nav-icon"><i data-lucide="clock-4"></i></span> <span>Turns</span>
+                <span class="nav-icon"><i data-lucide="clock-4"></i></span> <span>{{ __('Turns') }}</span>
             </a>
 
-            <div class="nav-section-title">Finance</div>
+            <div class="nav-section-title">{{ __('Finance') }}</div>
+            @if(auth()->user()->role !== 'accountant')
             <a href="{{ route('tuition-plans.index') }}" class="nav-item {{ request()->routeIs('tuition-plans.*') ? 'active' : '' }}">
-                <span class="nav-icon"><i data-lucide="banknote"></i></span> <span>Tuition Plans</span>
+                <span class="nav-icon"><i data-lucide="banknote"></i></span> <span>{{ __('Tuition Plans') }}</span>
             </a>
+            @endif
             <a href="{{ route('payments.index') }}" class="nav-item {{ request()->routeIs('payments.*') ? 'active' : '' }}">
-                <span class="nav-icon"><i data-lucide="credit-card"></i></span> <span>Payments</span>
+                <span class="nav-icon"><i data-lucide="credit-card"></i></span> <span>{{ __('Payments') }}</span>
             </a>
             <a href="{{ route('enrollments.index') }}" class="nav-item {{ request()->routeIs('enrollments.*') ? 'active' : '' }}">
-                <span class="nav-icon"><i data-lucide="clipboard-list"></i></span> <span>Enrollments</span>
+                <span class="nav-icon"><i data-lucide="clipboard-list"></i></span> <span>{{ __('Enrollments') }}</span>
             </a>
 
-            <div class="nav-section-title">Reports</div>
+            <div class="nav-section-title">{{ __('Reports') }}</div>
             
             {{-- Payment Reports --}}
             @php $payReportsOpen = request()->routeIs('reports.payment.*'); @endphp
             <div class="nav-group-toggle {{ $payReportsOpen ? 'open' : '' }}" id="payReportsToggle" onclick="toggleNavGroup('payReportsToggle','payReportsSub')">
                 <span class="nav-icon"><i data-lucide="wallet"></i></span>
-                <span>Payment Rep</span>
+                <span>{{ __('Payment Rep') }}</span>
                 <span class="ng-arrow"><i data-lucide="chevron-down" style="width:14px;height:14px;"></i></span>
             </div>
             <div class="nav-sub {{ $payReportsOpen ? 'open' : '' }}" id="payReportsSub">
@@ -218,7 +234,7 @@
             @php $classReportsOpen = request()->routeIs('reports.classroom*'); @endphp
             <div class="nav-group-toggle {{ $classReportsOpen ? 'open' : '' }}" id="classReportsToggle" onclick="toggleNavGroup('classReportsToggle','classReportsSub')">
                 <span class="nav-icon"><i data-lucide="school"></i></span>
-                <span>Classroom Rep</span>
+                <span>{{ __('Classroom Rep') }}</span>
                 <span class="ng-arrow"><i data-lucide="chevron-down" style="width:14px;height:14px;"></i></span>
             </div>
             <div class="nav-sub {{ $classReportsOpen ? 'open' : '' }}" id="classReportsSub">
@@ -231,7 +247,7 @@
             @php $studReportsOpen = request()->routeIs('reports.students*'); @endphp
             <div class="nav-group-toggle {{ $studReportsOpen ? 'open' : '' }}" id="studReportsToggle" onclick="toggleNavGroup('studReportsToggle','studReportsSub')">
                 <span class="nav-icon"><i data-lucide="graduation-cap"></i></span>
-                <span>Student Rep</span>
+                <span>{{ __('Student Rep') }}</span>
                 <span class="ng-arrow"><i data-lucide="chevron-down" style="width:14px;height:14px;"></i></span>
             </div>
             <div class="nav-sub {{ $studReportsOpen ? 'open' : '' }}" id="studReportsSub">
@@ -242,7 +258,7 @@
             @php $tgReportsOpen = request()->routeIs('reports.term-grade*'); @endphp
             <div class="nav-group-toggle {{ $tgReportsOpen ? 'open' : '' }}" id="tgReportsToggle" onclick="toggleNavGroup('tgReportsToggle','tgReportsSub')">
                 <span class="nav-icon"><i data-lucide="book-open"></i></span>
-                <span>Term / Grade</span>
+                <span>{{ __('Term / Grade') }}</span>
                 <span class="ng-arrow"><i data-lucide="chevron-down" style="width:14px;height:14px;"></i></span>
             </div>
             <div class="nav-sub {{ $tgReportsOpen ? 'open' : '' }}" id="tgReportsSub">
@@ -253,20 +269,23 @@
             @php $teachReportsOpen = request()->routeIs('reports.teachers*'); @endphp
             <div class="nav-group-toggle {{ $teachReportsOpen ? 'open' : '' }}" id="teachReportsToggle" onclick="toggleNavGroup('teachReportsToggle','teachReportsSub')">
                 <span class="nav-icon"><i data-lucide="user-round-check"></i></span>
-                <span>Teacher Rep</span>
+                <span>{{ __('Teacher Rep') }}</span>
                 <span class="ng-arrow"><i data-lucide="chevron-down" style="width:14px;height:14px;"></i></span>
             </div>
             <div class="nav-sub {{ $teachReportsOpen ? 'open' : '' }}" id="teachReportsSub">
                 <a href="{{ route('reports.teachers') }}" class="nav-item {{ request()->routeIs('reports.teachers*') ? 'active' : '' }}">Teacher Report</a>
             </div>
 
-            <div class="nav-section-title">System</div>
+            <div class="nav-section-title">{{ __('System') }}</div>
+            @if(auth()->user()->role !== 'accountant')
             <a href="{{ route('users.index') }}" class="nav-item {{ request()->routeIs('users.*') ? 'active' : '' }}">
-                <span class="nav-icon"><i data-lucide="users"></i></span> <span>Users</span>
+                <span class="nav-icon"><i data-lucide="users"></i></span> <span>{{ __('Users') }}</span>
             </a>
+            @endif
             <a href="{{ route('settings.index') }}" class="nav-item {{ request()->routeIs('settings.index') ? 'active' : '' }}">
-                <span class="nav-icon"><i data-lucide="settings"></i></span> <span>Settings</span>
+                <span class="nav-icon"><i data-lucide="settings"></i></span> <span>{{ __('Settings') }}</span>
             </a>
+            @if(!in_array(auth()->user()->role, ['accountant', 'admin']))
             <a href="{{ route('settings.grades.restore') }}" class="nav-item {{ request()->routeIs('settings.grades.restore') ? 'active' : '' }}">
                 <span class="nav-icon"><i data-lucide="rotate-ccw"></i></span> <span>Restore Grades</span>
             </a>
@@ -279,6 +298,7 @@
             <a href="{{ route('classrooms.archived') }}" class="nav-item {{ request()->routeIs('classrooms.archived') ? 'active' : '' }}">
                 <span class="nav-icon"><i data-lucide="archive"></i></span> <span>Restore Classrooms</span>
             </a>
+            @endif
         </nav>
     </aside>
 
@@ -300,6 +320,12 @@
                 </div>
             </div>
             <div class="topbar-right">
+                {{-- Language Switcher --}}
+                <div class="lang-switcher">
+                    <a href="{{ route('lang.switch', 'en') }}" class="lang-item {{ app()->getLocale() == 'en' ? 'active' : '' }}">EN</a>
+                    <a href="{{ route('lang.switch', 'km') }}" class="lang-item {{ app()->getLocale() == 'km' ? 'active' : '' }}">KM</a>
+                </div>
+
                 {{-- User Dropdown --}}
                 <div class="user-dropdown" id="userDropdown">
                     <div class="user-menu" onclick="document.getElementById('userDropdown').classList.toggle('open')">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Classrooms')
-@section('page-title', 'Classrooms')
+@section('title', __('Classrooms'))
+@section('page-title', __('Classrooms'))
 
 @section('content')
 <div class="card">
@@ -21,13 +21,26 @@
                     </option>
                 @endforeach
             </select>
+            <select class="form-control" style="width:auto;" id="gradeFilter">
+                <option value="">All Grades</option>
+                @foreach($grades as $grade)
+                    <option value="{{ $grade->id }}" 
+                            data-term-id="{{ $grade->term_id }}"
+                            {{ (string) request('grade_id') === (string) $grade->id ? 'selected' : '' }}
+                            style="{{ request('term_id') && (string) request('term_id') !== (string) $grade->term_id ? 'display:none;' : '' }}">
+                        {{ $grade->name }} ({{ $grade->term->name ?? '' }})
+                    </option>
+                @endforeach
+            </select>
         </div>
         <button class="btn btn-primary" onclick="openAddModal()">+ Add Classroom</button>
+        @if(!in_array(auth()->user()->role, ['accountant', 'admin']))
         <a href="{{ route('classrooms.archived') }}" class="btn btn-secondary" style="margin-left:8px;">Archived</a>
+        @endif
     </div>
     <div class="table-responsive">
         <table class="data-table">
-            <thead><tr><th>Name</th><th>Grade</th><th>Turn</th><th>Capacity</th><th>Teacher</th><th>Students</th><th>Actions</th></tr></thead>
+            <thead><tr><th>{{ __('Name') }}</th><th>{{ __('Grade') }}</th><th>{{ __('Turn') }}</th><th>{{ __('Capacity') }}</th><th>{{ __('Teacher') }}</th><th>{{ __('Students') }}</th><th>{{ __('Actions') }}</th></tr></thead>
             <tbody>
             @forelse($classrooms as $classroom)
                 <tr>
@@ -46,8 +59,12 @@
                     <td>
                         <div class="btn-group">
                             <button class="btn btn-sm btn-secondary" onclick="viewClassroom({{ $classroom->id }})" data-tip="View Details"><i data-lucide="eye" style="width:14px;height:14px;"></i></button>
+                            @if(auth()->user()->role !== 'accountant')
                             <button class="btn btn-sm btn-secondary" onclick="editClassroom({{ $classroom->id }}, '{{ $classroom->name }}', {{ $classroom->grade_id }}, {{ $classroom->capacity }}, {{ $classroom->grade->term_id ?? 'null' }}, {{ $classroom->turn_id ?? 'null' }}, {{ $classroom->teacher_id ?? 'null' }})" data-tip="Edit Classroom"><i data-lucide="pencil" style="width:14px;height:14px;"></i></button>
-                            <button class="btn btn-sm btn-warning" onclick="confirmArchive({{ $classroom->id }}, '{{ addslashes($classroom->name) }}')" data-tip="Archive Classroom"><i data-lucide="archive"></i></button>
+                            @endif
+                            @if(auth()->user()->role !== 'accountant')
+                            <button class="btn btn-sm btn-danger" onclick="confirmArchive({{ $classroom->id }}, '{{ addslashes($classroom->name) }}')" data-tip="Delete Classroom"><i data-lucide="trash-2"></i></button>
+                            @endif
                         </div>
                     </td>
                 </tr>
@@ -584,13 +601,37 @@ document.getElementById('termSelect').addEventListener('change', function () {
     }
 });
 
-document.getElementById('termFilter').addEventListener('change', applyClassroomFilters);
+document.getElementById('termFilter').addEventListener('change', function() {
+    // When term changes, we filter the grade options
+    const termId = this.value;
+    const gradeFilter = document.getElementById('gradeFilter');
+    const options = gradeFilter.querySelectorAll('option:not([value=""])');
+    
+    let hasMatchingSelected = false;
+    options.forEach(opt => {
+        if (!termId || opt.dataset.termId === termId) {
+            opt.style.display = '';
+            if (opt.selected) hasMatchingSelected = true;
+        } else {
+            opt.style.display = 'none';
+        }
+    });
+    
+    // If current selected grade doesn't match new term, reset it
+    if (termId && !hasMatchingSelected && gradeFilter.value !== "") {
+        gradeFilter.value = "";
+    }
+    
+    applyClassroomFilters();
+});
 document.getElementById('turnFilter').addEventListener('change', applyClassroomFilters);
+document.getElementById('gradeFilter').addEventListener('change', applyClassroomFilters);
 
 function applyClassroomFilters() {
     const params = new URLSearchParams(window.location.search);
     const termFilter = document.getElementById('termFilter');
     const turnFilter = document.getElementById('turnFilter');
+    const gradeFilter = document.getElementById('gradeFilter');
 
     if (termFilter.value) params.set('term_id', termFilter.value);
     else params.delete('term_id');
@@ -598,31 +639,40 @@ function applyClassroomFilters() {
     if (turnFilter.value) params.set('turn_id', turnFilter.value);
     else params.delete('turn_id');
 
+    if (gradeFilter.value) params.set('grade_id', gradeFilter.value);
+    else params.delete('grade_id');
+
+    params.delete('page'); // Reset to first page on filter change
     window.location.search = params.toString();
 }
 
-async function confirmArchive(id, name) {
-    if (!confirm(`Archive classroom "${name}"?\n\nIt will be hidden from the list but can be restored later.`)) return;
+function confirmArchive(id, name) {
+    showConfirmModal(
+        `Are you sure you want to delete classroom "${name}"?<br><br><span style="font-size:13px; color:var(--text-muted);">It will be hidden from the list but can be restored from the Archive later.</span>`,
+        async function() {
+            try {
+                const response = await fetch(`/api/classrooms/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json',
+                    },
+                });
 
-    try {
-        const response = await fetch(`/api/classrooms/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Accept': 'application/json',
-            },
-        });
-
-        if (response.ok) {
-            window.location.reload();
-        } else {
-            const data = await response.json();
-            alert(data.message || 'Failed to archive classroom.');
-        }
-    } catch (err) {
-        console.error(err);
-        alert('An error occurred. Please try again.');
-    }
+                if (response.ok) {
+                    showAlert('Classroom deleted successfully.');
+                    setTimeout(() => window.location.reload(), 800);
+                } else {
+                    const data = await response.json();
+                    showAlert(data.message || 'Failed to delete classroom.', 'danger');
+                }
+            } catch (err) {
+                console.error(err);
+                showAlert('An error occurred. Please try again.', 'danger');
+            }
+        },
+        'Yes, Delete'
+    );
 }
 </script>
 @endpush

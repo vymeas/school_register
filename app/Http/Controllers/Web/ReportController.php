@@ -22,7 +22,7 @@ class ReportController extends Controller
             $query->where('payment_date', '<=', $request->date_to);
         }
         if ($request->filled('method')) {
-            $query->where('payment_method', $request->method);
+            $query->where('payment_method', $request->input('method'));
         }
 
         return view('reports.index', [
@@ -66,14 +66,14 @@ class ReportController extends Controller
         // Include archived - use withoutGlobalScope
         $classrooms = Classroom::withoutGlobalScope('active')
             ->with(['enrollments', 'grade.term', 'teacher', 'turn'])
-            ->orderBy('is_archived')
+            ->orderBy('is_delete')
             ->orderBy('name')
             ->get();
 
         return view('reports.classroom_summary', [
             'classrooms'    => $classrooms,
-            'totalActive'   => $classrooms->where('is_archived', false)->count(),
-            'totalArchived' => $classrooms->where('is_archived', true)->count(),
+            'totalActive'   => $classrooms->where('is_delete', false)->count(),
+            'totalArchived' => $classrooms->where('is_delete', true)->count(),
         ]);
     }
 
@@ -182,7 +182,7 @@ class ReportController extends Controller
         $query = Payment::with(['student', 'enrollment.classroom', 'tuitionPlan', 'creator'])
             ->when($request->filled('date_from'), fn($q) => $q->whereDate('payment_date', '>=', $request->date_from))
             ->when($request->filled('date_to'),   fn($q) => $q->whereDate('payment_date', '<=', $request->date_to))
-            ->when($request->filled('method'),    fn($q) => $q->where('payment_method', $request->method))
+            ->when($request->filled('method'),    fn($q) => $q->where('payment_method', $request->input('method')))
             ->latest('payment_date');
 
         $total    = (clone $query)->sum('amount');
