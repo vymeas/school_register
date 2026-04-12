@@ -9,6 +9,14 @@
     {{-- Lucide Icons — #1 Modern Icon Library 2026 --}}
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+    @font-face {
+        font-family: 'Moul';
+        src: url("{{ asset('fonts/Moul-Regular.ttf') }}") format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+    .brand-text { font-family: 'Moul', cursive; font-size: 16px; line-height: 1.4; color: #1e293b; }
+
     /* ── Sidebar Dropdown (Reports etc.) ── */
     .nav-group-toggle {
         display: flex;
@@ -170,9 +178,9 @@
     {{-- Sidebar --}}
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <div class="brand-icon">SR</div>
+            <img src="{{ asset('storage/images/logo.png') }}" alt="Logo" class="brand-logo" style="height: 45px; width: auto; object-fit: contain; margin-right: 12px; border-radius: 8px;">
             <div>
-                <div class="brand-text">School Register</div>
+                <div class="brand-text">សាលារៀនវិទូជន</div>
                 <div class="brand-sub">Admin Panel</div>
             </div>
         </div>

@@ -16,7 +16,7 @@
                 @endforeach
             </select>
         </div>
-        <button class="btn btn-primary" onclick="openModal('enrollModal')">+ Add Enrollment</button>
+        <a href="{{ route('enrollments.create') }}" class="btn btn-primary">+ Add Enrollment</a>
     </div>
     <div class="table-responsive">
         <table class="data-table">
@@ -72,27 +72,7 @@
     @endif
 </div>
 
-<div class="modal-overlay" id="enrollModal">
-    <div class="modal">
-        <div class="modal-header"><h3>Add Enrollment</h3><button class="modal-close" onclick="closeModal('enrollModal')"><i data-lucide="x" style="width:18px;height:18px;"></i></button></div>
-        <div class="modal-body">
-            <form id="enrollForm" method="POST" action="{{ route('enrollments.store') }}">
-                @csrf
-                <div class="form-group"><label class="form-label">Student *</label><select name="student_id" class="form-control" required><option value="">Select</option>@foreach($students as $s)<option value="{{ $s->id }}">{{ $s->student_code }} — {{ $s->first_name }} {{ $s->last_name }}</option>@endforeach</select></div>
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label">Term *</label><select name="term_id" class="form-control" required id="createTermSelect"><option value="">Select</option>@foreach($terms as $t)<option value="{{ $t->id }}">{{ $t->name }}</option>@endforeach</select></div>
-                    <div class="form-group"><label class="form-label">Grade *</label><select name="grade_id" class="form-control" required id="createGradeSelect"><option value="">Select Grade</option>@foreach($grades as $g)<option value="{{ $g->id }}" data-term-id="{{ $g->term_id }}">{{ $g->name }}</option>@endforeach</select></div>
-                </div>
-                <div class="form-group"><label class="form-label">Classroom *</label><select name="classroom_id" class="form-control" required id="createClassroomSelect"><option value="">Select Classroom</option>@foreach($classrooms as $c)<option value="{{ $c->id }}" data-term-id="{{ $c->grade->term_id ?? '' }}" data-grade-id="{{ $c->grade_id }}">{{ $c->name }}</option>@endforeach</select></div>
-                <div class="form-group"><label class="form-label">Start Date</label><input type="date" name="start_date" class="form-control" value="{{ date('Y-m-d') }}"></div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" onclick="closeModal('enrollModal')">Cancel</button>
-            <button class="btn btn-primary" onclick="document.getElementById('enrollForm').submit()">Save</button>
-        </div>
-    </div>
-</div>
+{{-- Legacy modal removed. redirected to standalone create page --}}
 
 <div class="modal-overlay" id="upgradeModal">
     <div class="modal">
@@ -160,16 +140,7 @@ function filterSelectByTermGrade(termSelectId, gradeSelectId, classroomSelectId)
     });
 }
 
-document.getElementById('createTermSelect').addEventListener('change', function() {
-    document.getElementById('createGradeSelect').value = '';
-    document.getElementById('createClassroomSelect').value = '';
-    filterSelectByTermGrade('createTermSelect', 'createGradeSelect', 'createClassroomSelect');
-});
-
-document.getElementById('createGradeSelect').addEventListener('change', function() {
-    document.getElementById('createClassroomSelect').value = '';
-    filterSelectByTermGrade('createTermSelect', 'createGradeSelect', 'createClassroomSelect');
-});
+// Standalone creation page handles this now. legacy filtering logic removed.
 
 document.getElementById('upgradeTermSelect').addEventListener('change', function() {
     document.getElementById('upgradeGradeSelect').value = '';

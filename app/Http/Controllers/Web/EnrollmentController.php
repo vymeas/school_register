@@ -30,6 +30,17 @@ class EnrollmentController extends Controller
         ]);
     }
 
+    public function create(Request $request)
+    {
+        return view('enrollments.create', [
+            'students' => Student::all(),
+            'classrooms' => Classroom::with(['grade.term', 'turn'])->orderBy('name')->get(),
+            'grades' => Grade::with('term')->orderBy('name')->get(),
+            'terms' => Term::orderBy('start_date', 'desc')->get(),
+            'pre_student_id' => $request->student_id,
+        ]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
