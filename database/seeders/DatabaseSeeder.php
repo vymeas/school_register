@@ -16,8 +16,12 @@ class DatabaseSeeder extends Seeder
             TermSeeder::class,
             TurnSeeder::class,
             GradeSeeder::class,
+            TeacherSeeder::class,
             ClassroomSeeder::class,
             TuitionPlanSeeder::class,
+            StudentSeeder::class,
+            EnrollmentSeeder::class,
+            PaymentSeeder::class,
         ]);
     }
 }

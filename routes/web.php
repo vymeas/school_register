@@ -91,6 +91,7 @@ Route::middleware('auth')->group(function () {
 
     // Enrollments
     Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
+    Route::get('/enrollments/create', [EnrollmentController::class, 'create'])->name('enrollments.create');
     Route::post('/enrollments', [EnrollmentController::class, 'store'])->name('enrollments.store');
     Route::post('/enrollments/{enrollment}/upgrade', [EnrollmentController::class, 'upgrade'])->name('enrollments.upgrade');
     Route::post('/enrollments/{enrollment}/transfer', [EnrollmentController::class, 'transfer'])->name('enrollments.transfer');
