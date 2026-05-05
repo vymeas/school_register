@@ -89,6 +89,11 @@ class Student extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function scores()
+    {
+        return $this->hasMany(StudentScore::class);
+    }
+
     public function latestPayment()
     {
         return $this->hasOne(Payment::class)

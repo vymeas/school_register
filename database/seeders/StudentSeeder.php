@@ -23,7 +23,7 @@ class StudentSeeder extends Seeder
         $khmerLastNames = ['សោម', 'កែវ', 'សុខ', 'ចាន់', 'លី', 'ជា', 'ហេង', 'សៅ', 'ម៉ៅ', 'លឹម'];
         $khmerFirstNames = ['សុភ័ក្ត្រ', 'ស្រីនិ', 'រតនា', 'វិបុល', 'មករា', 'ធារី', 'ណារ៉េត', 'សិលា', 'វណ្ណះ', 'បូរមី'];
 
-        for ($i = 1; $i <= 50; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             $firstName = $khmerFirstNames[array_rand($khmerFirstNames)];
             $lastName = $khmerLastNames[array_rand($khmerLastNames)];
             $gender = $i % 2 == 0 ? 'Female' : 'Male';

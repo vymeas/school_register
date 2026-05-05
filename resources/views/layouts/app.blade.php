@@ -194,6 +194,12 @@
             <a href="{{ route('students.index') }}" class="nav-item {{ request()->routeIs('students.*') ? 'active' : '' }}">
                 <span class="nav-icon"><i data-lucide="graduation-cap"></i></span> <span>{{ __('Students') }}</span>
             </a>
+            <a href="{{ route('scores.index') }}" class="nav-item {{ request()->routeIs('scores.index') ? 'active' : '' }}">
+                <span class="nav-icon"><i data-lucide="bar-chart-2"></i></span> <span>{{ __('Results') }}</span>
+            </a>
+            <a href="{{ route('scores.create') }}" class="nav-item {{ request()->routeIs('scores.create') ? 'active' : '' }}">
+                <span class="nav-icon"><i data-lucide="edit-3"></i></span> <span>{{ __('Score Input') }}</span>
+            </a>
             <a href="{{ route('teachers.index') }}" class="nav-item {{ request()->routeIs('teachers.*') ? 'active' : '' }}">
                 <span class="nav-icon"><i data-lucide="user-round-check"></i></span> <span>{{ __('Teachers') }}</span>
             </a>
