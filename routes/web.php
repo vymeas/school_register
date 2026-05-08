@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\ClassroomController;
 use App\Http\Controllers\Web\DashboardController;
@@ -49,6 +50,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
     Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
     Route::patch('/students/{student}/study-status', [StudentController::class, 'updateStudyStatus'])->name('students.study-status');
+
+    // Scores
+    Route::get('/scores', [ScoreController::class, 'index'])->name('scores.index');
+    Route::get('/scores/create', [ScoreController::class, 'create'])->name('scores.create');
+    Route::post('/scores/store', [ScoreController::class, 'store'])->name('scores.store');
 
     // Teachers
     Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
