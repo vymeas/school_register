@@ -72,6 +72,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Users (Admin only)
     Route::middleware('role:super_admin,admin')->group(function () {
+        Route::put('/users/{user}/restore', [UserController::class, 'restore'])->name('api.users.restore');
+        Route::put('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('api.users.reset-password');
         Route::apiResource('users', UserController::class)->names('api.users');
     });
 });

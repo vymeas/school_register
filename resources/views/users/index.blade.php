@@ -18,6 +18,10 @@
                 <option value="admin" {{ request('role')=='admin'?'selected':'' }}>Admin</option>
                 <option value="accountant" {{ request('role')=='accountant'?'selected':'' }}>Accountant</option>
             </select>
+            <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                <input type="checkbox" id="trashedFilter" {{ request('trashed') == '1' ? 'checked' : '' }}>
+                Show Deleted
+            </label>
         </div>
         <button class="btn btn-primary" onclick="openModal('userModal')">+ Add User</button>
     </div>
@@ -34,8 +38,17 @@
                     <td>{{ $user->phone ?? '—' }}</td>
                     <td><span class="badge {{ $user->status }}">{{ ucfirst($user->status) }}</span></td>
                     <td><div class="btn-group">
-                        @if(auth()->user()->role !== 'accountant')
-                        <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/users/{{ $user->id }}', 'user')" data-tip="Delete User"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
+                        @if($user->is_deleted)
+                            @if(auth()->user()->role === 'super_admin' || (auth()->user()->role === 'admin' && $user->role === 'accountant'))
+                            <button class="btn btn-sm btn-success" onclick="restoreUser('{{ $user->id }}')" data-tip="Restore User"><i data-lucide="refresh-ccw" style="width:14px;height:14px;"></i></button>
+                            @endif
+                        @else
+                            @if(auth()->user()->role === 'super_admin' || (auth()->user()->role === 'admin' && $user->role === 'accountant'))
+                            <button class="btn btn-sm btn-warning" onclick="resetPassword('{{ $user->id }}')" data-tip="Reset Password"><i data-lucide="key" style="width:14px;height:14px;"></i></button>
+                            @endif
+                            @if(auth()->user()->id !== $user->id && (auth()->user()->role === 'super_admin' || (auth()->user()->role === 'admin' && $user->role === 'accountant')))
+                            <button class="btn btn-sm btn-danger" onclick="confirmDelete('/api/users/{{ $user->id }}', 'user')" data-tip="Delete User"><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
+                            @endif
                         @endif
                     </div></td>
                 </tr>
@@ -92,6 +105,45 @@ document.getElementById('roleFilter').addEventListener('change', function() {
     else p.delete('role');
     window.location.search = p.toString();
 });
+document.getElementById('trashedFilter').addEventListener('change', function() {
+    const p = new URLSearchParams(window.location.search);
+    if (this.checked) p.set('trashed', '1');
+    else p.delete('trashed');
+    window.location.search = p.toString();
+});
+
+function restoreUser(id) {
+    if (confirm('Are you sure you want to restore this user?')) {
+        fetch(`/api/users/${id}/restore`, {
+            method: 'PUT',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json'
+            }
+        }).then(res => res.json()).then(data => {
+            if (data.message) {
+                alert(data.message);
+                window.location.reload();
+            }
+        });
+    }
+}
+
+function resetPassword(id) {
+    if (confirm('Are you sure you want to reset the password to 123123?')) {
+        fetch(`/api/users/${id}/reset-password`, {
+            method: 'PUT',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json'
+            }
+        }).then(res => res.json()).then(data => {
+            if (data.message) {
+                alert(data.message);
+            }
+        });
+    }
+}
 </script>
 @endpush
 @endsection

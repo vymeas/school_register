@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             StudentSeeder::class,
             EnrollmentSeeder::class,
             PaymentSeeder::class,
+            StudentScoreSeeder::class,
         ]);
     }
 }

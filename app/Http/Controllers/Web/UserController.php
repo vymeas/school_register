@@ -10,8 +10,11 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::where('is_deleted', false);
-
+        if ($request->has('trashed') && $request->trashed == '1') {
+            $query = User::query()->where('is_deleted', true);
+        } else {
+            $query = User::query()->where('is_deleted', false);
+        }
         // Don't show super_admin to non-super_admin users
         if (auth()->user()->role !== 'super_admin') {
             $query->where('role', '!=', 'super_admin');

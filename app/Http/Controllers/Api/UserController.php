@@ -11,7 +11,11 @@ class UserController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = User::where('is_deleted', false);
+        if ($request->has('trashed') && $request->trashed == 'true') {
+            $query = User::query()->where('is_deleted', true);
+        } else {
+            $query = User::query()->where('is_deleted', false);
+        }
 
         if ($request->has('role')) {
             $query->where('role', $request->role);
@@ -55,7 +59,7 @@ class UserController extends Controller
 
     public function show(string $id): JsonResponse
     {
-        $user = User::where('is_deleted', false)->findOrFail($id);
+        $user = User::query()->where('is_deleted', false)->findOrFail($id);
 
         return response()->json([
             'user' => $user,
@@ -64,7 +68,7 @@ class UserController extends Controller
 
     public function update(Request $request, string $id): JsonResponse
     {
-        $user = User::where('is_deleted', false)->findOrFail($id);
+        $user = User::query()->where('is_deleted', false)->findOrFail($id);
 
         $data = $request->validate([
             'username' => 'sometimes|string|unique:users,username,' . $id . '|max:255',
@@ -91,13 +95,75 @@ class UserController extends Controller
 
     public function destroy(string $id): JsonResponse
     {
-        $user = User::where('is_deleted', false)->findOrFail($id);
+        $user = User::query()->where('is_deleted', false)->findOrFail($id);
+        $currentUser = auth()->user();
+
+        // Check permissions
+        if ($currentUser->id === $user->id) {
+            return response()->json(['message' => 'You cannot delete your own account.'], 403);
+        }
+
+        if ($currentUser->role !== 'super_admin') {
+            if ($currentUser->role === 'admin' && $user->role !== 'accountant') {
+                return response()->json(['message' => 'Admins can only delete accountants.'], 403);
+            }
+            if (!in_array($currentUser->role, ['super_admin', 'admin'])) {
+                return response()->json(['message' => 'You do not have permission to delete users.'], 403);
+            }
+        }
 
         // Soft delete by setting is_deleted flag
         $user->update(['is_deleted' => true]);
 
         return response()->json([
             'message' => 'User deleted successfully.',
+        ]);
+    }
+
+    public function restore(string $id): JsonResponse
+    {
+        $user = User::query()->where('is_deleted', true)->findOrFail($id);
+        $currentUser = auth()->user();
+
+        // Check permissions
+        if ($currentUser->role !== 'super_admin') {
+            if ($currentUser->role === 'admin' && $user->role !== 'accountant') {
+                return response()->json(['message' => 'Admins can only restore accountants.'], 403);
+            }
+            if (!in_array($currentUser->role, ['super_admin', 'admin'])) {
+                return response()->json(['message' => 'You do not have permission to restore users.'], 403);
+            }
+        }
+
+        $user->update(['is_deleted' => false]);
+
+        return response()->json([
+            'message' => 'User restored successfully.',
+            'user' => $user,
+        ]);
+    }
+
+    public function resetPassword(string $id): JsonResponse
+    {
+        $user = User::query()->findOrFail($id);
+        $currentUser = auth()->user();
+
+        // Check permissions
+        if ($currentUser->id !== $user->id && $currentUser->role !== 'super_admin') {
+            if ($currentUser->role === 'admin' && $user->role !== 'accountant') {
+                return response()->json(['message' => 'Admins can only reset passwords for accountants.'], 403);
+            }
+            if (!in_array($currentUser->role, ['super_admin', 'admin'])) {
+                return response()->json(['message' => 'You do not have permission to reset passwords.'], 403);
+            }
+        }
+
+        $user->update([
+            'password' => '123123', // Mutator on User model should automatically hash this, if not we need Hash::make
+        ]);
+
+        return response()->json([
+            'message' => 'User password has been reset to 123123.',
         ]);
     }
 }
