@@ -96,7 +96,8 @@ class UserController extends Controller
     public function destroy(string $id): JsonResponse
     {
         $user = User::query()->where('is_deleted', false)->findOrFail($id);
-        $currentUser = auth()->user();
+        /** @var \App\Models\User $currentUser */
+        $currentUser = request()->user();
 
         // Check permissions
         if ($currentUser->id === $user->id) {
@@ -123,7 +124,8 @@ class UserController extends Controller
     public function restore(string $id): JsonResponse
     {
         $user = User::query()->where('is_deleted', true)->findOrFail($id);
-        $currentUser = auth()->user();
+        /** @var \App\Models\User $currentUser */
+        $currentUser = request()->user();
 
         // Check permissions
         if ($currentUser->role !== 'super_admin') {
@@ -146,7 +148,8 @@ class UserController extends Controller
     public function resetPassword(string $id): JsonResponse
     {
         $user = User::query()->findOrFail($id);
-        $currentUser = auth()->user();
+        /** @var \App\Models\User $currentUser */
+        $currentUser = request()->user();
 
         // Check permissions
         if ($currentUser->id !== $user->id && $currentUser->role !== 'super_admin') {

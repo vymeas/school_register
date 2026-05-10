@@ -15,8 +15,11 @@ class UserController extends Controller
         } else {
             $query = User::query()->where('is_deleted', false);
         }
+        /** @var \App\Models\User $currentUser */
+        $currentUser = request()->user();
+
         // Don't show super_admin to non-super_admin users
-        if (auth()->user()->role !== 'super_admin') {
+        if ($currentUser->role !== 'super_admin') {
             $query->where('role', '!=', 'super_admin');
         }
 
@@ -38,8 +41,11 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        /** @var \App\Models\User $currentUser */
+        $currentUser = request()->user();
+
         $allowedRoles = 'admin,accountant';
-        if (auth()->user()->role === 'super_admin') {
+        if ($currentUser->role === 'super_admin') {
             $allowedRoles .= ',super_admin';
         }
 
